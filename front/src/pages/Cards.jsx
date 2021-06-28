@@ -3,15 +3,14 @@ import Header from '../components/Header';
 import MenuTab from '../components/MenuTab';
 import { Container } from '../globalStyles';
 
-const Home = () => {
+const Cards = () => {
   return (
     <div>
       <Header />
-      <Container>
-        <MenuTab />
-      </Container>
+      <MenuTab />
+      <Container>cardlist</Container>
     </div>
   );
 };
 
-export default Home;
+export default Cards;
