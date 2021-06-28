@@ -27,7 +27,7 @@ const StyledCheckbox = styled(Checkbox)`
   right: 0;
 `;
 
-const Quizzes = () => {
+const QuizList = () => {
   const { Search } = Input;
   function confirm(e) {
     console.log(e);
@@ -92,4 +92,4 @@ const Quizzes = () => {
   );
 };
 
-export default Quizzes;
+export default QuizList;

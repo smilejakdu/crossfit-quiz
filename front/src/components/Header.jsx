@@ -1,6 +1,8 @@
-import { Button } from 'antd';
-import React from 'react';
+import React, { useState } from 'react';
+import { Button, Popover, Avatar } from 'antd';
 import styled from 'styled-components';
+import LoginModal from './LoginModal';
+import { GoogleLogout } from 'react-google-login';
 
 const Wrapper = styled.div`
   display: flex;
@@ -17,14 +19,70 @@ const Logo = styled.div``;
 const Right = styled.div`
   display: flex;
 `;
+const UserWrapper = styled.div`
+  margin-right: 1.5rem;
 
-const Header = () => {
+  &:hover {
+    cursor: pointer;
+  }
+`;
+const Username = styled.span`
+  display: inline-block;
+  padding-left: 0.5rem;
+`;
+
+const Header = ({ userObj, setUserObj }) => {
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isSignedIn, setIsSignedIn] = useState(true);
+
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+  const logout = () => {
+    console.log('로그아웃');
+    setUserObj(null);
+    // setIsSignedIn(false);
+  };
+
+  const content = (
+    <GoogleLogout
+      clientId="275555720661-ugoifbggh1orde85t41blpfprl0dcvn0.apps.googleusercontent.com"
+      buttonText="Sign Out"
+      onLogoutSuccess={logout}
+    ></GoogleLogout>
+  );
+
   return (
     <Wrapper>
       <Logo>Logo</Logo>
 
       <Right>
-        <Button type="primary">Sign Up</Button>
+        {userObj && (
+          <UserWrapper>
+            <Popover content={content}>
+              <Avatar src={userObj.imageUrl} />
+              <Username>{userObj.username}</Username>
+            </Popover>
+          </UserWrapper>
+        )}
+        {userObj ? (
+          <>
+            <Button type="primary">Create Quiz</Button>
+          </>
+        ) : (
+          <>
+            <Button type="primary" onClick={showModal}>
+              Sign Up
+            </Button>
+            <LoginModal
+              isModalVisible={isModalVisible}
+              setIsModalVisible={setIsModalVisible}
+              setUserObj={setUserObj}
+              isSignedIn={isSignedIn}
+              setIsSignedIn={setIsSignedIn}
+            />
+          </>
+        )}
       </Right>
     </Wrapper>
   );
