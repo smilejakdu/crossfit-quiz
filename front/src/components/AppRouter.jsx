@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Redirect,
   Route,
@@ -12,12 +12,14 @@ import Quiz from '../pages/Quiz';
 import Settings from '../pages/Settings';
 
 const AppRouter = () => {
+  const [userObj, setUserObj] = useState(null);
+
   return (
     <Router>
       <GlobalStyle />
       <Switch>
         <Route exact path="/">
-          <Home />
+          <Home userObj={userObj} setUserObj={setUserObj} />
         </Route>
         <Route exact path="/settings">
           <Settings />

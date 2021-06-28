@@ -3,10 +3,10 @@ import Header from '../components/Header';
 import MenuTab from '../components/MenuTab';
 import { Container } from '../globalStyles';
 
-const Home = () => {
+const Home = ({ userObj, setUserObj }) => {
   return (
     <div>
-      <Header />
+      <Header userObj={userObj} setUserObj={setUserObj} />
       <Container>
         <MenuTab />
       </Container>
