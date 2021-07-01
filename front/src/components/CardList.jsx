@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import { Button, Card, Checkbox, Col, Input, Row, Tag } from 'antd';
+import { Button, Card, Checkbox, Col, Input, Row, Tag, Form } from 'antd';
 import styled from 'styled-components';
 import { category } from '../constants';
+import CardModal from './CardModal';
+import Meta from 'antd/lib/card/Meta';
 
 const { Search } = Input;
 const { CheckableTag } = Tag;
@@ -29,6 +31,8 @@ const StyledCheckbox = styled(Checkbox)`
 
 const CardList = () => {
   const [selectedTags, setSelectedTags] = useState('');
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [form] = Form.useForm();
 
   const onSearch = (value) => console.log(value);
 
@@ -45,12 +49,22 @@ const CardList = () => {
     setSelectedTags(nextSelectedTags);
   };
 
+  const showModal = () => {
+    form.resetFields();
+    setIsModalVisible(true);
+  };
+
   return (
     <>
       <SearchWrapper>
         <SearchBox>
           <StyledSearch placeholder="Search" onSearch={onSearch} enterButton />
-          <Button>Add a Card</Button>
+          <Button onClick={showModal}>Add a Card</Button>
+          <CardModal
+            isModalVisible={isModalVisible}
+            setIsModalVisible={setIsModalVisible}
+            form={form}
+          />
         </SearchBox>
 
         <Filter>
@@ -60,7 +74,6 @@ const CardList = () => {
                 key={tag.name}
                 checked={selectedTags.indexOf(tag) > -1}
                 onChange={(checked) => handleChange(tag, checked)}
-                inputColor={tag.color}
               >
                 {tag.name}
               </CheckableTag>
@@ -71,11 +84,19 @@ const CardList = () => {
       </SearchWrapper>
 
       <div className="site-card-wrapper">
-        <Row gutter={16}>
-          <Col span={8}>
-            <Card title="동작 이름" hoverable>
-              <div>이미지</div>
-              <Tag>카테고리</Tag>
+        <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
+          <Col span={6}>
+            <Card
+              cover={
+                <img
+                  alt="movement"
+                  src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
+                />
+              }
+              hoverable
+              onClick={showModal}
+            >
+              <Meta title="동작 이름" description={<Tag>카테고리</Tag>} />
             </Card>
           </Col>
         </Row>

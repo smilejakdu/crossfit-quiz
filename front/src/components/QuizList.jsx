@@ -11,6 +11,7 @@ import {
 } from 'antd';
 import styled from 'styled-components';
 import { CommentOutlined } from '@ant-design/icons';
+const { Search } = Input;
 
 const SearchWrapper = styled.div`
   width: 50%;
@@ -28,7 +29,6 @@ const StyledCheckbox = styled(Checkbox)`
 `;
 
 const QuizList = () => {
-  const { Search } = Input;
   function confirm(e) {
     console.log(e);
     message.success('Click on Yes');
