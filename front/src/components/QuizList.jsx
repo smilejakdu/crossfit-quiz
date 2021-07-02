@@ -11,6 +11,7 @@ import {
 } from 'antd';
 import styled from 'styled-components';
 import { CommentOutlined } from '@ant-design/icons';
+import { Link } from 'react-router-dom';
 const { Search } = Input;
 
 const SearchWrapper = styled.div`
@@ -67,24 +68,26 @@ const QuizList = () => {
       <div className="site-card-wrapper">
         <Row gutter={16}>
           <Col span={8}>
-            <Card title="동작 이름" extra={<a href="#">정답률</a>} hoverable>
-              <div>생성일</div>
-              <div>created by</div>
-              <div>총 _명 참여!</div>
-              <div>
-                <CommentOutlined />
-                comments
-              </div>
-              <Popconfirm
-                title="Are you sure to delete this task?"
-                onConfirm={confirm}
-                onCancel={cancel}
-                okText="Yes"
-                cancelText="No"
-              >
-                <a href="#">Delete</a>
-              </Popconfirm>
-            </Card>
+            <Link to="/settings">
+              <Card title="동작 이름" extra={<a href="#">정답률</a>} hoverable>
+                <div>생성일</div>
+                <div>created by</div>
+                <div>총 _명 참여!</div>
+                <div>
+                  <CommentOutlined />
+                  comments
+                </div>
+                <Popconfirm
+                  title="Are you sure to delete this task?"
+                  onConfirm={confirm}
+                  onCancel={cancel}
+                  okText="Yes"
+                  cancelText="No"
+                >
+                  <a href="#">Delete</a>
+                </Popconfirm>
+              </Card>
+            </Link>
           </Col>
         </Row>
       </div>

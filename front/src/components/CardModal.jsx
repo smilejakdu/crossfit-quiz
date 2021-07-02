@@ -18,7 +18,7 @@ const CardWrapper = styled.div`
   margin: 2rem;
   padding: 2rem;
   border: 1px solid #266293;
-  background-color: #f7f9fa;
+  background-color: var(--main-bg-color);
 `;
 const ButtonWrapper = styled.div`
   display: flex;

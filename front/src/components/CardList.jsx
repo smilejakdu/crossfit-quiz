@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { Button, Card, Checkbox, Col, Input, Row, Tag, Form } from 'antd';
+import { Button, Checkbox, Input, Tag, Form } from 'antd';
 import styled from 'styled-components';
 import { category } from '../constants';
 import CardModal from './CardModal';
-import Meta from 'antd/lib/card/Meta';
+import Card from './Card';
 
 const { Search } = Input;
 const { CheckableTag } = Tag;
@@ -83,24 +83,7 @@ const CardList = () => {
         </Filter>
       </SearchWrapper>
 
-      <div className="site-card-wrapper">
-        <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
-          <Col span={6}>
-            <Card
-              cover={
-                <img
-                  alt="movement"
-                  src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
-                />
-              }
-              hoverable
-              onClick={showModal}
-            >
-              <Meta title="동작 이름" description={<Tag>카테고리</Tag>} />
-            </Card>
-          </Col>
-        </Row>
-      </div>
+      <Card showModal={showModal} />
     </>
   );
 };

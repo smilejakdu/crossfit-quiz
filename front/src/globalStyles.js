@@ -7,6 +7,10 @@ const GlobalStyle = createGlobalStyle`
         box-sizing:border-box;
         font-family:'Montserrat', sans-serif;
     }
+    
+    :root {
+      --main-bg-color: #f7f9fa;
+    }
 `;
 export const Container = styled.div`
   z-index: 1;
@@ -14,11 +18,7 @@ export const Container = styled.div`
   // max-width: 1500px;
   margin-right: auto;
   margin-left: auto;
-  padding: 0 4rem;
-
-  @media screen and (max-width: 48rem) {
-    padding: 0 2rem;
-  }
+  padding: 2rem 4rem;
 `;
 
 export default GlobalStyle;

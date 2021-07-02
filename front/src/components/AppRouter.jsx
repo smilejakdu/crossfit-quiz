@@ -22,7 +22,7 @@ const AppRouter = () => {
           <Home userObj={userObj} setUserObj={setUserObj} />
         </Route>
         <Route exact path="/settings">
-          <Settings />
+          <Settings userObj={userObj} setUserObj={setUserObj} />
         </Route>
         <Route exact path="/quiz">
           <Quiz />

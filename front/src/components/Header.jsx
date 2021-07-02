@@ -3,6 +3,7 @@ import { Button, Popover, Avatar } from 'antd';
 import styled from 'styled-components';
 import LoginModal from './LoginModal';
 import { GoogleLogout } from 'react-google-login';
+import { Link, useLocation } from 'react-router-dom';
 
 const Wrapper = styled.div`
   display: flex;
@@ -32,6 +33,7 @@ const Username = styled.span`
 `;
 
 const Header = ({ userObj, setUserObj }) => {
+  let location = useLocation();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isSignedIn, setIsSignedIn] = useState(true);
 
@@ -66,9 +68,17 @@ const Header = ({ userObj, setUserObj }) => {
           </UserWrapper>
         )}
         {userObj ? (
-          <>
-            <Button type="primary">Create Quiz</Button>
-          </>
+          location.pathname === '/settings' ? (
+            <Link to="/">
+              <Button type="primary" ghost>
+                Back to Quiz List
+              </Button>
+            </Link>
+          ) : (
+            <Link to="/settings">
+              <Button type="primary">Create Quiz</Button>
+            </Link>
+          )
         ) : (
           <>
             <Button type="primary" onClick={showModal}>
