@@ -3,7 +3,8 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import Card from '../components/Card';
 import Header from '../components/Header';
-import { Container } from '../globalStyles';
+import SettingsCard from '../components/SettingsCard';
+import { CardsWrapper, Container } from '../globalStyles';
 const { Search } = Input;
 
 const TitleWrapper = styled.div`
@@ -22,23 +23,10 @@ const ContentsWrapper = styled.div`
   background-color: #fff;
   padding: 2rem;
 `;
-const CardsWrapper = styled.div`
-  padding: 2rem;
-  display: grid;
-  grid-gap: 3rem;
-  grid-template-columns: 1fr 1fr 1fr;
-
-  @media screen and (max-width: 80rem) {
-    grid-template-columns: 1fr 1fr;
-  }
-  @media screen and (max-width: 52rem) {
-    grid-template-columns: 1fr;
-    justify-content: center;
-  }
-`;
 
 const Settings = ({ userObj, setUserObj }) => {
   const [showViewBtn, setShowViewBtn] = useState(false);
+  const [settingsCard, setSettingsCard] = useState(false);
 
   function confirm(e) {
     console.log(e);
@@ -56,6 +44,10 @@ const Settings = ({ userObj, setUserObj }) => {
 
   const onSearch = (value) => console.log(value);
 
+  const handleSelect = () => {
+    setSettingsCard(false);
+  };
+
   return (
     <div>
       <Header userObj={userObj} setUserObj={setUserObj} />
@@ -67,67 +59,89 @@ const Settings = ({ userObj, setUserObj }) => {
         <Form name="settings-form" onFinish={handleSave}>
           <TitleWrapper>
             <h1>Settings</h1>
-            <ButtonWrapper>
-              <Form.Item>
-                <Popconfirm
-                  title="Are you sure to delete this task?"
-                  onConfirm={confirm}
-                  onCancel={cancel}
-                  okText="Yes"
-                  cancelText="No"
-                >
-                  <StyledButton danger>Delete</StyledButton>
-                </Popconfirm>
-              </Form.Item>
-              {showViewBtn && (
+            {!settingsCard ? (
+              <ButtonWrapper>
                 <Form.Item>
-                  <StyledButton type="primary" ghost>
-                    View
+                  <Popconfirm
+                    title="Are you sure to delete this task?"
+                    onConfirm={confirm}
+                    onCancel={cancel}
+                    okText="Yes"
+                    cancelText="No"
+                  >
+                    <StyledButton danger>Delete</StyledButton>
+                  </Popconfirm>
+                </Form.Item>
+                {showViewBtn && (
+                  <Form.Item>
+                    <StyledButton type="primary" ghost>
+                      View
+                    </StyledButton>
+                  </Form.Item>
+                )}
+                <Form.Item>
+                  <StyledButton
+                    type="primary"
+                    htmlType="submit"
+                    onClick={() => setShowViewBtn(true)}
+                  >
+                    Save
                   </StyledButton>
                 </Form.Item>
-              )}
-              <Form.Item>
-                <StyledButton
-                  type="primary"
-                  htmlType="submit"
-                  onClick={() => setShowViewBtn(true)}
-                >
-                  Save
-                </StyledButton>
-              </Form.Item>
-            </ButtonWrapper>
+              </ButtonWrapper>
+            ) : (
+              <ButtonWrapper>
+                <Form.Item>
+                  <StyledButton
+                    type="primary"
+                    htmlType="submit"
+                    onClick={handleSelect}
+                  >
+                    Select
+                  </StyledButton>
+                </Form.Item>
+              </ButtonWrapper>
+            )}
           </TitleWrapper>
-          <ContentsWrapper>
-            <h2>Question</h2>
-            <Form.Item
-              name="question"
-              rules={[
-                {
-                  required: true,
-                  message: '질문을 입력해주세요.',
-                },
-              ]}
-            >
-              <Search
-                placeholder="Search"
-                allowClear
-                onSearch={onSearch}
-                style={{ width: 200 }}
-              />
-            </Form.Item>
-            <h2 style={{ marginTop: '2rem' }}>Answer Cards</h2>
-            <Button type="primary" ghost>
-              + Add Cards
-            </Button>
-            <Form.Item name="cards">
-              <CardsWrapper>
-                <Card />
-                <Card />
-                <Card />
-                <Card />
-              </CardsWrapper>
-            </Form.Item>
-          </ContentsWrapper>
+          {!settingsCard ? (
+            <ContentsWrapper>
+              <h2>Question</h2>
+              <Form.Item
+                name="question"
+                rules={[
+                  {
+                    required: true,
+                    message: '질문을 입력해주세요.',
+                  },
+                ]}
+              >
+                <Search
+                  placeholder="Search"
+                  allowClear
+                  onSearch={onSearch}
+                  style={{ width: 200 }}
+                />
+              </Form.Item>
+              <h2 style={{ marginTop: '2rem' }}>Answer Cards</h2>
+              <Button
+                type="primary"
+                ghost
+                onClick={() => setSettingsCard(true)}
+              >
+                + Add Cards
+              </Button>
+              <Form.Item name="cards">
+                <CardsWrapper>
+                  <Card />
+                  <Card />
+                  <Card />
+                  <Card />
+                </CardsWrapper>
+              </Form.Item>
+            </ContentsWrapper>
+          ) : (
+            <SettingsCard settingsCard={settingsCard} />
+          )}
         </Form>
       </Container>
     </div>

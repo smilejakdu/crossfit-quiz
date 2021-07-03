@@ -2,10 +2,17 @@ import React, { useState } from 'react';
 import { Card as AntCard, Radio, Tag } from 'antd';
 import Meta from 'antd/lib/card/Meta';
 import { useLocation } from 'react-router';
-
 const Card = ({ showModal }) => {
-  let location = useLocation();
   const [radioText, setRadioText] = useState('');
+  let location = useLocation();
+
+  const handleClick = () => {
+    if (location.pathname === '/settings') {
+      return;
+    } else {
+      showModal();
+    }
+  };
 
   return (
     <AntCard
@@ -17,11 +24,9 @@ const Card = ({ showModal }) => {
         />
       }
       hoverable
-      onClick={showModal}
+      onClick={handleClick}
     >
-      {location.pathname === '/settings' && (
-        <Radio onChange={() => setRadioText('Correct')}>{radioText}</Radio>
-      )}
+      <Radio onChange={() => setRadioText('Correct')}>{radioText}</Radio>
       <Meta title="동작 이름" description={<Tag>카테고리</Tag>} />
     </AntCard>
   );
