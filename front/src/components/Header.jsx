@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Popover, Avatar } from 'antd';
 import styled from 'styled-components';
 import LoginModal from './LoginModal';
@@ -35,15 +35,17 @@ const Username = styled.span`
 const Header = ({ userObj, setUserObj }) => {
   let location = useLocation();
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [isSignedIn, setIsSignedIn] = useState(true);
+
+  useEffect(() => {
+    window.localStorage.setItem('userObj', JSON.stringify(userObj));
+  }, [userObj]);
 
   const showModal = () => {
     setIsModalVisible(true);
   };
+
   const logout = () => {
-    console.log('로그아웃');
     setUserObj(null);
-    // setIsSignedIn(false);
   };
 
   const content = (
@@ -88,8 +90,6 @@ const Header = ({ userObj, setUserObj }) => {
               isModalVisible={isModalVisible}
               setIsModalVisible={setIsModalVisible}
               setUserObj={setUserObj}
-              isSignedIn={isSignedIn}
-              setIsSignedIn={setIsSignedIn}
             />
           </>
         )}
