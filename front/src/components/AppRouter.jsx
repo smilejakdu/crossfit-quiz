@@ -12,7 +12,9 @@ import Quiz from '../pages/Quiz';
 import Settings from '../pages/Settings';
 
 const AppRouter = () => {
-  const [userObj, setUserObj] = useState(null);
+  const [userObj, setUserObj] = useState(
+    () => JSON.parse(window.localStorage.getItem('userObj')) || null
+  );
 
   return (
     <Router>
