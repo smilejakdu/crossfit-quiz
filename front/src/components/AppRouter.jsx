@@ -15,10 +15,7 @@ const AppRouter = () => {
   const [userObj, setUserObj] = useState(
     () => JSON.parse(window.localStorage.getItem('userObj')) || null
   );
-<<<<<<< HEAD
   const [cards, setCards] = useState([]);
-=======
->>>>>>> 6f82ad49c15c779fdff7d2b0f70c339742a377b5
 
   return (
     <Router>
