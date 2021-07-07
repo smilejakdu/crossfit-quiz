@@ -3,12 +3,12 @@ import Header from '../components/Header';
 import MenuTab from '../components/MenuTab';
 import { Container } from '../globalStyles';
 
-const Home = ({ userObj, setUserObj }) => {
+const Home = ({ cards, setCards, userObj, setUserObj }) => {
   return (
     <div>
       <Header userObj={userObj} setUserObj={setUserObj} />
       <Container>
-        <MenuTab />
+        <MenuTab cards={cards} setCards={setCards} />
       </Container>
     </div>
   );

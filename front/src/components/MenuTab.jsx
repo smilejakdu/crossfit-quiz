@@ -2,10 +2,9 @@ import { Tabs } from 'antd';
 import React from 'react';
 import CardList from './CardList';
 import QuizList from './QuizList';
+const { TabPane } = Tabs;
 
-const MenuTab = () => {
-  const { TabPane } = Tabs;
-
+const MenuTab = ({ cards, setCards }) => {
   //   function callback(key) {
   //     console.log(key);
   //   }
@@ -21,7 +20,7 @@ const MenuTab = () => {
         <QuizList />
       </TabPane>
       <TabPane tab="Cards" key="2">
-        <CardList />
+        <CardList cards={cards} setCards={setCards} />
       </TabPane>
     </Tabs>
   );

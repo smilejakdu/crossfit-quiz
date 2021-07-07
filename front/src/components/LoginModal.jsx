@@ -18,7 +18,7 @@ const LoginModal = ({ isModalVisible, setIsModalVisible, setUserObj }) => {
     setIsModalVisible(false);
     const { profileObj } = response;
     setUserObj({
-      id: profileObj.googleId,
+      googleId: profileObj.googleId,
       username: profileObj.givenName,
       imageUrl: profileObj.imageUrl,
     });

@@ -3,6 +3,7 @@ import { Card, Tag } from 'antd';
 import Meta from 'antd/lib/card/Meta';
 import styled from 'styled-components';
 import SearchBar from './SearchBar';
+import CardList from './CardList';
 
 const ContentsWrapper = styled.div`
   background-color: #fff;
@@ -16,23 +17,17 @@ const StyledCard = styled(Card)`
   top: ${(props) => props.selected && '2px'};
 `;
 
-const SettingsCard = () => {
-  const [selected, setSelected] = useState(false);
-
-  const handleClick = () => {
-    console.log('check');
-    if (selected) {
-      setSelected(false);
-    } else {
-      setSelected(true);
-    }
-  };
-
+const SettingsCard = ({ cards, setCards, setSettingsCard }) => {
   return (
     <>
       <ContentsWrapper>
         <h2>Answer Cards</h2>
-        <SearchBar />
+        <CardList
+          cards={cards}
+          setCards={setCards}
+          setSettingsCard={setSettingsCard}
+        />
+        {/* <SearchBar />
         <StyledCard
           cover={
             <img
@@ -41,11 +36,10 @@ const SettingsCard = () => {
             />
           }
           hoverable
-          onClick={handleClick}
           selected={selected}
         >
           <Meta title="동작 이름" description={<Tag>카테고리</Tag>} />
-        </StyledCard>
+        </StyledCard> */}
       </ContentsWrapper>
     </>
   );

@@ -12,6 +12,7 @@ import {
 import React from 'react';
 import styled from 'styled-components';
 import { category } from '../constants';
+import { cardService } from '../service/config';
 const { Option } = Select;
 
 const CardWrapper = styled.div`
@@ -37,7 +38,7 @@ const StyledInput = styled(Input)`
   width: 10rem;
 `;
 
-const CardModal = ({ isModalVisible, setIsModalVisible, form }) => {
+const CardModal = ({ fetchCards, isModalVisible, setIsModalVisible, form }) => {
   const handleCancel = () => {
     setIsModalVisible(false);
   };
@@ -59,6 +60,17 @@ const CardModal = ({ isModalVisible, setIsModalVisible, form }) => {
   const handleSave = (values) => {
     console.log(values);
     setIsModalVisible(false);
+    addCard(values);
+  };
+
+  const addCard = async (values) => {
+    try {
+      const res = await cardService.add(values);
+      console.log(res);
+    } catch (e) {
+      console.log(e.message);
+    }
+    await fetchCards();
   };
 
   const props = {

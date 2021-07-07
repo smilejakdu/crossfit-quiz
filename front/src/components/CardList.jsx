@@ -1,14 +1,35 @@
-import React, { useState } from 'react';
-import { Form } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Form, Skeleton } from 'antd';
 import Card from './Card';
 import SearchBar from './SearchBar';
+import { cardService } from '../service/config';
 
-const CardList = () => {
+const CardList = ({ cards, setCards, setSettingsCard }) => {
   const [form] = Form.useForm();
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  const showModal = () => {
-    // form.resetFields();
+  useEffect(() => {
+    fetchCards();
+    // console.log(cards);
+  }, []);
+
+  const fetchCards = async () => {
+    setError(null);
+    setLoading(true);
+    try {
+      const response = await cardService.getAll();
+      console.log(response);
+      setCards(response.data);
+    } catch (e) {
+      setError(e);
+    }
+    setLoading(false);
+  };
+
+  const showModal = async () => {
+    form.resetFields();
     setIsModalVisible(true);
   };
 
@@ -19,9 +40,23 @@ const CardList = () => {
         isModalVisible={isModalVisible}
         setIsModalVisible={setIsModalVisible}
         form={form}
+        fetchCards={fetchCards}
       />
-
-      <Card showModal={showModal} />
+      {loading ? (
+        <>
+          <Skeleton active />
+        </>
+      ) : (
+        cards.map((card) => (
+          <Card
+            key={card.id}
+            card={card}
+            showModal={showModal}
+            setSettingsCard={setSettingsCard}
+            setCards={setCards}
+          />
+        ))
+      )}
     </>
   );
 };

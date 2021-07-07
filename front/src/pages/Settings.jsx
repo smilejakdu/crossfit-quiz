@@ -38,7 +38,7 @@ const CardsWrapper = styled.div`
   }
 `;
 
-const Settings = ({ userObj, setUserObj }) => {
+const Settings = ({ cards, setCards, userObj, setUserObj }) => {
   const [showViewBtn, setShowViewBtn] = useState(false);
   const [settingsCard, setSettingsCard] = useState(false);
 
@@ -146,15 +146,23 @@ const Settings = ({ userObj, setUserObj }) => {
               </Button>
               <Form.Item name="cards">
                 <CardsWrapper>
-                  <Card />
-                  <Card />
-                  <Card />
-                  <Card />
+                  {cards.map((card) => (
+                    <Card
+                      key={card.id}
+                      card={card}
+                      setCards={setCards}
+                      setSettingsCard={setSettingsCard}
+                    />
+                  ))}
                 </CardsWrapper>
               </Form.Item>
             </ContentsWrapper>
           ) : (
-            <SettingsCard />
+            <SettingsCard
+              cards={cards}
+              setCards={setCards}
+              setSettingsCard={setSettingsCard}
+            />
           )}
         </Form>
       </Container>
