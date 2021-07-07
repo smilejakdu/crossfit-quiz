@@ -20,5 +20,19 @@ export const Container = styled.div`
   margin-left: auto;
   padding: 2rem 4rem;
 `;
+export const CardsWrapper = styled.div`
+  padding: 2rem;
+  display: grid;
+  grid-gap: 3rem;
+  grid-template-columns: 1fr 1fr 1fr;
+
+  @media screen and (max-width: 80rem) {
+    grid-template-columns: 1fr 1fr;
+  }
+  @media screen and (max-width: 52rem) {
+    grid-template-columns: 1fr;
+    justify-content: center;
+  }
+`;
 
 export default GlobalStyle;

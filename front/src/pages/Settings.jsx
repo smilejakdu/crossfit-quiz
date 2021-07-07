@@ -4,7 +4,11 @@ import styled from 'styled-components';
 import Card from '../components/Card';
 import Header from '../components/Header';
 import SettingsCard from '../components/SettingsCard';
+<<<<<<< HEAD
 import { Container } from '../globalStyles';
+=======
+import { CardsWrapper, Container } from '../globalStyles';
+>>>>>>> 6f82ad49c15c779fdff7d2b0f70c339742a377b5
 const { Search } = Input;
 
 const TitleWrapper = styled.div`
@@ -22,20 +26,6 @@ const StyledButton = styled(Button)`
 const ContentsWrapper = styled.div`
   background-color: #fff;
   padding: 2rem;
-`;
-const CardsWrapper = styled.div`
-  padding: 2rem;
-  display: grid;
-  grid-gap: 3rem;
-  grid-template-columns: 1fr 1fr 1fr;
-
-  @media screen and (max-width: 80rem) {
-    grid-template-columns: 1fr 1fr;
-  }
-  @media screen and (max-width: 52rem) {
-    grid-template-columns: 1fr;
-    justify-content: center;
-  }
 `;
 
 const Settings = ({ cards, setCards, userObj, setUserObj }) => {
@@ -146,6 +136,7 @@ const Settings = ({ cards, setCards, userObj, setUserObj }) => {
               </Button>
               <Form.Item name="cards">
                 <CardsWrapper>
+<<<<<<< HEAD
                   {cards.map((card) => (
                     <Card
                       key={card.id}
@@ -154,15 +145,25 @@ const Settings = ({ cards, setCards, userObj, setUserObj }) => {
                       setSettingsCard={setSettingsCard}
                     />
                   ))}
+=======
+                  <Card />
+                  <Card />
+                  <Card />
+                  <Card />
+>>>>>>> 6f82ad49c15c779fdff7d2b0f70c339742a377b5
                 </CardsWrapper>
               </Form.Item>
             </ContentsWrapper>
           ) : (
+<<<<<<< HEAD
             <SettingsCard
               cards={cards}
               setCards={setCards}
               setSettingsCard={setSettingsCard}
             />
+=======
+            <SettingsCard settingsCard={settingsCard} />
+>>>>>>> 6f82ad49c15c779fdff7d2b0f70c339742a377b5
           )}
         </Form>
       </Container>

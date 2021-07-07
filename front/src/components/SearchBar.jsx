@@ -27,7 +27,13 @@ const StyledCheckbox = styled(Checkbox)`
   right: 0;
 `;
 
-const SearchBar = ({ fetchCards,showModal, isModalVisible, setIsModalVisible, form }) => {
+const SearchBar = ({
+  showModal,
+  isModalVisible,
+  setIsModalVisible,
+  form,
+  settingsCard,
+}) => {
   const [selectedTags, setSelectedTags] = useState('');
 
   const onSearch = (value) => console.log(value);
@@ -49,12 +55,11 @@ const SearchBar = ({ fetchCards,showModal, isModalVisible, setIsModalVisible, fo
     <SearchWrapper>
       <SearchBox>
         <StyledSearch placeholder="Search" onSearch={onSearch} enterButton />
-        <Button onClick={showModal}>Add a Card</Button>
+        {!settingsCard && <Button onClick={showModal}>Add a Card</Button>}
         <CardModal
           isModalVisible={isModalVisible}
           setIsModalVisible={setIsModalVisible}
           form={form}
-          fetchCards={fetchCards}
         />
       </SearchBox>
 

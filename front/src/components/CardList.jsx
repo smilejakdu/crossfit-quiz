@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useEffect, useState } from 'react';
 import { Form, Skeleton } from 'antd';
 import Card from './Card';
@@ -30,6 +31,20 @@ const CardList = ({ cards, setCards, setSettingsCard }) => {
 
   const showModal = async () => {
     form.resetFields();
+=======
+import React, { useState } from 'react';
+import { Form } from 'antd';
+import Card from './Card';
+import SearchBar from './SearchBar';
+import { CardsWrapper } from '../globalStyles';
+
+const CardList = () => {
+  const [form] = Form.useForm();
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const showModal = () => {
+    // form.resetFields();
+>>>>>>> 6f82ad49c15c779fdff7d2b0f70c339742a377b5
     setIsModalVisible(true);
   };
 
@@ -40,6 +55,7 @@ const CardList = ({ cards, setCards, setSettingsCard }) => {
         isModalVisible={isModalVisible}
         setIsModalVisible={setIsModalVisible}
         form={form}
+<<<<<<< HEAD
         fetchCards={fetchCards}
       />
       {loading ? (
@@ -57,6 +73,13 @@ const CardList = ({ cards, setCards, setSettingsCard }) => {
           />
         ))
       )}
+=======
+      />
+
+      <CardsWrapper>
+        <Card showModal={showModal} />
+      </CardsWrapper>
+>>>>>>> 6f82ad49c15c779fdff7d2b0f70c339742a377b5
     </>
   );
 };

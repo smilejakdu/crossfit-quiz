@@ -27,19 +27,6 @@ const SettingsCard = ({ cards, setCards, setSettingsCard }) => {
           setCards={setCards}
           setSettingsCard={setSettingsCard}
         />
-        {/* <SearchBar />
-        <StyledCard
-          cover={
-            <img
-              alt="movement"
-              src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
-            />
-          }
-          hoverable
-          selected={selected}
-        >
-          <Meta title="동작 이름" description={<Tag>카테고리</Tag>} />
-        </StyledCard> */}
       </ContentsWrapper>
     </>
   );
