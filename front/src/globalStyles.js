@@ -24,9 +24,12 @@ export const CardsWrapper = styled.div`
   padding: 2rem;
   display: grid;
   grid-gap: 3rem;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
 
   @media screen and (max-width: 80rem) {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+  @media screen and (max-width: 70rem) {
     grid-template-columns: 1fr 1fr;
   }
   @media screen and (max-width: 52rem) {

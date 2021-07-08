@@ -1,45 +1,35 @@
 import { Button, Input, message, Popconfirm, Form } from 'antd';
 import React, { useState } from 'react';
-import styled from 'styled-components';
 import Card from '../components/Card';
-import Header from '../components/Header';
-import SettingsCard from '../components/SettingsCard';
+import CardList from '../components/CardList';
 import { CardsWrapper, Container } from '../globalStyles';
+import {
+  ButtonWrapper,
+  SettingsCard,
+  SettingsMain,
+  StyledButton,
+  TitleWrapper,
+} from '../styles/settings';
 const { Search } = Input;
-
-const TitleWrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  min-height: 5rem;
-`;
-const ButtonWrapper = styled.div`
-  display: flex;
-`;
-const StyledButton = styled(Button)`
-  margin-left: 0.5rem;
-`;
-const ContentsWrapper = styled.div`
-  background-color: #fff;
-  padding: 2rem;
-`;
 
 const Settings = ({ cards, setCards, userObj, setUserObj }) => {
   const [showViewBtn, setShowViewBtn] = useState(false);
   const [settingsCard, setSettingsCard] = useState(false);
+  const [selectedCards, setSelectedCards] = useState([]);
+
+  // useEffect(() => {
+  //   console.log('selectedCards ? ', selectedCards);
+  //   console.log(settingsCard);
+  // }, []);
 
   function confirm(e) {
     console.log(e);
     message.success('Click on Yes');
   }
 
-  function cancel(e) {
-    console.log(e);
-    message.error('Click on No');
-  }
-
-  const handleSave = (values) => {
+  const addQuiz = (values) => {
     console.log(values);
+    setShowViewBtn(true);
   };
 
   const onSearch = (value) => console.log(value);
@@ -50,13 +40,12 @@ const Settings = ({ cards, setCards, userObj, setUserObj }) => {
 
   return (
     <div>
-      <Header userObj={userObj} setUserObj={setUserObj} />
       <Container
         style={{
           backgroundColor: 'var(--main-bg-color)',
         }}
       >
-        <Form name="settings-form" onFinish={handleSave}>
+        <Form name="settings-form" onFinish={addQuiz}>
           <TitleWrapper>
             <h1>Settings</h1>
             {!settingsCard ? (
@@ -65,7 +54,6 @@ const Settings = ({ cards, setCards, userObj, setUserObj }) => {
                   <Popconfirm
                     title="Are you sure to delete this task?"
                     onConfirm={confirm}
-                    onCancel={cancel}
                     okText="Yes"
                     cancelText="No"
                   >
@@ -80,11 +68,7 @@ const Settings = ({ cards, setCards, userObj, setUserObj }) => {
                   </Form.Item>
                 )}
                 <Form.Item>
-                  <StyledButton
-                    type="primary"
-                    htmlType="submit"
-                    onClick={() => setShowViewBtn(true)}
-                  >
+                  <StyledButton type="primary" htmlType="submit">
                     Save
                   </StyledButton>
                 </Form.Item>
@@ -104,7 +88,7 @@ const Settings = ({ cards, setCards, userObj, setUserObj }) => {
             )}
           </TitleWrapper>
           {!settingsCard ? (
-            <ContentsWrapper>
+            <SettingsMain>
               <h2>Question</h2>
               <Form.Item
                 name="question"
@@ -130,25 +114,34 @@ const Settings = ({ cards, setCards, userObj, setUserObj }) => {
               >
                 + Add Cards
               </Button>
-              <Form.Item name="cards">
-                <CardsWrapper>
-                  {cards.map((card) => (
-                    <Card
-                      key={card.id}
-                      card={card}
-                      setCards={setCards}
-                      setSettingsCard={setSettingsCard}
-                    />
-                  ))}
-                </CardsWrapper>
-              </Form.Item>
-            </ContentsWrapper>
+              {selectedCards.length > 0 && (
+                <Form.Item name="cards">
+                  <CardsWrapper>
+                    {selectedCards.map((card) => (
+                      <Card
+                        key={card.id}
+                        card={card}
+                        settingsCard={settingsCard}
+                        selectedCards={selectedCards}
+                        setSelectedCards={setSelectedCards}
+                      />
+                    ))}
+                  </CardsWrapper>
+                </Form.Item>
+              )}
+            </SettingsMain>
           ) : (
-            <SettingsCard
-              cards={cards}
-              setCards={setCards}
-              setSettingsCard={setSettingsCard}
-            />
+            <SettingsCard>
+              <h2>Select Answer Cards</h2>
+              <CardList
+                cards={cards}
+                setCards={setCards}
+                settingsCard={settingsCard}
+                setSettingsCard={setSettingsCard}
+                selectedCards={selectedCards}
+                setSelectedCards={setSelectedCards}
+              />
+            </SettingsCard>
           )}
         </Form>
       </Container>

@@ -10,18 +10,19 @@ import Home from '../pages/Home';
 import NotFound from '../pages/NotFound';
 import Quiz from '../pages/Quiz';
 import Settings from '../pages/Settings';
+import Header from './Header';
 
 const AppRouter = () => {
   const [userObj, setUserObj] = useState(
     () => JSON.parse(window.localStorage.getItem('userObj')) || null
   );
   const [cards, setCards] = useState([]);
-
   return (
     <Router>
       <GlobalStyle />
       <Switch>
         <Route exact path="/">
+          <Header userObj={userObj} setUserObj={setUserObj} />
           <Home
             cards={cards}
             setCards={setCards}
@@ -30,6 +31,7 @@ const AppRouter = () => {
           />
         </Route>
         <Route exact path="/settings">
+          <Header userObj={userObj} setUserObj={setUserObj} />
           <Settings
             cards={cards}
             setCards={setCards}
@@ -38,9 +40,11 @@ const AppRouter = () => {
           />
         </Route>
         <Route exact path="/quiz">
+          <Header userObj={userObj} setUserObj={setUserObj} />
           <Quiz />
         </Route>
         <Route>
+          <Header userObj={userObj} setUserObj={setUserObj} />
           <NotFound />
         </Route>
         <Route>

@@ -1,36 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Popover, Avatar } from 'antd';
-import styled from 'styled-components';
 import LoginModal from './LoginModal';
 import { GoogleLogout } from 'react-google-login';
 import { Link, useLocation } from 'react-router-dom';
-
-const Wrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1.5rem 5rem;
-  // border-bottom: 0.5px solid #f0f4f7;
-
-  @media screen and (max-width: 48rem) {
-    padding: 1.5rem 2rem;
-  }
-`;
-const Logo = styled.div``;
-const Right = styled.div`
-  display: flex;
-`;
-const UserWrapper = styled.div`
-  margin-right: 1.5rem;
-
-  &:hover {
-    cursor: pointer;
-  }
-`;
-const Username = styled.span`
-  display: inline-block;
-  padding-left: 0.5rem;
-`;
+import { Logo, Right, Username, UserWrapper, Wrapper } from '../styles/header';
 
 const Header = ({ userObj, setUserObj }) => {
   let location = useLocation();
@@ -64,7 +37,7 @@ const Header = ({ userObj, setUserObj }) => {
         {userObj && (
           <UserWrapper>
             <Popover content={content}>
-              <Avatar src={userObj.imageUrl} />
+              <Avatar src={userObj.image_path} />
               <Username>{userObj.username}</Username>
             </Popover>
           </UserWrapper>

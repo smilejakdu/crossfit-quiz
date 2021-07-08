@@ -1,33 +1,9 @@
 import React from 'react';
-import {
-  Card,
-  message,
-  Checkbox,
-  Col,
-  Input,
-  Popconfirm,
-  Row,
-  Tag,
-} from 'antd';
-import styled from 'styled-components';
+import { Card, message, Col, Input, Popconfirm, Row, Tag } from 'antd';
 import { CommentOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
+import { Filter, SearchWrapper, StyledCheckbox } from '../styles/quizList';
 const { Search } = Input;
-
-const SearchWrapper = styled.div`
-  width: 50%;
-  margin: 0 auto;
-`;
-const Filter = styled.div`
-  display: flex;
-  justify-content: center;
-  padding: 2rem 0;
-  position: relative;
-`;
-const StyledCheckbox = styled(Checkbox)`
-  position: absolute;
-  right: 0;
-`;
 
 const QuizList = () => {
   function confirm(e) {

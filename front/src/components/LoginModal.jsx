@@ -2,6 +2,7 @@ import React from 'react';
 import { Modal } from 'antd';
 import { GoogleLogin } from 'react-google-login';
 import styled from 'styled-components';
+import { loginRequest } from '../service/login';
 
 const Wrapper = styled.div`
   display: flex;
@@ -16,12 +17,15 @@ const LoginModal = ({ isModalVisible, setIsModalVisible, setUserObj }) => {
 
   const responseGoogle = (response) => {
     setIsModalVisible(false);
-    const { profileObj } = response;
-    setUserObj({
-      googleId: profileObj.googleId,
-      username: profileObj.givenName,
-      imageUrl: profileObj.imageUrl,
-    });
+    const { googleId, name, imageUrl } = response.profileObj;
+    const profileData = {
+      google_id: googleId,
+      username: name,
+      image_path: imageUrl,
+    };
+    const res = loginRequest(profileData);
+    console.log(res);
+    setUserObj(profileData);
   };
 
   return (

@@ -2,9 +2,16 @@ import React, { useEffect, useState } from 'react';
 import { Form, Skeleton } from 'antd';
 import Card from './Card';
 import SearchBar from './SearchBar';
-import { cardService } from '../service/config';
+import { cardService } from '../service/cards';
+import { CardsWrapper } from '../globalStyles';
 
-const CardList = ({ cards, setCards, setSettingsCard }) => {
+const CardList = ({
+  cards,
+  setCards,
+  settingsCard,
+  selectedCards,
+  setSelectedCards,
+}) => {
   const [form] = Form.useForm();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -12,7 +19,6 @@ const CardList = ({ cards, setCards, setSettingsCard }) => {
 
   useEffect(() => {
     fetchCards();
-    // console.log(cards);
   }, []);
 
   const fetchCards = async () => {
@@ -41,21 +47,23 @@ const CardList = ({ cards, setCards, setSettingsCard }) => {
         setIsModalVisible={setIsModalVisible}
         form={form}
         fetchCards={fetchCards}
+        settingsCard={settingsCard}
       />
       {loading ? (
-        <>
-          <Skeleton active />
-        </>
+        <Skeleton active />
       ) : (
-        cards.map((card) => (
-          <Card
-            key={card.id}
-            card={card}
-            showModal={showModal}
-            setSettingsCard={setSettingsCard}
-            setCards={setCards}
-          />
-        ))
+        <CardsWrapper>
+          {cards.map((card) => (
+            <Card
+              key={card.id}
+              card={card}
+              fetchCards={fetchCards}
+              selectedCards={selectedCards}
+              setSelectedCards={setSelectedCards}
+              settingsCard={settingsCard}
+            />
+          ))}
+        </CardsWrapper>
       )}
     </>
   );

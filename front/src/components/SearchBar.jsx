@@ -1,31 +1,15 @@
-import { category } from '../constants';
+import { categoryOptions } from '../constants';
 import CardModal from './CardModal';
 import React, { useState } from 'react';
-import styled from 'styled-components';
-import { Input, Button, Checkbox, Tag } from 'antd';
+import { Button, Tag } from 'antd';
+import {
+  Filter,
+  SearchBox,
+  SearchWrapper,
+  StyledCheckbox,
+  StyledSearch,
+} from '../styles/searchBar';
 const { CheckableTag } = Tag;
-const { Search } = Input;
-
-const SearchWrapper = styled.div`
-  width: 50%;
-  margin: 0 auto;
-`;
-const SearchBox = styled.div`
-  display: flex;
-`;
-const StyledSearch = styled(Search)`
-  margin-right: 1.5rem;
-`;
-const Filter = styled.div`
-  display: flex;
-  justify-content: center;
-  padding: 2rem 0;
-  position: relative;
-`;
-const StyledCheckbox = styled(Checkbox)`
-  position: absolute;
-  right: 0;
-`;
 
 const SearchBar = ({
   showModal,
@@ -33,7 +17,9 @@ const SearchBar = ({
   setIsModalVisible,
   form,
   settingsCard,
+  fetchCards,
 }) => {
+  // console.log(settingsCard);
   const [selectedTags, setSelectedTags] = useState('');
 
   const onSearch = (value) => console.log(value);
@@ -60,12 +46,13 @@ const SearchBar = ({
           isModalVisible={isModalVisible}
           setIsModalVisible={setIsModalVisible}
           form={form}
+          fetchCards={fetchCards}
         />
       </SearchBox>
 
       <Filter>
         <div>
-          {category.map((tag) => (
+          {categoryOptions.map((tag) => (
             <CheckableTag
               key={tag.name}
               checked={selectedTags.indexOf(tag) > -1}

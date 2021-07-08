@@ -1,66 +1,32 @@
 import { UploadOutlined } from '@ant-design/icons';
+import { Button, message, Modal, Form, Upload } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { cardService } from '../service/cards';
 import {
-  Button,
-  Input,
-  message,
-  Popconfirm,
-  Select,
-  Modal,
-  Form,
-  Upload,
-} from 'antd';
-import React from 'react';
-import styled from 'styled-components';
-import { category } from '../constants';
-import { cardService } from '../service/config';
-const { Option } = Select;
-
-const CardWrapper = styled.div`
-  margin: 2rem;
-  padding: 2rem;
-  border: 1px solid #266293;
-  background-color: var(--main-bg-color);
-`;
-const ButtonWrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
-`;
-const ContentsWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-const StyledSelect = styled(Select)`
-  margin-top: 2rem;
-`;
-const StyledInput = styled(Input)`
-  margin: 1rem 0;
-  width: 10rem;
-`;
+  ButtonWrapper,
+  CardWrapper,
+  ContentsWrapper,
+  StyledInput,
+} from '../styles/cardModal';
+import CategoryBar from './CategoryBar';
 
 const CardModal = ({ fetchCards, isModalVisible, setIsModalVisible, form }) => {
   const handleCancel = () => {
     setIsModalVisible(false);
   };
 
-  function handleOptionChange(value) {
-    console.log(`selected ${value}`);
-  }
-
-  function confirm(e) {
-    console.log(e);
-    message.success('Click on Yes');
-  }
-
-  function cancel(e) {
-    console.log(e);
-    message.error('Click on No');
-  }
-
   const handleSave = (values) => {
-    console.log(values);
+    // console.log('google_id : ', google_id);
+    // console.log(window.localStorage.getItem('userObj'));
+    const { category_id, title, image_path } = values;
+    const { google_id } = JSON.parse(window.localStorage.getItem('userObj'));
+    addCard({
+      category_id,
+      title,
+      image_path,
+      google_id,
+    });
     setIsModalVisible(false);
-    addCard(values);
   };
 
   const addCard = async (values) => {
@@ -70,7 +36,7 @@ const CardModal = ({ fetchCards, isModalVisible, setIsModalVisible, form }) => {
     } catch (e) {
       console.log(e.message);
     }
-    await fetchCards();
+    // await fetchCards();
   };
 
   const props = {
@@ -97,36 +63,13 @@ const CardModal = ({ fetchCards, isModalVisible, setIsModalVisible, form }) => {
         <Form form={form} name="add-form" onFinish={handleSave}>
           <ButtonWrapper>
             <Form.Item>
-              <Popconfirm
-                title="Are you sure to delete this task?"
-                onConfirm={confirm}
-                onCancel={cancel}
-                okText="Yes"
-                cancelText="No"
-              >
-                <Button danger>Delete</Button>
-              </Popconfirm>
-            </Form.Item>
-            <Form.Item>
               <Button type="primary" htmlType="submit">
                 Save
               </Button>
             </Form.Item>
           </ButtonWrapper>
           <ContentsWrapper>
-            <Form.Item name="category">
-              <StyledSelect
-                placeholder="Equipment"
-                style={{ width: 120 }}
-                onChange={handleOptionChange}
-              >
-                {category.map((tag) => (
-                  <Option key={tag.name} value={tag.name}>
-                    {tag.name}
-                  </Option>
-                ))}
-              </StyledSelect>
-            </Form.Item>
+            <CategoryBar />
             <Form.Item
               name="title"
               rules={[
@@ -139,7 +82,7 @@ const CardModal = ({ fetchCards, isModalVisible, setIsModalVisible, form }) => {
               <StyledInput placeholder="Title" />
             </Form.Item>
             <Form.Item
-              name="image"
+              name="image_path"
               rules={[
                 {
                   required: true,
