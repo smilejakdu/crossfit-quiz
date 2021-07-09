@@ -5,8 +5,9 @@ var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 var cors = require("cors");
 var config = require("./config")
-var indexRouter = require("./routes/index");
 
+var indexRouter = require("./routes/index");
+var usersRouter = require("./routes/users");
 
 var app = express();
 
@@ -21,7 +22,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // routes
-app.use("/", indexRouter); // 127.0.0.1:3000
+app.use("/"     , indexRouter); // 127.0.0.1:3000
+app.use("/users" , usersRouter); // 127.0.0.1:3000/user
 
 
 app.use(function (req, res, next) {
