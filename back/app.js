@@ -6,8 +6,11 @@ var logger = require("morgan");
 var cors = require("cors");
 var config = require("./config")
 
-var indexRouter = require("./routes/index");
-var usersRouter = require("./routes/users");
+var indexRouter    = require("./routes/index");
+var usersRouter    = require("./routes/users");
+var cardsRouter    = require("./routes/cards");
+var cardsImgRouter = require("./routes/cards_img");
+var commentsRouter = require("./routes/comments");
 
 var app = express();
 
@@ -22,8 +25,11 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // routes
-app.use("/"     , indexRouter); // 127.0.0.1:3000
-app.use("/users" , usersRouter); // 127.0.0.1:3000/user
+app.use("/"          , indexRouter);
+app.use("/users"     , usersRouter); 
+app.use("/cards"     , cardsRouter);
+app.use("/cards_img" , cardsImgRouter);
+app.use("/comments"  , commentsRouter);
 
 
 app.use(function (req, res, next) {
