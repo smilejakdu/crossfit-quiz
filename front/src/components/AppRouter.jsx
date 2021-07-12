@@ -23,21 +23,11 @@ const AppRouter = () => {
       <Switch>
         <Route exact path="/">
           <Header userObj={userObj} setUserObj={setUserObj} />
-          <Home
-            cards={cards}
-            setCards={setCards}
-            userObj={userObj}
-            setUserObj={setUserObj}
-          />
+          <Home cards={cards} setCards={setCards} />
         </Route>
         <Route exact path="/settings">
           <Header userObj={userObj} setUserObj={setUserObj} />
-          <Settings
-            cards={cards}
-            setCards={setCards}
-            userObj={userObj}
-            setUserObj={setUserObj}
-          />
+          <Settings cards={cards} setCards={setCards} />
         </Route>
         <Route exact path="/quiz">
           <Header userObj={userObj} setUserObj={setUserObj} />

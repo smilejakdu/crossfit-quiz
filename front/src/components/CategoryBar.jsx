@@ -1,8 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Form, Select } from 'antd';
 import { categoryOptions } from '../constants';
-const { Option } = Select;
 
 const StyledSelect = styled(Select)`
   margin-top: 2rem;
@@ -11,13 +10,14 @@ const StyledSelect = styled(Select)`
 const CategoryBar = () => {
   return (
     <Form.Item name="category_id">
-      <StyledSelect style={{ width: 120 }} placeholder="Equipment" allowClear>
-        {categoryOptions.map((option) => (
-          <Option key={option.id} value={option.id}>
-            {option.value}
-          </Option>
-        ))}
-      </StyledSelect>
+      <StyledSelect
+        labelInValue
+        style={{ width: 120 }}
+        placeholder="Equipment"
+        allowClear
+        onChange={(value) => console.log(value)}
+        options={categoryOptions}
+      />
     </Form.Item>
   );
 };

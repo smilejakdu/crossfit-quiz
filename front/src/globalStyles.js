@@ -10,6 +10,7 @@ const GlobalStyle = createGlobalStyle`
     
     :root {
       --main-bg-color: #f7f9fa;
+      --blue-color:#3799fc;
     }
 `;
 export const Container = styled.div`

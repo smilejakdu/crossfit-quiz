@@ -1,17 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Badge, Button, Card as AntCard, Radio, Tag } from 'antd';
+import { Badge, Button, Tag } from 'antd';
 import Meta from 'antd/lib/card/Meta';
 import { useLocation } from 'react-router';
 import EditModal from './EditModal';
+import { categoryOptions } from '../constants';
+import { DeselectBtn, StyledCard } from '../styles/card';
 import { MinusCircleOutlined } from '@ant-design/icons';
-
-// const StyledCard = styled(AntCard)`
-//   min-width: 16rem;
-//   max-width: 30rem;
-//   position: relative;
-//   box-shadow: ${(props) => props.selected && '4px 4px 15px 0px #383838'};
-//   top: ${(props) => props.selected && '2px'};
-// `;
 
 const Card = ({
   card,
@@ -21,27 +15,42 @@ const Card = ({
   settingsCard,
 }) => {
   let location = useLocation();
-  const [editCard, setEditCard] = useState({});
   const [showRibbon, setShowRibbon] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
-  const [radioText, setRadioText] = useState('');
-  const { title, category, image_path } = card;
+  const [category, setCategory] = useState('');
+  const { id, title, category_id, img_path } = card;
+
+  useEffect(() => {
+    if (category_id) setCategory(categoryOptions[category_id - 1].value);
+  }, []);
+
+  useEffect(() => {
+    if (location.pathname === '/settings') {
+      const selected = selectedCards.filter((selected) => selected.id === id);
+      if (settingsCard && selected.length > 0) {
+        setShowRibbon(true);
+      }
+    }
+  }, []);
 
   const handleClick = () => {
-    if (settingsCard) {
-      console.log('card ? ', card);
-      setShowRibbon((prev) => !prev);
-      setSelectedCards(selectedCards.concat(card));
-      console.log('selectedCards ? ', selectedCards);
+    if (settingsCard && !showRibbon && selectedCards.length < 4) {
+      addToSelectedCards();
+    } else if (settingsCard && showRibbon) {
+      removeFromSelectedCards();
     } else {
-      // console.log('editCard? ', editCard);
-      console.log('selectedCards ? ', selectedCards);
-      setEditCard(card);
       setShowEditModal(true);
     }
   };
 
+  const addToSelectedCards = () => {
+    setShowRibbon(true);
+    setSelectedCards([...selectedCards, card]);
+    console.log('selectedCards ? ', selectedCards);
+  };
+
   const removeFromSelectedCards = () => {
+    setShowRibbon(false);
     setSelectedCards(
       selectedCards.filter((selected) => selected.id !== card.id)
     );
@@ -50,43 +59,47 @@ const Card = ({
 
   return showRibbon ? (
     <Badge.Ribbon text="select">
-      <AntCard
+      <StyledCard
         style={{
-          minWidth: '14rem',
-          maxWidth: '30rem',
           border: '3px solid #2db7f5',
         }}
         bordered={false}
-        cover={<img alt="movement" src={image_path} />}
+        cover={<img alt="movement" src={img_path} />}
         hoverable
         onClick={handleClick}
       >
-        <Meta title={title} description={category && <Tag>{category}</Tag>} />
-      </AntCard>
+        <Meta
+          title={title}
+          description={category_id && <Tag>{category}</Tag>}
+        />
+      </StyledCard>
     </Badge.Ribbon>
   ) : (
     <>
-      <AntCard
-        style={{ minWidth: '14rem', maxWidth: '30rem' }}
-        cover={<img alt="movement" src={image_path} />}
+      <StyledCard
+        cover={<img alt="movement" src={img_path} />}
         hoverable={location.pathname === '/' && true}
         onClick={handleClick}
       >
-        {/* <Radio onChange={() => setRadioText('Correct')}>{radioText}</Radio> */}
-        <Meta title={title} description={category && <Tag>{category}</Tag>} />
-        {!settingsCard && location.pathname === '/settings' && (
-          <Button type="link" danger onClick={removeFromSelectedCards}>
-            <MinusCircleOutlined style={{ fontSize: '2em' }} />
-          </Button>
-        )}
-      </AntCard>
+        <Meta
+          title={title}
+          description={[
+            category_id && <Tag>{category}</Tag>,
+            !settingsCard && location.pathname === '/settings' && (
+              <DeselectBtn type="link" onClick={removeFromSelectedCards}>
+                <MinusCircleOutlined />
+              </DeselectBtn>
+            ),
+          ]}
+        />
+      </StyledCard>
       {location.pathname === '/' && (
         <EditModal
           fetchCards={fetchCards}
           showEditModal={showEditModal}
           setShowEditModal={setShowEditModal}
-          editCard={editCard}
-          setEditCard={setEditCard}
+          card={card}
+          category={category}
         />
       )}
     </>

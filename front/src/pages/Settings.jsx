@@ -1,40 +1,55 @@
-import { Button, Input, message, Popconfirm, Form } from 'antd';
+import { Button, Input, message, Popconfirm, Form, Radio } from 'antd';
 import React, { useState } from 'react';
 import Card from '../components/Card';
 import CardList from '../components/CardList';
 import { CardsWrapper, Container } from '../globalStyles';
+import { quizService } from '../service/quizzes';
 import {
   ButtonWrapper,
   SettingsCard,
   SettingsMain,
   StyledButton,
+  StyledRadio,
   TitleWrapper,
 } from '../styles/settings';
 const { Search } = Input;
 
-const Settings = ({ cards, setCards, userObj, setUserObj }) => {
+const Settings = ({ cards, setCards }) => {
   const [showViewBtn, setShowViewBtn] = useState(false);
   const [settingsCard, setSettingsCard] = useState(false);
   const [selectedCards, setSelectedCards] = useState([]);
+  const [value, setValue] = useState(1);
 
-  // useEffect(() => {
-  //   console.log('selectedCards ? ', selectedCards);
-  //   console.log(settingsCard);
-  // }, []);
+  const onRadioChange = (e) => {
+    console.log('radio checked', e.target.value);
+    setValue(e.target.value);
+  };
 
   function confirm(e) {
     console.log(e);
     message.success('Click on Yes');
   }
 
-  const addQuiz = (values) => {
+  const addQuiz = async (values) => {
+    if (selectedCards.length < 2) {
+      message.warning('카드를 2개 이상 선택해주세요.');
+      return;
+    }
     console.log(values);
-    setShowViewBtn(true);
+    // const {title} = values;
+
+    // try {
+    //   const res = await quizService.add({title, answer, id});
+    //   console.log(res);
+    // } catch (e) {
+    //   console.log(e.message);
+    // }
+    // await fetchCards();
   };
 
   const onSearch = (value) => console.log(value);
 
-  const handleSelect = () => {
+  const onSelectBtn = () => {
     setSettingsCard(false);
   };
 
@@ -45,45 +60,39 @@ const Settings = ({ cards, setCards, userObj, setUserObj }) => {
           backgroundColor: 'var(--main-bg-color)',
         }}
       >
-        <Form name="settings-form" onFinish={addQuiz}>
+        <Form
+          name="settings-form"
+          onFinish={addQuiz}
+          initialValues={{ answer: 1 }}
+        >
           <TitleWrapper>
             <h1>Settings</h1>
             {!settingsCard ? (
               <ButtonWrapper>
-                <Form.Item>
-                  <Popconfirm
-                    title="Are you sure to delete this task?"
-                    onConfirm={confirm}
-                    okText="Yes"
-                    cancelText="No"
-                  >
-                    <StyledButton danger>Delete</StyledButton>
-                  </Popconfirm>
-                </Form.Item>
+                <Popconfirm
+                  title="Are you sure to delete this task?"
+                  onConfirm={confirm}
+                  okText="Yes"
+                  cancelText="No"
+                >
+                  <StyledButton danger>Delete</StyledButton>
+                </Popconfirm>
+
                 {showViewBtn && (
-                  <Form.Item>
-                    <StyledButton type="primary" ghost>
-                      View
-                    </StyledButton>
-                  </Form.Item>
-                )}
-                <Form.Item>
-                  <StyledButton type="primary" htmlType="submit">
-                    Save
+                  <StyledButton type="primary" ghost>
+                    View
                   </StyledButton>
-                </Form.Item>
+                )}
+                <StyledButton type="primary" htmlType="submit">
+                  Save
+                </StyledButton>
               </ButtonWrapper>
             ) : (
               <ButtonWrapper>
-                <Form.Item>
-                  <StyledButton
-                    type="primary"
-                    htmlType="submit"
-                    onClick={handleSelect}
-                  >
-                    Select
-                  </StyledButton>
-                </Form.Item>
+                <h3>({selectedCards.length}/4)개 선택</h3>
+                <StyledButton type="primary" onClick={onSelectBtn}>
+                  Select
+                </StyledButton>
               </ButtonWrapper>
             )}
           </TitleWrapper>
@@ -91,7 +100,7 @@ const Settings = ({ cards, setCards, userObj, setUserObj }) => {
             <SettingsMain>
               <h2>Question</h2>
               <Form.Item
-                name="question"
+                name="title"
                 rules={[
                   {
                     required: true,
@@ -115,18 +124,23 @@ const Settings = ({ cards, setCards, userObj, setUserObj }) => {
                 + Add Cards
               </Button>
               {selectedCards.length > 0 && (
-                <Form.Item name="cards">
-                  <CardsWrapper>
-                    {selectedCards.map((card) => (
-                      <Card
-                        key={card.id}
-                        card={card}
-                        settingsCard={settingsCard}
-                        selectedCards={selectedCards}
-                        setSelectedCards={setSelectedCards}
-                      />
-                    ))}
-                  </CardsWrapper>
+                <Form.Item name="answer">
+                  <Radio.Group onChange={onRadioChange} defaultValue={1}>
+                    <CardsWrapper>
+                      {selectedCards.map((card, i) => (
+                        <StyledRadio value={i + 1}>
+                          Correct
+                          <Card
+                            key={card.id}
+                            card={card}
+                            settingsCard={settingsCard}
+                            selectedCards={selectedCards}
+                            setSelectedCards={setSelectedCards}
+                          />
+                        </StyledRadio>
+                      ))}
+                    </CardsWrapper>
+                  </Radio.Group>
                 </Form.Item>
               )}
             </SettingsMain>

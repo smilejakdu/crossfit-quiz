@@ -37,7 +37,7 @@ const Header = ({ userObj, setUserObj }) => {
         {userObj && (
           <UserWrapper>
             <Popover content={content}>
-              <Avatar src={userObj.image_path} />
+              <Avatar src={userObj.img_path} />
               <Username>{userObj.username}</Username>
             </Popover>
           </UserWrapper>

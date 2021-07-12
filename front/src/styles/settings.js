@@ -1,4 +1,4 @@
-import { Button } from 'antd';
+import { Button, Radio } from 'antd';
 import styled from 'styled-components';
 
 export const TitleWrapper = styled.div`
@@ -9,6 +9,8 @@ export const TitleWrapper = styled.div`
 `;
 export const ButtonWrapper = styled.div`
   display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 export const StyledButton = styled(Button)`
   margin-left: 0.5rem;
@@ -21,3 +23,4 @@ export const SettingsCard = styled.div`
   background-color: #fff;
   padding: 2rem;
 `;
+export const StyledRadio = styled(Radio)``;

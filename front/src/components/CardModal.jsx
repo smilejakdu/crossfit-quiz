@@ -18,12 +18,18 @@ const CardModal = ({ fetchCards, isModalVisible, setIsModalVisible, form }) => {
   const handleSave = (values) => {
     // console.log('google_id : ', google_id);
     // console.log(window.localStorage.getItem('userObj'));
-    const { category_id, title, image_path } = values;
+
+    const {
+      category_id,
+      title,
+      image: { file },
+    } = values;
+    console.log(file);
     const { google_id } = JSON.parse(window.localStorage.getItem('userObj'));
     addCard({
       category_id,
       title,
-      image_path,
+      img_path: file.response.result,
       google_id,
     });
     setIsModalVisible(false);
@@ -40,14 +46,11 @@ const CardModal = ({ fetchCards, isModalVisible, setIsModalVisible, form }) => {
   };
 
   const props = {
-    name: 'file',
-    // action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
-    headers: {
-      authorization: 'authorization-text',
-    },
+    action: 'http://192.168.146.63:4000/cards_img/upload',
+    listType: 'picture',
     onChange(info) {
       if (info.file.status !== 'uploading') {
-        console.log(info.file, info.fileList);
+        console.log(info.file);
       }
       if (info.file.status === 'done') {
         message.success(`${info.file.name} file uploaded successfully`);
@@ -82,7 +85,7 @@ const CardModal = ({ fetchCards, isModalVisible, setIsModalVisible, form }) => {
               <StyledInput placeholder="Title" />
             </Form.Item>
             <Form.Item
-              name="image_path"
+              name="image"
               rules={[
                 {
                   required: true,

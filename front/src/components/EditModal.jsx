@@ -1,6 +1,8 @@
 import { UploadOutlined } from '@ant-design/icons';
-import { Button, message, Popconfirm, Modal, Form, Upload } from 'antd';
-import React, { useEffect, useState } from 'react';
+import { Button, Popconfirm, Modal, Form, Upload, Select } from 'antd';
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import { categoryOptions } from '../constants';
 
 import { cardService } from '../service/cards';
 import {
@@ -9,56 +11,54 @@ import {
   ContentsWrapper,
   StyledInput,
 } from '../styles/editModal';
-import CategoryBar from './CategoryBar';
+const { Option } = Select;
+
+const StyledSelect = styled(Select)`
+  margin-top: 2rem;
+`;
 
 const EditModal = ({
   fetchCards,
   showEditModal,
   setShowEditModal,
-  editCard,
-  setEditCard,
+  card,
+  category,
 }) => {
-  // console.log('editCard ? ', editCard);
-  const { id, title, image_path } = editCard;
-  const [category, setCategory] = useState('Equipment');
-
-  useEffect(() => {
-    if (editCard.category) {
-      setCategory(editCard.category);
-    }
-  }, []);
+  const [form] = Form.useForm();
+  const { id, title } = card;
+  const [fileList, setFileList] = useState([
+    {
+      uid: '-1',
+      name: 'image.png',
+      status: 'done',
+      url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+    },
+  ]);
 
   const handleCancel = () => {
     setShowEditModal(false);
   };
 
-  const updateCard = async () => {
+  const updateCard = async (values) => {
+    const { category, title, img_path } = values;
+    // console.log(values);
     setShowEditModal(false);
     try {
-      if (category === 'Equipment') {
-        const res = await cardService.update(id, { title, category: '' });
-        console.log(res);
-      } else {
-        const res = await cardService.update(id, { title, category });
-        console.log(res);
-      }
+      const res = await cardService.update({
+        id,
+        category_id:
+          category.value &&
+          categoryOptions.findIndex(
+            (option) => option.value === category.value
+          ) + 1,
+        title,
+        img_path,
+      });
+      console.log(res);
     } catch (e) {
       console.log(e.message);
     }
     await fetchCards();
-  };
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setEditCard({
-      ...editCard,
-      [name]: value,
-    });
-  };
-
-  const getSelectedOption = (value) => {
-    console.log(value);
-    setCategory(value);
   };
 
   const deleteCard = async (id) => {
@@ -71,28 +71,33 @@ const EditModal = ({
     await fetchCards();
   };
 
+  const removeImage = () => {
+    console.log('이미지삭제');
+  };
+
   const props = {
-    name: 'file',
-    // action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
-    headers: {
-      authorization: 'authorization-text',
+    action: 'http://192.168.146.63:4000/cards_img/upload',
+    listType: 'picture-card',
+    fileList,
+    onChange({ fileList: newFileList }) {
+      setFileList(newFileList);
     },
-    onChange(info) {
-      if (info.file.status !== 'uploading') {
-        console.log(info.file, info.fileList);
-      }
-      if (info.file.status === 'done') {
-        message.success(`${info.file.name} file uploaded successfully`);
-      } else if (info.file.status === 'error') {
-        message.error(`${info.file.name} file upload failed.`);
-      }
-    },
+    onRemove: removeImage,
   };
 
   return (
     <Modal visible={showEditModal} onCancel={handleCancel} footer={null}>
       <CardWrapper>
-        <Form name="add-form" onFinish={updateCard}>
+        <Form
+          form={form}
+          name="edit-form"
+          onFinish={updateCard}
+          initialValues={{
+            category: { value: category },
+            title,
+            img_path: fileList[0],
+          }}
+        >
           <ButtonWrapper>
             <Popconfirm
               title="이 카드를 삭제할까요?"
@@ -102,19 +107,27 @@ const EditModal = ({
             >
               <Button danger>Delete</Button>
             </Popconfirm>
-            <Form.Item>
-              <Button type="primary" htmlType="submit">
-                Save
-              </Button>
-            </Form.Item>
+            <Button type="primary" htmlType="submit">
+              Save
+            </Button>
           </ButtonWrapper>
           <ContentsWrapper>
-            <CategoryBar
-              category={category}
-              setCategory={setCategory}
-              setSelectedOption={getSelectedOption}
-            />
+            <Form.Item name="category">
+              <StyledSelect
+                labelInValue
+                // defaultValue={{ value: category }}
+                style={{ width: 120 }}
+                allowClear
+              >
+                {categoryOptions.map((option) => (
+                  <Option key={option.id} value={option.value}>
+                    {option.value}
+                  </Option>
+                ))}
+              </StyledSelect>
+            </Form.Item>
             <Form.Item
+              name="title"
               rules={[
                 {
                   required: true,
@@ -122,23 +135,23 @@ const EditModal = ({
                 },
               ]}
             >
-              <StyledInput name="title" value={title} onChange={handleChange} />
+              <StyledInput />
             </Form.Item>
-            {/* <Form.Item
+            <Form.Item
+              name="img_path"
               rules={[
-                  {
-                      required: true,
-                      message: '이미지를 업로드 해주세요.',
-                    },
+                {
+                  required: true,
+                  message: '이미지를 업로드 해주세요.',
+                },
               ]}
-              >
-              <Upload 
-              
-              name="image"
-              {...props}>
-                <Button icon={<UploadOutlined />}>Click to Upload</Button>
+            >
+              <Upload {...props}>
+                {fileList.length < 1 && (
+                  <Button icon={<UploadOutlined />}>Change Image</Button>
+                )}
               </Upload>
-            </Form.Item> */}
+            </Form.Item>
           </ContentsWrapper>
         </Form>
       </CardWrapper>

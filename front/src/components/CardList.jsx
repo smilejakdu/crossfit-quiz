@@ -25,7 +25,9 @@ const CardList = ({
     setError(null);
     setLoading(true);
     try {
-      const response = await cardService.getAll();
+      const response = await cardService.getAll({
+        params: { offset: '1', limit: '10' },
+      });
       console.log(response);
       setCards(response.data);
     } catch (e) {
@@ -49,6 +51,7 @@ const CardList = ({
         fetchCards={fetchCards}
         settingsCard={settingsCard}
       />
+
       {loading ? (
         <Skeleton active />
       ) : (

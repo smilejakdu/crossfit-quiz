@@ -1,14 +1,14 @@
 import axios from 'axios';
 import { baseURL } from './config';
 
-const endpoint = '/cards';
+const endpoint = '/quizzes';
 
 const getAll = (params) => {
   return axios.get(baseURL + endpoint, params);
 };
 
 const add = (data) => {
-  console.log('card data confirm :', data);
+  console.log('quiz data confirm :', data);
   return axios.post(baseURL + endpoint, data);
 };
 
@@ -20,7 +20,7 @@ const remove = (id) => {
   return axios.delete(baseURL + endpoint + '/' + id);
 };
 
-export const cardService = {
+export const quizService = {
   getAll,
   add,
   update,
