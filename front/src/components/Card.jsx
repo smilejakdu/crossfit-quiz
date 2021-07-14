@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Badge, Button, Tag } from 'antd';
+import { Badge, Tag } from 'antd';
 import Meta from 'antd/lib/card/Meta';
 import { useLocation } from 'react-router';
 import EditModal from './EditModal';

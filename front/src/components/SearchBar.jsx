@@ -1,15 +1,17 @@
-import { categoryOptions } from '../constants';
-import CardModal from './CardModal';
-import React, { useState } from 'react';
-import { Button, Tag } from 'antd';
+import { debounce } from 'debounce';
 import {
-  Filter,
-  SearchBox,
+  Wrapper,
   SearchWrapper,
+  Filter,
+  StyledButton,
   StyledCheckbox,
   StyledSearch,
+  TagWrapper,
+  StyledCheckableTag,
 } from '../styles/searchBar';
-const { CheckableTag } = Tag;
+import { categoryOptions } from '../constants';
+import CardModal from './CardModal';
+import React, { useEffect, useRef, useState } from 'react';
 
 const SearchBar = ({
   showModal,
@@ -18,53 +20,85 @@ const SearchBar = ({
   form,
   settingsCard,
   fetchCards,
+  searchByTitle,
+  filterByCategory,
+  filterByUser,
 }) => {
-  // console.log(settingsCard);
   const [selectedTags, setSelectedTags] = useState('');
+  const [windowSize, setWindowSize] = useState({
+    width: window.innerWidth,
+    height: window.innerHeight,
+  });
+  const inputRef = useRef(null);
 
-  const onSearch = (value) => console.log(value);
+  useEffect(() => {
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
-  function onChange(e) {
-    console.log(`checked = ${e.target.checked}`);
-  }
+  const handleResize = debounce(() => {
+    setWindowSize({
+      width: window.innerWidth,
+      height: window.innerHeight,
+    });
+  }, 1000);
 
-  const handleChange = (tag, checked) => {
+  const handleSearch = async (value) => {
+    searchByTitle(value.toLowerCase());
+    inputRef.current.focus({
+      cursor: 'all',
+    });
+  };
+
+  const handleTags = (tag, checked) => {
     const nextSelectedTags = checked
       ? [...selectedTags, tag]
       : selectedTags.filter((t) => t !== tag);
-    console.log('checked: ', tag);
-    console.log('선택한 카테고리: ', nextSelectedTags);
     setSelectedTags(nextSelectedTags);
+    const tagIds = nextSelectedTags.map((tag) => tag.id);
+    filterByCategory(tagIds);
   };
 
   return (
-    <SearchWrapper>
-      <SearchBox>
-        <StyledSearch placeholder="Search" onSearch={onSearch} enterButton />
-        {!settingsCard && <Button onClick={showModal}>Add a Card</Button>}
+    <Wrapper>
+      <SearchWrapper>
+        <StyledSearch
+          placeholder="Search"
+          onSearch={handleSearch}
+          enterButton
+          allowClear
+          ref={inputRef}
+        />
+        {!settingsCard && (
+          <StyledButton onClick={showModal}>
+            {windowSize.width > 768 ? '+ Add a Card' : '+ New'}
+          </StyledButton>
+        )}
         <CardModal
           isModalVisible={isModalVisible}
           setIsModalVisible={setIsModalVisible}
           form={form}
           fetchCards={fetchCards}
         />
-      </SearchBox>
+      </SearchWrapper>
 
       <Filter>
-        <div>
+        <TagWrapper>
           {categoryOptions.map((tag) => (
-            <CheckableTag
+            <StyledCheckableTag
               key={tag.name}
               checked={selectedTags.indexOf(tag) > -1}
-              onChange={(checked) => handleChange(tag, checked)}
+              onChange={(checked) => handleTags(tag, checked)}
             >
               {tag.name}
-            </CheckableTag>
+            </StyledCheckableTag>
           ))}
-        </div>
-        <StyledCheckbox onChange={onChange}>내가 만든 카드</StyledCheckbox>
+        </TagWrapper>
+        <StyledCheckbox onChange={filterByUser}>내가 만든 카드</StyledCheckbox>
       </Filter>
-    </SearchWrapper>
+    </Wrapper>
   );
 };
 

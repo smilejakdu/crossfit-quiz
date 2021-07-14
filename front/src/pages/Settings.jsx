@@ -1,5 +1,6 @@
 import { Button, Input, message, Popconfirm, Form, Radio } from 'antd';
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import Card from '../components/Card';
 import CardList from '../components/CardList';
 import { CardsWrapper, Container } from '../globalStyles';
@@ -19,6 +20,7 @@ const Settings = ({ cards, setCards }) => {
   const [settingsCard, setSettingsCard] = useState(false);
   const [selectedCards, setSelectedCards] = useState([]);
   const [value, setValue] = useState(1);
+  let history = useHistory();
 
   const onRadioChange = (e) => {
     console.log('radio checked', e.target.value);
@@ -36,15 +38,16 @@ const Settings = ({ cards, setCards }) => {
       return;
     }
     console.log(values);
-    // const {title} = values;
+    const { title, answer } = values;
+    const { google_id } = JSON.parse(window.localStorage.getItem('userObj'));
 
     // try {
-    //   const res = await quizService.add({title, answer, id});
+    //   const res = await quizService.add({google_id, title, answer, id});
     //   console.log(res);
     // } catch (e) {
     //   console.log(e.message);
     // }
-    // await fetchCards();
+    // history.push('/')
   };
 
   const onSearch = (value) => console.log(value);

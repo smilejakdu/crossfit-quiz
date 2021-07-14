@@ -5,17 +5,8 @@ import QuizList from './QuizList';
 const { TabPane } = Tabs;
 
 const MenuTab = ({ cards, setCards }) => {
-  //   function callback(key) {
-  //     console.log(key);
-  //   }
-
   return (
-    <Tabs
-      centered
-      size="large"
-      defaultActiveKey="1"
-      //  onChange={callback}
-    >
+    <Tabs centered size="large" defaultActiveKey="1">
       <TabPane tab="Quizzes" key="1">
         <QuizList />
       </TabPane>

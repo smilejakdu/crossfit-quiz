@@ -1,14 +1,12 @@
-import { DeleteOutlined } from '@ant-design/icons';
 import { Button, Card } from 'antd';
 import styled from 'styled-components';
 
 export const StyledCard = styled(Card)`
-  min-width: 14rem;
-  max-width: 30rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
   position: relative;
-`;
-export const MetaWrapper = styled.div`
-  /* display: flex; */
 `;
 export const DeselectBtn = styled(Button)`
   font-size: 1.5em;

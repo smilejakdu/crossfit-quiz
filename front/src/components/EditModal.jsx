@@ -25,13 +25,13 @@ const EditModal = ({
   category,
 }) => {
   const [form] = Form.useForm();
-  const { id, title } = card;
+  const { id, title, img_path } = card;
   const [fileList, setFileList] = useState([
     {
       uid: '-1',
-      name: 'image.png',
+      name: title,
       status: 'done',
-      url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+      url: img_path,
     },
   ]);
 
