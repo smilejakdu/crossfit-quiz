@@ -11,6 +11,7 @@ var usersRouter    = require("./routes/users");
 var cardsRouter    = require("./routes/cards");
 var cardsImgRouter = require("./routes/cards_img");
 var commentsRouter = require("./routes/comments");
+var quizRouter     = require("./routes/quiz");
 
 var app = express();
 
@@ -30,6 +31,7 @@ app.use("/users"     , usersRouter);
 app.use("/cards"     , cardsRouter);
 app.use("/cards_img" , cardsImgRouter);
 app.use("/comments"  , commentsRouter);
+app.use("/quizzes"   , quizRouter);
 
 
 app.use(function (req, res, next) {
