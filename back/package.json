@@ -1,0 +1,29 @@
+{
+  "name": "crossfit-back",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "start": "node ./bin/www",
+    "dev": "NODE_ENV=local nodemon ./bin/www"
+  },
+  "author": "Jakdu",
+  "license": "ISC",
+  "dependencies": {
+    "cookie-parser": "~1.4.4",
+    "cors": "^2.8.5",
+    "crypto-js": "^3.1.9-1",
+    "debug": "~2.6.9",
+    "ejs": "~2.6.1",
+    "express": "~4.16.1",
+    "http-errors": "~1.6.3",
+    "lodash": "^4.17.20",
+    "moment": "^2.29.1",
+    "morgan": "^1.9.1",
+    "mysql": "^2.18.1",
+    "mysql2": "^2.2.5",
+    "nodemailer": "^6.4.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.2"
+  }
+}
