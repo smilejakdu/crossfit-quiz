@@ -7,6 +7,11 @@ const GlobalStyle = createGlobalStyle`
         box-sizing:border-box;
         font-family:'Montserrat', sans-serif;
     }
+    
+    :root {
+      --main-bg-color: #f7f9fa;
+      --blue-color:#3799fc;
+    }
 `;
 export const Container = styled.div`
   z-index: 1;
@@ -14,10 +19,23 @@ export const Container = styled.div`
   // max-width: 1500px;
   margin-right: auto;
   margin-left: auto;
-  padding: 0 4rem;
+  padding: 2rem 4rem;
+`;
+export const CardsWrapper = styled.div`
+  padding: 2rem;
+  display: grid;
+  grid-gap: 3rem;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
 
-  @media screen and (max-width: 48rem) {
-    padding: 0 2rem;
+  @media screen and (max-width: 80rem) {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+  @media screen and (max-width: 70rem) {
+    grid-template-columns: 1fr 1fr;
+  }
+  @media screen and (max-width: 52rem) {
+    grid-template-columns: 1fr;
+    justify-content: center;
   }
 `;
 

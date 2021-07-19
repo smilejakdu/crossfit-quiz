@@ -1,0 +1,38 @@
+{
+  "cards": [
+    {
+      "id": 1,
+      "title": "Squat Clean",
+      "category_id": 1,
+      "img_path": "https://www.crossfit.com/wp-content/uploads/2019/11/21141605/Hang-Squat-Clean-Camille.png",
+      "google_id": "111827277827081733666"
+    },
+    {
+      "id": 2,
+      "title": "Power Snatch",
+      "img_path": "https://via.placeholder.com/150/771796",
+      "google_id": "111827277827081733666"
+    },
+    {
+      "id": 3,
+      "title": "Toes to Bar",
+      "category_id": 4,
+      "img_path": "https://via.placeholder.com/150/24f355",
+      "google_id": "2222222222222"
+    },
+    {
+      "id": 4,
+      "title": "Kettlebell Swing",
+      "category_id": 3,
+      "img_path": "https://via.placeholder.com/150/d32776",
+      "google_id": "2222222222222"
+    },
+    {
+      "id": 5,
+      "title": "Overhead Squat",
+      "category_id": 1,
+      "img_path": "https://via.placeholder.com/150/f66b97",
+      "google_id": "2222222222222"
+    }
+  ]
+}
