@@ -15,7 +15,7 @@ export const SearchWrapper = styled.div`
   display: flex;
 `;
 export const StyledSearch = styled(Search)`
-  min-width: 10rem;
+  min-width: 13rem;
   margin-right: 1.5rem;
   @media (max-width: 768px) {
     margin-right: 0.8rem;
@@ -26,17 +26,14 @@ export const StyledButton = styled(Button)`
 `;
 export const Filter = styled.div`
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   padding: 2rem 0;
-  @media screen and (max-width: 1350px) {
-    flex-direction: column;
-  }
 `;
 export const TagWrapper = styled.div`
-  padding-right: 2rem;
+  padding-bottom: 1.5rem;
   @media screen and (max-width: 1350px) {
-    padding-bottom: 2rem;
     padding-right: 0;
   }
   @media screen and (max-width: 768px) {

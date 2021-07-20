@@ -43,11 +43,20 @@ const Settings = ({ cards, setCards }) => {
     }
     console.log(values);
     const { title, answer } = values;
-    const { google_id } = JSON.parse(window.localStorage.getItem('userObj'));
+    const { google_id, username, img_path } = JSON.parse(
+      window.localStorage.getItem('userObj')
+    );
 
     try {
       const card_id = selectedCards.map((card) => card.id);
-      const res = await quizService.add({ google_id, title, answer, card_id });
+      const res = await quizService.add({
+        google_id,
+        username,
+        img_path,
+        title,
+        answer,
+        card_id,
+      });
       createdQuizId = res.data.id;
       console.log(createdQuizId);
     } catch (e) {

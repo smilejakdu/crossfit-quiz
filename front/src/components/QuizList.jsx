@@ -1,10 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { Empty, Input, Skeleton, Tag } from 'antd';
-import { Filter, SearchWrapper, StyledCheckbox } from '../styles/quizList';
+import { Empty, Skeleton } from 'antd';
+import {
+  StyledSearch,
+  Filter,
+  SearchWrapper,
+  TagWrapper,
+  StyledCheckbox,
+  StyledTag,
+} from '../styles/quizList';
 import { quizService } from '../service/quizzes';
 import QuizCard from './QuizCard';
 import { CardsWrapper, EmptyWrapper } from '../globalStyles';
-const { Search } = Input;
+import { sortingOptions } from '../constants';
 
 const QuizList = ({ quizzes, setQuizzes }) => {
   const [loading, setLoading] = useState(false);
@@ -38,19 +45,25 @@ const QuizList = ({ quizzes, setQuizzes }) => {
   return (
     <>
       <SearchWrapper>
-        <Search placeholder="Search" onSearch={onSearch} enterButton />
+        <StyledSearch placeholder="Search" onSearch={onSearch} enterButton />
 
         <Filter>
-          <div>
-            <Tag
-              checked
-              // onChange={checked => handleChange(tag, checked)}
-            >
-              인기순
-            </Tag>
-            <Tag>최신순</Tag>
-          </div>
-          <StyledCheckbox onChange={onChange}>내가 만든 퀴즈</StyledCheckbox>
+          <TagWrapper>
+            {sortingOptions.map((tag) => (
+              <StyledTag
+                key={tag.id}
+                checked={tag.id === 0 && true}
+                // onChange={(checked) => handleTags(tag, checked)}
+              >
+                {tag.name}
+              </StyledTag>
+            ))}
+          </TagWrapper>
+          <StyledCheckbox
+          // onChange={filterByUser}
+          >
+            내가 만든 퀴즈
+          </StyledCheckbox>
         </Filter>
       </SearchWrapper>
 

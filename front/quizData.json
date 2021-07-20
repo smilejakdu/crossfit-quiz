@@ -3,178 +3,41 @@
     {
       "id": 1,
       "title": "Squat Clean",
-      "card_id": [
-        1,
-        2
-      ],
+      "card_id": [1, 2],
       "answer": 1,
-      "created_at": "today",
-      "img_path": "https://www.crossfit.com/wp-content/uploads/2019/11/21141605/Hang-Squat-Clean-Camille.png",
-      "google_id": "111827277827081733666"
+      "created_at": "today"
     },
     {
       "id": 2,
       "title": "Power Snatch",
-      "card_id": [
-        3,
-        4
-      ],
+      "card_id": [3, 4],
       "answer": 1,
-      "created_at": "21/07/17",
-      "img_path": "https://via.placeholder.com/150/771796",
-      "google_id": "111827277827081733666"
+      "created_at": "21/07/17"
     },
     {
       "id": 3,
       "title": "Toes to Bar",
-      "card_id": [
-        3,
-        4
-      ],
+      "card_id": [3, 4],
       "answer": 1,
       "created_at": "21/07/17",
-      "img_path": "https://via.placeholder.com/150/24f355",
       "google_id": "2222222222222"
     },
     {
       "id": 4,
       "title": "Kettlebell Swing",
-      "card_id": [
-        3,
-        4
-      ],
+      "card_id": [3, 4],
       "answer": 1,
       "created_at": "21/07/17",
-      "img_path": "https://via.placeholder.com/150/d32776",
-      "google_id": "2222222222222"
-    },
-    {
-      "id": 5,
-      "title": "Overhead Squat",
-      "card_id": [
-        3,
-        4
-      ],
-      "answer": 1,
-      "created_at": "21/07/17",
-      "img_path": "https://via.placeholder.com/150/f66b97",
       "google_id": "2222222222222"
     },
     {
       "google_id": "111827277827081733666",
-      "title": "스내치",
-      "answer": 1,
-      "card_id": [
-        2,
-        1
-      ],
-      "id": 6
-    },
-    {
-      "google_id": "111827277827081733666",
-      "title": "케틀벨 스윙",
-      "answer": 3,
-      "card_id": [
-        3,
-        5,
-        4
-      ],
-      "id": 7
-    },
-    {
-      "google_id": "111827277827081733666",
-      "title": "스쾃 클린",
-      "answer": 1,
-      "card_id": [
-        1,
-        5,
-        2
-      ],
-      "id": 8
-    },
-    {
-      "google_id": "111827277827081733666",
-      "title": "파워 스내치",
-      "answer": 2,
-      "card_id": [
-        1,
-        2
-      ],
-      "id": 9
-    },
-    {
-      "google_id": "111827277827081733666",
+      "username": "LightFury",
+      "img_path": "https://lh3.googleusercontent.com/a/AATXAJz9AYlH4QMpD4QzdjJPHnw-45qcx1K8ZsjWYDC9=s96-c",
       "title": "squat clean!!",
-      "answer": 2,
-      "card_id": [
-        2,
-        1,
-        4
-      ],
-      "id": 10
-    },
-    {
-      "google_id": "111827277827081733666",
-      "title": "스내치",
       "answer": 1,
-      "card_id": [
-        2,
-        1
-      ],
-      "id": 11
-    },
-    {
-      "google_id": "111827277827081733666",
-      "title": "스내치",
-      "answer": 1,
-      "card_id": [
-        2,
-        3
-      ],
-      "id": 12
-    },
-    {
-      "google_id": "111827277827081733666",
-      "title": "오버헤드 스쿼트",
-      "answer": 2,
-      "card_id": [
-        1,
-        5,
-        2,
-        3
-      ],
-      "id": 13
-    },
-    {
-      "google_id": "111827277827081733666",
-      "card_id": [
-        4,
-        1
-      ],
-      "id": 14
-    },
-    {
-      "google_id": "111827277827081733666",
-      "title": "러시안 스윙",
-      "answer": 1,
-      "card_id": [
-        4,
-        1,
-        2
-      ],
-      "id": 15
-    },
-    {
-      "google_id": "111827277827081733666",
-      "title": "4개스퀏클린",
-      "answer": 1,
-      "card_id": [
-        1,
-        2,
-        3,
-        4
-      ],
-      "id": 16
+      "card_id": [1, 2, 3],
+      "id": 17
     }
   ]
 }

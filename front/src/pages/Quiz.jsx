@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { quizService } from '../service/quizzes';
-import { Typography, Image, Button, Tooltip } from 'antd';
+import { Typography, Image, Button, Tooltip, message } from 'antd';
 import { Container } from '../globalStyles';
 import { TitleWrapper } from '../styles/settings';
 import { cardService } from '../service/cards';
@@ -27,7 +27,6 @@ const Quiz = () => {
   useEffect(() => {
     setAnswerCard(cards[answer - 1]);
   }, [cards]);
-  console.log('정답카드', answerCard);
 
   const fetchQuiz = async () => {
     setLoading(true);
@@ -65,10 +64,15 @@ const Quiz = () => {
   };
 
   const handleCheckAnswer = () => {
+    if (selectedCard.length === 0) {
+      message.warning('정답을 선택해주세요.');
+      return;
+    }
     setShowAnswer(true);
   };
 
   const handleRestart = () => {
+    setSelectedCard([]);
     setShowAnswer(false);
     setShowFinishScreen(false);
   };

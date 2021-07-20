@@ -6,16 +6,22 @@ import {
   SendOutlined,
 } from '@ant-design/icons';
 import { Card, Statistic, Avatar } from 'antd';
+import { currentUserId } from '../constants';
 
 const QuizCard = ({ quiz, fetchQuizzes }) => {
   let history = useHistory();
-  const { id, title, answer, created_at, google_id, card_id } = quiz;
+  const {
+    id,
+    title,
+    answer,
+    created_at,
+    google_id,
+    username,
+    img_path,
+    card_id,
+  } = quiz;
 
   const handleClick = () => {
-    const { google_id: currentUserId } = JSON.parse(
-      window.localStorage.getItem('userObj')
-    );
-    console.log('userobj', JSON.parse(window.localStorage.getItem('userObj')));
     // if (google_id === currentUserId) {
     //   history.push('/settings');
     // } else {
@@ -53,7 +59,11 @@ const QuizCard = ({ quiz, fetchQuizzes }) => {
         value={created_at}
         prefix={<CalendarOutlined />}
       />
-      <Statistic title="Created By" value={google_id} prefix={<Avatar />} />
+      <Statistic
+        title="Created By"
+        value={username}
+        prefix={<Avatar src={img_path} />}
+      />
       <Statistic title="Comments" value={20} prefix={<CommentOutlined />} />
     </Card>
   );
