@@ -5,7 +5,6 @@ export const StyledCard = styled(Card)`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-
   position: relative;
 `;
 export const DeselectBtn = styled(Button)`

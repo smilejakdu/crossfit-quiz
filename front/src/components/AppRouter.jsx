@@ -17,19 +17,26 @@ const AppRouter = () => {
     () => JSON.parse(window.localStorage.getItem('userObj')) || null
   );
   const [cards, setCards] = useState([]);
+  const [quizzes, setQuizzes] = useState([]);
+
   return (
     <Router>
       <GlobalStyle />
       <Switch>
         <Route exact path="/">
           <Header userObj={userObj} setUserObj={setUserObj} />
-          <Home cards={cards} setCards={setCards} />
+          <Home
+            cards={cards}
+            setCards={setCards}
+            quizzes={quizzes}
+            setQuizzes={setQuizzes}
+          />
         </Route>
         <Route exact path="/settings">
           <Header userObj={userObj} setUserObj={setUserObj} />
           <Settings cards={cards} setCards={setCards} />
         </Route>
-        <Route exact path="/quiz">
+        <Route exact path="/quiz/:id">
           <Header userObj={userObj} setUserObj={setUserObj} />
           <Quiz />
         </Route>

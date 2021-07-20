@@ -1,10 +1,15 @@
 import axios from 'axios';
-import { baseURL } from './config';
+// import { baseURL } from './config';
+const baseURL = 'http://localhost:4001';
 
 const endpoint = '/quizzes';
 
 const getAll = (params) => {
   return axios.get(baseURL + endpoint, params);
+};
+
+const get = (id) => {
+  return axios.get(baseURL + endpoint + '/' + id);
 };
 
 const add = (data) => {
@@ -22,6 +27,7 @@ const remove = (id) => {
 
 export const quizService = {
   getAll,
+  get,
   add,
   update,
   remove,

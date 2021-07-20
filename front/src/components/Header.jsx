@@ -2,11 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { Button, Popover, Avatar } from 'antd';
 import LoginModal from './LoginModal';
 import { GoogleLogout } from 'react-google-login';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useRouteMatch } from 'react-router-dom';
 import { Logo, Right, Username, UserWrapper, Wrapper } from '../styles/header';
 
 const Header = ({ userObj, setUserObj }) => {
-  let location = useLocation();
+  let matchSettings = useRouteMatch('/settings');
+  let matchQuiz = useRouteMatch('/quiz/:id');
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   useEffect(() => {
@@ -43,7 +44,7 @@ const Header = ({ userObj, setUserObj }) => {
           </UserWrapper>
         )}
         {userObj ? (
-          location.pathname === '/settings' ? (
+          matchSettings || matchQuiz ? (
             <Link to="/">
               <Button type="primary" ghost>
                 Back to Quiz List

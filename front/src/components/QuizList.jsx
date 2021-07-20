@@ -1,20 +1,33 @@
-import React from 'react';
-import { Card, message, Col, Input, Popconfirm, Row, Tag } from 'antd';
-import { CommentOutlined } from '@ant-design/icons';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Empty, Input, Skeleton, Tag } from 'antd';
 import { Filter, SearchWrapper, StyledCheckbox } from '../styles/quizList';
+import { quizService } from '../service/quizzes';
+import QuizCard from './QuizCard';
+import { CardsWrapper, EmptyWrapper } from '../globalStyles';
 const { Search } = Input;
 
-const QuizList = () => {
-  function confirm(e) {
-    console.log(e);
-    message.success('Click on Yes');
-  }
+const QuizList = ({ quizzes, setQuizzes }) => {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  function cancel(e) {
-    console.log(e);
-    message.error('Click on No');
-  }
+  useEffect(() => {
+    fetchQuizzes();
+  }, []);
+
+  const fetchQuizzes = async () => {
+    setError(null);
+    setLoading(true);
+    try {
+      const res = await quizService.getAll({
+        params: { offset: '1', limit: '10' },
+      });
+      console.log(res);
+      setQuizzes(res.data);
+    } catch (e) {
+      setError(e);
+    }
+    setLoading(false);
+  };
 
   const onSearch = (value) => console.log(value);
 
@@ -41,32 +54,19 @@ const QuizList = () => {
         </Filter>
       </SearchWrapper>
 
-      <div className="site-card-wrapper">
-        <Row gutter={16}>
-          <Col span={8}>
-            <Link to="/settings">
-              <Card title="동작 이름" extra={<a href="#">정답률</a>} hoverable>
-                <div>생성일</div>
-                <div>created by</div>
-                <div>총 _명 참여!</div>
-                <div>
-                  <CommentOutlined />
-                  comments
-                </div>
-                <Popconfirm
-                  title="Are you sure to delete this task?"
-                  onConfirm={confirm}
-                  onCancel={cancel}
-                  okText="Yes"
-                  cancelText="No"
-                >
-                  <a href="#">Delete</a>
-                </Popconfirm>
-              </Card>
-            </Link>
-          </Col>
-        </Row>
-      </div>
+      {loading ? (
+        <Skeleton active />
+      ) : quizzes.length === 0 ? (
+        <EmptyWrapper>
+          <Empty description="검색 결과가 없습니다." />
+        </EmptyWrapper>
+      ) : (
+        <CardsWrapper>
+          {quizzes.map((quiz) => (
+            <QuizCard key={quiz.id} quiz={quiz} fetchQuizzes={fetchQuizzes} />
+          ))}
+        </CardsWrapper>
+      )}
     </>
   );
 };

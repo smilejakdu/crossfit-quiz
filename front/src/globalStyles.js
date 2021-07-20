@@ -16,7 +16,6 @@ const GlobalStyle = createGlobalStyle`
 export const Container = styled.div`
   z-index: 1;
   width: 100%;
-  // max-width: 1500px;
   margin-right: auto;
   margin-left: auto;
   padding: 2rem 4rem;
@@ -37,6 +36,9 @@ export const CardsWrapper = styled.div`
     grid-template-columns: 1fr;
     justify-content: center;
   }
+`;
+export const EmptyWrapper = styled.div`
+  margin-top: 5rem;
 `;
 
 export default GlobalStyle;

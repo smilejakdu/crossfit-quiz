@@ -21,16 +21,20 @@ const Settings = ({ cards, setCards }) => {
   const [selectedCards, setSelectedCards] = useState([]);
   const [value, setValue] = useState(1);
   let history = useHistory();
+  let createdQuizId;
 
   const onRadioChange = (e) => {
     console.log('radio checked', e.target.value);
     setValue(e.target.value);
   };
 
-  function confirm(e) {
-    console.log(e);
-    message.success('Click on Yes');
-  }
+  const onCancelConfirm = () => {
+    history.push('/quizzes');
+  };
+
+  // const handleViewBtn = () => {
+  //   history.push(`/quiz/${createdQuizId}`);
+  // };
 
   const addQuiz = async (values) => {
     if (selectedCards.length < 2) {
@@ -41,13 +45,16 @@ const Settings = ({ cards, setCards }) => {
     const { title, answer } = values;
     const { google_id } = JSON.parse(window.localStorage.getItem('userObj'));
 
-    // try {
-    //   const res = await quizService.add({google_id, title, answer, id});
-    //   console.log(res);
-    // } catch (e) {
-    //   console.log(e.message);
-    // }
-    // history.push('/')
+    try {
+      const card_id = selectedCards.map((card) => card.id);
+      const res = await quizService.add({ google_id, title, answer, card_id });
+      createdQuizId = res.data.id;
+      console.log(createdQuizId);
+    } catch (e) {
+      console.log(e.message);
+    }
+    message.success('퀴즈를 만들었습니다!');
+    setShowViewBtn(true);
   };
 
   const onSearch = (value) => console.log(value);
@@ -73,19 +80,28 @@ const Settings = ({ cards, setCards }) => {
             {!settingsCard ? (
               <ButtonWrapper>
                 <Popconfirm
-                  title="Are you sure to delete this task?"
-                  onConfirm={confirm}
+                  title="취소하시겠습니까?"
+                  onConfirm={onCancelConfirm}
+                  okText="Yes"
+                  cancelText="No"
+                >
+                  <StyledButton danger>Cancel</StyledButton>
+                </Popconfirm>
+                {/* 만든 사람이면
+                <Popconfirm
+                  title="삭제하시겠습니까?"
+                  onConfirm={onDeleteConfirm}
                   okText="Yes"
                   cancelText="No"
                 >
                   <StyledButton danger>Delete</StyledButton>
-                </Popconfirm>
+                </Popconfirm> */}
 
-                {showViewBtn && (
-                  <StyledButton type="primary" ghost>
+                {/* {showViewBtn && (
+                  <StyledButton type="primary" ghost onClick={handleViewBtn}>
                     View
                   </StyledButton>
-                )}
+                )} */}
                 <StyledButton type="primary" htmlType="submit">
                   Save
                 </StyledButton>

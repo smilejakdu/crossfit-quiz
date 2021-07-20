@@ -7,6 +7,10 @@ const getAll = (params) => {
   return axios.get(baseURL + endpoint, params);
 };
 
+const get = (id) => {
+  return axios.get(baseURL + endpoint + '/' + id);
+};
+
 const add = (data) => {
   console.log('card data confirm :', data);
   return axios.post(baseURL + endpoint, data);
@@ -22,6 +26,7 @@ const remove = (id) => {
 
 export const cardService = {
   getAll,
+  get,
   add,
   update,
   remove,

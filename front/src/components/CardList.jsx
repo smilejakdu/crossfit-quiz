@@ -3,8 +3,7 @@ import { Empty, Form, Skeleton } from 'antd';
 import Card from './Card';
 import SearchBar from './SearchBar';
 import { cardService } from '../service/cards';
-import { CardsWrapper } from '../globalStyles';
-import { EmptyWrapper } from '../styles/cardList';
+import { CardsWrapper, EmptyWrapper } from '../globalStyles';
 
 const CardList = ({
   cards,
