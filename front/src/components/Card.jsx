@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Badge, Tag } from 'antd';
+import { Badge, Button, Tag } from 'antd';
 import Meta from 'antd/lib/card/Meta';
 import { useLocation } from 'react-router';
 import EditModal from './EditModal';
-import { categoryOptions } from '../constants';
-import { DeselectBtn, StyledCard } from '../styles/card';
-import { MinusCircleOutlined } from '@ant-design/icons';
+import { categoryOptions, currentUserId } from '../constants';
+import { DeselectBtn, StyledCard, TitleWrapper } from '../styles/card';
+import { EditOutlined, MinusCircleOutlined } from '@ant-design/icons';
 import { useRouteMatch } from 'react-router-dom';
 
 const Card = ({
@@ -20,7 +20,7 @@ const Card = ({
   const [showEditModal, setShowEditModal] = useState(false);
   const [category, setCategory] = useState('');
   let matchEditSettings = useRouteMatch('/settings/:id');
-  const { id, title, category_id, img_path } = card;
+  const { id, title, category_id, img_path, google_id } = card;
 
   useEffect(() => {
     if (category_id) setCategory(categoryOptions[category_id - 1].value);
@@ -78,13 +78,24 @@ const Card = ({
     </Badge.Ribbon>
   ) : (
     <>
-      <StyledCard
-        cover={<img alt="movement" src={img_path} />}
-        hoverable={location.pathname === '/' && true}
-        onClick={handleClick}
-      >
+      <StyledCard cover={<img alt="movement" src={img_path} />}>
         <Meta
-          title={title}
+          title={
+            <TitleWrapper>
+              {title}
+              {currentUserId === google_id && (
+                <Button
+                  type="primary"
+                  shape="round"
+                  ghost
+                  onClick={handleClick}
+                >
+                  <EditOutlined />
+                  Edit
+                </Button>
+              )}
+            </TitleWrapper>
+          }
           description={[
             category_id && <Tag>{category}</Tag>,
             !settingsCard && location.pathname === '/settings' && (

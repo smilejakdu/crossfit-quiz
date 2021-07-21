@@ -17,3 +17,7 @@ export const DeselectBtn = styled(Button)`
   top: -2.4rem;
   right: 0;
 `;
+export const TitleWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
