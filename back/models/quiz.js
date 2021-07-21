@@ -1,6 +1,5 @@
 const { disable } = require("debug");
 const db = require("../components/db");
-
 module.exports.insert = async (connection, options) => {
   console.log("options : ", options);
   let query = "INSERT INTO quizzes SET ?";
@@ -33,18 +32,35 @@ module.exports.delete = async (connection, options) => {
 };
 
 module.exports.getList = async (options) => {
-  console.log("options : ", options);
-  const { id } = options;
-  let query = "SELECT * FROM quizzes ";
-  let values;
+  try{
+    console.log("options : ", options);
+    const { id } = options;
+    // let query = "SELECT * FROM quizzes ";
+    let query = "";
+    let values;
 
-  if (id) {
-    query += " WHERE id = ?";
-    values = id;
+    if (id === 0) { // 인기순 (참여자 순) : quiz_answer
+      let query = `SELECT * , count(comments.quiz_id) as comment_cnt FROM quizzes
+                  LEFT JOIN comments ON quizzes.id = comments.quiz_id
+                  LEFT JOIN cards ON quizzes.cards_id = cards.id
+                  ORDER BY count(comments.quiz_id)
+                  GROUP BY 1,2`;
+      values = id;
+      return await db.query({
+        query: query,
+        values: "",
+      });
+    }else if(id === 1){ // 최신순 , created_at
+      query = `SELECT * , count(comments.quiz_id) as comment_cnt FROM quizzes
+                LEFT JOIN comments ON quizzes.id = comments.quiz_id 
+                ORDER BY quizzes.created_at
+                GROUP BY 1,2`;
+      return await db.query({
+        query: query,
+        values: "",
+      });
+    }
+  }catch(err){
+    throw new Error(err); 
   }
-  return await db.query({
-    // connection:connection,
-    query: query,
-    values: values,
-  });
 };

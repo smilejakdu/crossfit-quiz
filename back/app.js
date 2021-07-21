@@ -6,12 +6,13 @@ var logger = require("morgan");
 var cors = require("cors");
 var config = require("./config")
 
-var indexRouter    = require("./routes/index");
-var usersRouter    = require("./routes/users");
-var cardsRouter    = require("./routes/cards");
-var cardsImgRouter = require("./routes/cards_img");
-var commentsRouter = require("./routes/comments");
-var quizRouter     = require("./routes/quiz");
+var indexRouter       = require("./routes/index");
+var usersRouter       = require("./routes/users");
+var cardsRouter       = require("./routes/cards");
+var cardsImgRouter    = require("./routes/cards_img");
+var commentsRouter    = require("./routes/comments");
+var quizRouter        = require("./routes/quiz");
+var quizAnswerRouter  = require("./routes/quiz_answer");
 
 var app = express();
 
@@ -26,12 +27,13 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // routes
-app.use("/"          , indexRouter);
-app.use("/users"     , usersRouter); 
-app.use("/cards"     , cardsRouter);
-app.use("/cards_img" , cardsImgRouter);
-app.use("/comments"  , commentsRouter);
-app.use("/quizzes"   , quizRouter);
+app.use("/"               , indexRouter);
+app.use("/users"          , usersRouter); 
+app.use("/cards"          , cardsRouter);
+app.use("/cards_img"      , cardsImgRouter);
+app.use("/comments"       , commentsRouter);
+app.use("/quizzes"        , quizRouter);
+app.use("/quizzes_answer" , quizAnswerRouter);
 
 
 app.use(function (req, res, next) {
