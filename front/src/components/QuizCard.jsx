@@ -22,11 +22,14 @@ const QuizCard = ({ quiz, fetchQuizzes }) => {
   } = quiz;
 
   const handleClick = () => {
-    // if (google_id === currentUserId) {
-    //   history.push('/settings');
-    // } else {
-    history.push(`/quiz/${id}`);
-    // }
+    if (google_id === currentUserId) {
+      history.push({
+        pathname: `/settings/${id}`,
+        state: { quiz },
+      });
+    } else {
+      history.push(`/quiz/${id}`);
+    }
   };
 
   return (

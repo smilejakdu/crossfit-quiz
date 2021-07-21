@@ -18,7 +18,7 @@ const add = (data) => {
 };
 
 const update = (data) => {
-  return axios.put(baseURL + endpoint + '/', data);
+  return axios.patch(baseURL + endpoint + '/' + data.id, data);
 };
 
 const remove = (id) => {

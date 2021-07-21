@@ -6,6 +6,7 @@ import {
   Switch,
 } from 'react-router-dom';
 import GlobalStyle from '../globalStyles';
+import EditSettings from '../pages/EditSettings';
 import Home from '../pages/Home';
 import NotFound from '../pages/NotFound';
 import Quiz from '../pages/Quiz';
@@ -35,6 +36,10 @@ const AppRouter = () => {
         <Route exact path="/settings">
           <Header userObj={userObj} setUserObj={setUserObj} />
           <Settings cards={cards} setCards={setCards} />
+        </Route>
+        <Route exact path="/settings/:id">
+          <Header userObj={userObj} setUserObj={setUserObj} />
+          <EditSettings cards={cards} setCards={setCards} />
         </Route>
         <Route exact path="/quiz/:id">
           <Header userObj={userObj} setUserObj={setUserObj} />

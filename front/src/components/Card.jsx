@@ -6,6 +6,7 @@ import EditModal from './EditModal';
 import { categoryOptions } from '../constants';
 import { DeselectBtn, StyledCard } from '../styles/card';
 import { MinusCircleOutlined } from '@ant-design/icons';
+import { useRouteMatch } from 'react-router-dom';
 
 const Card = ({
   card,
@@ -18,6 +19,7 @@ const Card = ({
   const [showRibbon, setShowRibbon] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [category, setCategory] = useState('');
+  let matchEditSettings = useRouteMatch('/settings/:id');
   const { id, title, category_id, img_path } = card;
 
   useEffect(() => {
@@ -25,7 +27,7 @@ const Card = ({
   }, []);
 
   useEffect(() => {
-    if (location.pathname === '/settings') {
+    if (location.pathname === '/settings' || matchEditSettings) {
       const selected = selectedCards.filter((selected) => selected.id === id);
       if (settingsCard && selected.length > 0) {
         setShowRibbon(true);

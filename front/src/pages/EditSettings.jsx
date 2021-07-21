@@ -1,11 +1,11 @@
-import { Button, Input, message, Popconfirm, Form, Radio } from 'antd';
+import { Button, Input, Popconfirm, Form, Radio, message } from 'antd';
 import React, { useState } from 'react';
 import { useEffect } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import Card from '../components/Card';
 import CardList from '../components/CardList';
-import { currentUserId, currentUserImg, currentUserName } from '../constants';
 import { CardsWrapper, Container } from '../globalStyles';
+import { cardService } from '../service/cards';
 import { quizService } from '../service/quizzes';
 import {
   ButtonWrapper,
@@ -16,60 +16,63 @@ import {
   TitleWrapper,
 } from '../styles/settings';
 
-const Settings = ({ cards, setCards }) => {
-  const [form] = Form.useForm();
-  const [showViewBtn, setShowViewBtn] = useState(false);
-  const [settingsCard, setSettingsCard] = useState(false);
-  const [selectedCards, setSelectedCards] = useState([]);
-  const [answer, setAnswer] = useState(1);
-  const [isSaveClicked, setIsSaveClicked] = useState(false);
-  const [createdQuizId, setCreatedQuizId] = useState(1);
+const EditSettings = ({ cards, setCards }) => {
   let history = useHistory();
   let location = useLocation();
+  const quiz = location.state.quiz;
+  const [settingsCard, setSettingsCard] = useState(false);
+  const [answer, setAnswer] = useState(null);
+  const [selectedCards, setSelectedCards] = useState([]);
+  const [isSaveClicked, setIsSaveClicked] = useState(false);
 
-  // useEffect(() => {
-  //   fetchQuiz();
-  // }, []);
+  useEffect(() => {
+    fetchSelectedCards();
+  }, []);
 
   const onRadioChange = (e) => {
     setAnswer(e.target.value);
   };
 
   const handleViewBtn = () => {
-    history.push(`/quiz/${createdQuizId}`);
-  };
-
-  const addQuiz = async (values) => {
-    const { title, answer } = values;
-    console.log(values);
-    if (selectedCards.length < 2) {
-      message.warning('카드를 2개 이상 선택해주세요.');
-      return;
-    }
-    if (isSaveClicked) {
-      setIsSaveClicked(false);
-      try {
-        const card_id = selectedCards.map((card) => card.id);
-        const res = await quizService.add({
-          google_id: currentUserId,
-          username: currentUserName,
-          img_path: currentUserImg,
-          title,
-          answer,
-          card_id,
-        });
-        setCreatedQuizId(res.data.id);
-      } catch (e) {
-        console.log(e.message);
-      }
-      message.success('퀴즈를 만들었습니다!');
-      setShowViewBtn(true);
-    }
+    history.push(`/quiz/${quiz.id}`);
   };
 
   const onSelectBtn = () => {
     setSettingsCard(false);
   };
+
+  const fetchSelectedCards = async () => {
+    try {
+      let cardsArr = [];
+      for await (const id of quiz.card_id) {
+        const res = await cardService.get(id);
+        cardsArr.push(res.data);
+      }
+      setSelectedCards(cardsArr);
+    } catch (e) {
+      console.log(e.message);
+    }
+  };
+
+  const updateQuiz = async (values) => {
+    const { title, answer } = values;
+    if (isSaveClicked) {
+      try {
+        const res = await quizService.update({
+          id: quiz.id,
+          title,
+          answer,
+          card_id: selectedCards.map((card) => card.id),
+        });
+        console.log('퀴즈 수정', res.data);
+      } catch (e) {
+        console.log(e.message);
+      }
+      message.success('수정되었습니다.');
+    }
+  };
+
+  const deleteQuiz = () => {};
 
   return (
     <div>
@@ -80,19 +83,25 @@ const Settings = ({ cards, setCards }) => {
       >
         <Form
           name="settings-form"
-          initialValues={{ answer: 1 }}
-          onFinish={addQuiz}
-          form={form}
+          initialValues={{ title: quiz.title, answer: quiz.answer }}
+          onFinish={updateQuiz}
         >
           <TitleWrapper>
             <h1>Settings</h1>
             {!settingsCard ? (
               <ButtonWrapper>
-                {showViewBtn && (
-                  <StyledButton type="primary" ghost onClick={handleViewBtn}>
-                    View
-                  </StyledButton>
-                )}
+                <Popconfirm
+                  title="삭제하시겠습니까?"
+                  onConfirm={deleteQuiz}
+                  okText="Yes"
+                  cancelText="No"
+                >
+                  <StyledButton danger>Delete</StyledButton>
+                </Popconfirm>
+                <StyledButton type="primary" ghost onClick={handleViewBtn}>
+                  View
+                </StyledButton>
+
                 <StyledButton
                   type="primary"
                   htmlType="submit"
@@ -105,7 +114,7 @@ const Settings = ({ cards, setCards }) => {
               <ButtonWrapper>
                 <h3>({selectedCards.length}/4)개 선택</h3>
                 <StyledButton type="primary" onClick={onSelectBtn}>
-                  {selectedCards.length > 0 ? 'Select' : 'Back'}
+                  Select
                 </StyledButton>
               </ButtonWrapper>
             )}
@@ -133,15 +142,7 @@ const Settings = ({ cards, setCards }) => {
                 + Select Cards
               </Button>
               {selectedCards.length > 0 && (
-                <Form.Item
-                  name="answer"
-                  rules={[
-                    {
-                      required: true,
-                      message: '카드를 선택해주세요.',
-                    },
-                  ]}
-                >
+                <Form.Item name="answer">
                   <Radio.Group onChange={onRadioChange} value={answer}>
                     <CardsWrapper>
                       {selectedCards.map((card, i) => (
@@ -180,4 +181,4 @@ const Settings = ({ cards, setCards }) => {
   );
 };
 
-export default Settings;
+export default EditSettings;

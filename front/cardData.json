@@ -8,16 +8,15 @@
       "google_id": "111827277827081733666"
     },
     {
-      "id": 2,
-      "title": "Power Snatch",
-      "img_path": "https://via.placeholder.com/150/771796",
-      "google_id": "111827277827081733666"
-    },
-    {
       "id": 3,
-      "title": "Toes to Bar",
+      "title": "토투바",
       "category_id": 4,
-      "img_path": "https://via.placeholder.com/150/24f355",
+      "img_path": {
+        "uid": "-1",
+        "name": "Toes to Bar",
+        "status": "done",
+        "url": "https://via.placeholder.com/150/24f355"
+      },
       "google_id": "2222222222222"
     },
     {

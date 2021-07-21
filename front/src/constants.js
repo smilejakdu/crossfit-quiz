@@ -8,6 +8,8 @@ export const sortingOptions = [
   { id: 0, name: '인기순', value: '인기순' },
   { id: 1, name: '최신순', value: '최신순' },
 ];
-export const { google_id: currentUserId } = JSON.parse(
-  window.localStorage.getItem('userObj')
-);
+export const {
+  google_id: currentUserId,
+  username: currentUserName,
+  img_path: currentUserImg,
+} = JSON.parse(window.localStorage.getItem('userObj'));
