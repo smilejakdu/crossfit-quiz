@@ -72,7 +72,15 @@ const EditSettings = ({ cards, setCards }) => {
     }
   };
 
-  const deleteQuiz = () => {};
+  const deleteQuiz = async () => {
+    try {
+      await quizService.remove(quiz.id);
+    } catch (e) {
+      console.log(e.message);
+    }
+    message.success('삭제되었습니다.');
+    history.push('/');
+  };
 
   return (
     <div>
@@ -146,7 +154,7 @@ const EditSettings = ({ cards, setCards }) => {
                   <Radio.Group onChange={onRadioChange} value={answer}>
                     <CardsWrapper>
                       {selectedCards.map((card, i) => (
-                        <StyledRadio value={i + 1}>
+                        <StyledRadio key={card.id} value={i + 1}>
                           Correct
                           <Card
                             key={card.id}

@@ -40,8 +40,12 @@ const EditModal = ({
   };
 
   const updateCard = async (values) => {
-    const { category, title, img_path } = values;
-    // console.log(values);
+    const {
+      category,
+      title,
+      img_path: { file },
+    } = values;
+    console.log(values);
     setShowEditModal(false);
     try {
       const res = await cardService.update({
@@ -52,7 +56,7 @@ const EditModal = ({
             (option) => option.value === category.value
           ) + 1,
         title,
-        img_path,
+        img_path: file.response.result,
       });
       console.log(res);
     } catch (e) {
@@ -113,12 +117,7 @@ const EditModal = ({
           </ButtonWrapper>
           <ContentsWrapper>
             <Form.Item name="category">
-              <StyledSelect
-                labelInValue
-                // defaultValue={{ value: category }}
-                style={{ width: 120 }}
-                allowClear
-              >
+              <StyledSelect labelInValue style={{ width: 120 }} allowClear>
                 {categoryOptions.map((option) => (
                   <Option key={option.id} value={option.value}>
                     {option.value}

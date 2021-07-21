@@ -1,6 +1,7 @@
 import { UploadOutlined } from '@ant-design/icons';
 import { Button, message, Modal, Form, Upload } from 'antd';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import { currentUserId } from '../constants';
 import { cardService } from '../service/cards';
 import {
   ButtonWrapper,
@@ -16,21 +17,17 @@ const CardModal = ({ fetchCards, isModalVisible, setIsModalVisible, form }) => {
   };
 
   const handleSave = (values) => {
-    // console.log('google_id : ', google_id);
-    // console.log(window.localStorage.getItem('userObj'));
-
     const {
       category_id,
       title,
       image: { file },
     } = values;
     console.log(file);
-    const { google_id } = JSON.parse(window.localStorage.getItem('userObj'));
     addCard({
       category_id,
       title,
       img_path: file.response.result,
-      google_id,
+      google_id: currentUserId,
     });
     setIsModalVisible(false);
   };
@@ -42,7 +39,7 @@ const CardModal = ({ fetchCards, isModalVisible, setIsModalVisible, form }) => {
     } catch (e) {
       console.log(e.message);
     }
-    // await fetchCards();
+    await fetchCards();
   };
 
   const props = {
