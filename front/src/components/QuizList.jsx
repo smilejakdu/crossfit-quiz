@@ -13,7 +13,7 @@ import QuizCard from './QuizCard';
 import { CardsWrapper, EmptyWrapper } from '../globalStyles';
 import { sortingOptions } from '../constants';
 
-const QuizList = ({ quizzes, setQuizzes }) => {
+const QuizList = ({ quizzes, setQuizzes, userObj }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -59,11 +59,13 @@ const QuizList = ({ quizzes, setQuizzes }) => {
               </StyledTag>
             ))}
           </TagWrapper>
-          <StyledCheckbox
-          // onChange={filterByUser}
-          >
-            내가 만든 퀴즈
-          </StyledCheckbox>
+          {userObj && (
+            <StyledCheckbox
+            // onChange={filterByUser}
+            >
+              내가 만든 퀴즈
+            </StyledCheckbox>
+          )}
         </Filter>
       </SearchWrapper>
 
@@ -76,7 +78,12 @@ const QuizList = ({ quizzes, setQuizzes }) => {
       ) : (
         <CardsWrapper>
           {quizzes.map((quiz) => (
-            <QuizCard key={quiz.id} quiz={quiz} fetchQuizzes={fetchQuizzes} />
+            <QuizCard
+              key={quiz.id}
+              quiz={quiz}
+              fetchQuizzes={fetchQuizzes}
+              userObj={userObj}
+            />
           ))}
         </CardsWrapper>
       )}

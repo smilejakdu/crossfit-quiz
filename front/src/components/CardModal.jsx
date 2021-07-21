@@ -1,7 +1,6 @@
 import { UploadOutlined } from '@ant-design/icons';
 import { Button, message, Modal, Form, Upload } from 'antd';
 import React from 'react';
-import { currentUserId } from '../constants';
 import { cardService } from '../service/cards';
 import {
   ButtonWrapper,
@@ -11,7 +10,13 @@ import {
 } from '../styles/cardModal';
 import CategoryBar from './CategoryBar';
 
-const CardModal = ({ fetchCards, isModalVisible, setIsModalVisible, form }) => {
+const CardModal = ({
+  fetchCards,
+  isModalVisible,
+  setIsModalVisible,
+  form,
+  userObj,
+}) => {
   const handleCancel = () => {
     setIsModalVisible(false);
   };
@@ -27,7 +32,7 @@ const CardModal = ({ fetchCards, isModalVisible, setIsModalVisible, form }) => {
       category_id,
       title,
       img_path: file.response.result,
-      google_id: currentUserId,
+      google_id: userObj.google_id,
     });
     setIsModalVisible(false);
   };

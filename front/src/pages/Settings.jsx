@@ -1,10 +1,8 @@
-import { Button, Input, message, Popconfirm, Form, Radio } from 'antd';
+import { Button, Input, message, Form, Radio } from 'antd';
 import React, { useState } from 'react';
-import { useEffect } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import Card from '../components/Card';
 import CardList from '../components/CardList';
-import { currentUserId, currentUserImg, currentUserName } from '../constants';
 import { CardsWrapper, Container } from '../globalStyles';
 import { quizService } from '../service/quizzes';
 import {
@@ -16,7 +14,7 @@ import {
   TitleWrapper,
 } from '../styles/settings';
 
-const Settings = ({ cards, setCards }) => {
+const Settings = ({ cards, setCards, userObj }) => {
   const [form] = Form.useForm();
   const [showViewBtn, setShowViewBtn] = useState(false);
   const [settingsCard, setSettingsCard] = useState(false);
@@ -25,11 +23,7 @@ const Settings = ({ cards, setCards }) => {
   const [isSaveClicked, setIsSaveClicked] = useState(false);
   const [createdQuizId, setCreatedQuizId] = useState(1);
   let history = useHistory();
-  let location = useLocation();
-
-  // useEffect(() => {
-  //   fetchQuiz();
-  // }, []);
+  const { google_id, username, img_path } = userObj;
 
   const onRadioChange = (e) => {
     setAnswer(e.target.value);
@@ -51,9 +45,9 @@ const Settings = ({ cards, setCards }) => {
       try {
         const card_id = selectedCards.map((card) => card.id);
         const res = await quizService.add({
-          google_id: currentUserId,
-          username: currentUserName,
-          img_path: currentUserImg,
+          google_id,
+          username,
+          img_path,
           title,
           answer,
           card_id,

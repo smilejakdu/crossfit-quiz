@@ -3,7 +3,7 @@ import { Badge, Button, Tag } from 'antd';
 import Meta from 'antd/lib/card/Meta';
 import { useLocation } from 'react-router';
 import EditModal from './EditModal';
-import { categoryOptions, currentUserId } from '../constants';
+import { categoryOptions } from '../constants';
 import { DeselectBtn, StyledCard, TitleWrapper } from '../styles/card';
 import { EditOutlined, MinusCircleOutlined } from '@ant-design/icons';
 import { useRouteMatch } from 'react-router-dom';
@@ -14,6 +14,7 @@ const Card = ({
   selectedCards,
   setSelectedCards,
   settingsCard,
+  userObj,
 }) => {
   let location = useLocation();
   const [showRibbon, setShowRibbon] = useState(false);
@@ -83,7 +84,7 @@ const Card = ({
           title={
             <TitleWrapper>
               {title}
-              {currentUserId === google_id && (
+              {userObj && userObj.google_id === google_id && (
                 <Button
                   type="primary"
                   shape="round"

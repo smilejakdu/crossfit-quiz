@@ -23,6 +23,7 @@ const SearchBar = ({
   searchByTitle,
   filterByCategory,
   filterByUser,
+  userObj,
 }) => {
   const [selectedTags, setSelectedTags] = useState('');
   const [windowSize, setWindowSize] = useState({
@@ -81,9 +82,9 @@ const SearchBar = ({
           setIsModalVisible={setIsModalVisible}
           form={form}
           fetchCards={fetchCards}
+          userObj={userObj}
         />
       </SearchWrapper>
-
       <Filter>
         <TagWrapper>
           {categoryOptions.map((tag) => (
@@ -96,7 +97,11 @@ const SearchBar = ({
             </StyledCheckableTag>
           ))}
         </TagWrapper>
-        <StyledCheckbox onChange={filterByUser}>내가 만든 카드</StyledCheckbox>
+        {userObj && (
+          <StyledCheckbox onChange={filterByUser}>
+            내가 만든 카드
+          </StyledCheckbox>
+        )}
       </Filter>
     </Wrapper>
   );

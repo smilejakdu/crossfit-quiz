@@ -5,10 +5,9 @@ import {
   CommentOutlined,
   SendOutlined,
 } from '@ant-design/icons';
-import { Card, Statistic, Avatar } from 'antd';
-import { currentUserId } from '../constants';
+import { Card, Statistic, Avatar, message } from 'antd';
 
-const QuizCard = ({ quiz, fetchQuizzes }) => {
+const QuizCard = ({ quiz, userObj }) => {
   let history = useHistory();
   const {
     id,
@@ -22,7 +21,10 @@ const QuizCard = ({ quiz, fetchQuizzes }) => {
   } = quiz;
 
   const handleClick = () => {
-    if (google_id === currentUserId) {
+    if (!userObj) {
+      message.warning('로그인을 해주세요.');
+      return;
+    } else if (google_id === userObj.google_id) {
       history.push({
         pathname: `/settings/${id}`,
         state: { quiz },

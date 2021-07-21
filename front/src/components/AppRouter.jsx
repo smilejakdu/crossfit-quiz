@@ -31,11 +31,12 @@ const AppRouter = () => {
             setCards={setCards}
             quizzes={quizzes}
             setQuizzes={setQuizzes}
+            userObj={userObj}
           />
         </Route>
         <Route exact path="/settings">
           <Header userObj={userObj} setUserObj={setUserObj} />
-          <Settings cards={cards} setCards={setCards} />
+          <Settings cards={cards} setCards={setCards} userObj={userObj} />
         </Route>
         <Route exact path="/settings/:id">
           <Header userObj={userObj} setUserObj={setUserObj} />

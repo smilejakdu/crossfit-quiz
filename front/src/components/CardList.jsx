@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Empty, Form, Skeleton } from 'antd';
+import { Empty, Form, message, Skeleton } from 'antd';
 import Card from './Card';
 import SearchBar from './SearchBar';
 import { cardService } from '../service/cards';
@@ -11,13 +11,13 @@ const CardList = ({
   settingsCard,
   selectedCards,
   setSelectedCards,
+  userObj,
 }) => {
   const [form] = Form.useForm();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [allCards, setAllCards] = useState([]);
-  const [currentUserId, setCurrentUserId] = useState('');
   const [tagIds, setTagIds] = useState([]);
   const [myCardsChecked, setMyCardsChecked] = useState(false);
   const [titleSearched, setTitleSearched] = useState('');
@@ -25,9 +25,6 @@ const CardList = ({
   useEffect(() => {
     fetchCards();
     fetchAllCards();
-    setCurrentUserId(
-      JSON.parse(window.localStorage.getItem('userObj')).google_id
-    );
   }, []);
   useEffect(() => {
     filterCards();
@@ -85,11 +82,12 @@ const CardList = ({
     if (myCardsChecked && tagIds.length > 0) {
       searchResult = (titleSearched ? titleSearched : allCards).filter(
         (card) =>
-          card.google_id === currentUserId && tagIds.includes(card.category_id)
+          card.google_id === userObj.google_id &&
+          tagIds.includes(card.category_id)
       );
     } else if (myCardsChecked && tagIds.length === 0) {
       searchResult = (titleSearched ? titleSearched : allCards).filter(
-        (card) => card.google_id === currentUserId
+        (card) => card.google_id === userObj.google_id
       );
     } else if (!myCardsChecked && tagIds.length > 0) {
       searchResult = (titleSearched ? titleSearched : allCards).filter((card) =>
@@ -128,6 +126,10 @@ const CardList = ({
   };
 
   const showModal = async () => {
+    if (!userObj) {
+      message.warning('로그인을 해주세요.');
+      return;
+    }
     form.resetFields();
     setIsModalVisible(true);
   };
@@ -144,6 +146,7 @@ const CardList = ({
         searchByTitle={searchByTitle}
         filterByCategory={filterByCategory}
         filterByUser={filterByUser}
+        userObj={userObj}
       />
 
       {loading ? (
@@ -162,6 +165,7 @@ const CardList = ({
               selectedCards={selectedCards}
               setSelectedCards={setSelectedCards}
               settingsCard={settingsCard}
+              userObj={userObj}
             />
           ))}
         </CardsWrapper>
