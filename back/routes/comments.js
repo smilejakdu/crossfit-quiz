@@ -18,7 +18,7 @@ router.post("/", async function (req, res, next) {
   }
 });
 
-router.put("/", async function (req, res, next) {
+router.patch("/", async function (req, res, next) {
   try {
     const json = req.body; 
     const connection = await db.beginTransaction();

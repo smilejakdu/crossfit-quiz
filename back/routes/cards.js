@@ -23,7 +23,7 @@ router.post('/',async function (req, res, next) {
 })
 
 
-router.put("/", async function (req, res, next) {
+router.patch("/", async function (req, res, next) {
   try {
     const body = req.body; 
     console.log("body : " , body);
