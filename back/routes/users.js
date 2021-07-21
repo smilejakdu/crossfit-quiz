@@ -21,7 +21,7 @@ router.post("", async function (req, res, next) {
       // 회원가입 
       const result = await model.insert(connection, body);
       await db.commit(connection);
-      res.status(200).json({ usersResult });   
+      res.status(201).json({ usersResult });   
     }
   } catch (err) {
     console.log("err : ", err);
