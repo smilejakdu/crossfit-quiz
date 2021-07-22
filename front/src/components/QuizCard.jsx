@@ -18,6 +18,8 @@ const QuizCard = ({ quiz, userObj }) => {
     username,
     img_path,
     card_id,
+    cnt_correct_answer,
+    cnt_total_answer,
   } = quiz;
 
   const handleClick = () => {
@@ -48,18 +50,21 @@ const QuizCard = ({ quiz, userObj }) => {
       hoverable
       title={<Statistic title="What is" value={title} />}
       extra={
-        <Statistic
-          title="정답률"
-          value={93}
-          suffix="%"
-          valueStyle={{ color: '#cf1322' }}
-        />
+        cnt_correct_answer > 0 &&
+        cnt_total_answer > 0 && (
+          <Statistic
+            title="정답률"
+            value={Math.round((cnt_correct_answer / cnt_total_answer) * 100)}
+            suffix="%"
+            valueStyle={{ color: '#cf1322' }}
+          />
+        )
       }
       onClick={handleClick}
     >
       <Statistic
         title="Submissions"
-        value={`?명 참여`}
+        value={`${cnt_total_answer > 0 ? cnt_total_answer : 0}명 참여`}
         prefix={<SendOutlined />}
       />
       <Statistic

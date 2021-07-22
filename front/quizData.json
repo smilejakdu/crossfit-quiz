@@ -3,41 +3,21 @@
     {
       "id": 1,
       "title": "Squat Clean",
-      "card_id": [
-        1,
-        2
-      ],
+      "card_id": [1, 2],
       "answer": 1,
       "created_at": "today"
     },
     {
       "id": 2,
       "title": "Power Snatch",
-      "card_id": [
-        3,
-        4
-      ],
+      "card_id": [3, 4],
       "answer": 1,
       "created_at": "21/07/17"
     },
     {
-      "id": 3,
-      "title": "Toes to Bar",
-      "card_id": [
-        3,
-        4
-      ],
-      "answer": 1,
-      "created_at": "21/07/17",
-      "google_id": "2222222222222"
-    },
-    {
       "id": 4,
       "title": "Kettlebell Swing",
-      "card_id": [
-        3,
-        4
-      ],
+      "card_id": [3, 4],
       "answer": 1,
       "created_at": "21/07/17",
       "google_id": "2222222222222"
@@ -46,12 +26,11 @@
       "google_id": "111827277827081733666",
       "username": "LightFury",
       "img_path": "https://lh3.googleusercontent.com/a/AATXAJz9AYlH4QMpD4QzdjJPHnw-45qcx1K8ZsjWYDC9=s96-c",
-      "card_id": [
-        4,
-        5
-      ],
-      "id": 21,
-      "title": "오버헤드 스쿼트"
+      "card_id": [4, 5],
+      "id": 5,
+      "title": "오버헤드 스쿼트",
+      "cnt_correct_answer": 9,
+      "cnt_total_answer": 13
     },
     {
       "google_id": "111827277827081733666",
@@ -59,74 +38,17 @@
       "img_path": "https://lh3.googleusercontent.com/a/AATXAJz9AYlH4QMpD4QzdjJPHnw-45qcx1K8ZsjWYDC9=s96-c",
       "title": "스내치",
       "answer": 1,
-      "card_id": [
-        1,
-        3,
-        4
-      ],
+      "card_id": [1, 3, 4],
       "id": 26
     },
     {
       "google_id": "111827277827081733666",
       "username": "LightFury",
       "img_path": "https://lh3.googleusercontent.com/a/AATXAJz9AYlH4QMpD4QzdjJPHnw-45qcx1K8ZsjWYDC9=s96-c",
-      "title": "sdf",
-      "answer": 1,
-      "card_id": [
-        1,
-        3,
-        4
-      ],
-      "id": 27
-    },
-    {
-      "google_id": "111827277827081733666",
-      "username": "LightFury",
-      "img_path": "https://lh3.googleusercontent.com/a/AATXAJz9AYlH4QMpD4QzdjJPHnw-45qcx1K8ZsjWYDC9=s96-c",
-      "title": "sdf",
-      "answer": 2,
-      "card_id": [
-        1,
-        4
-      ],
-      "id": 28
-    },
-    {
-      "google_id": "111827277827081733666",
-      "username": "LightFury",
-      "img_path": "https://lh3.googleusercontent.com/a/AATXAJz9AYlH4QMpD4QzdjJPHnw-45qcx1K8ZsjWYDC9=s96-c",
-      "title": "sdf",
-      "answer": 2,
-      "card_id": [
-        1,
-        3
-      ],
-      "id": 29
-    },
-    {
-      "google_id": "111827277827081733666",
-      "username": "LightFury",
-      "img_path": "https://lh3.googleusercontent.com/a/AATXAJz9AYlH4QMpD4QzdjJPHnw-45qcx1K8ZsjWYDC9=s96-c",
       "title": "토투바",
       "answer": 1,
-      "card_id": [
-        3,
-        4,
-        5
-      ],
+      "card_id": [3, 4, 5],
       "id": 30
-    },
-    {
-      "google_id": "111827277827081733666",
-      "username": "LightFury",
-      "img_path": "https://lh3.googleusercontent.com/a/AATXAJz9AYlH4QMpD4QzdjJPHnw-45qcx1K8ZsjWYDC9=s96-c",
-      "title": "토투바",
-      "answer": 1,
-      "card_id": [
-        1,
-        4
-      ],
-      "id": 31
     },
     {
       "google_id": "111827277827081733666",
@@ -134,11 +56,7 @@
       "img_path": "https://lh3.googleusercontent.com/a/AATXAJz9AYlH4QMpD4QzdjJPHnw-45qcx1K8ZsjWYDC9=s96-c",
       "title": "케틀벨스윙",
       "answer": 1,
-      "card_id": [
-        4,
-        1,
-        3
-      ],
+      "card_id": [4, 1, 3],
       "id": 32
     },
     {
@@ -147,36 +65,8 @@
       "img_path": "https://lh3.googleusercontent.com/a/AATXAJz9AYlH4QMpD4QzdjJPHnw-45qcx1K8ZsjWYDC9=s96-c",
       "title": "오버헤드 스쿼트",
       "answer": 1,
-      "card_id": [
-        5,
-        1
-      ],
+      "card_id": [5, 1],
       "id": 33
-    },
-    {
-      "google_id": "111827277827081733666",
-      "username": "LightFury",
-      "img_path": "https://lh3.googleusercontent.com/a/AATXAJz9AYlH4QMpD4QzdjJPHnw-45qcx1K8ZsjWYDC9=s96-c",
-      "title": "오버헤드 스쿼트",
-      "answer": 2,
-      "card_id": [
-        4,
-        3,
-        1
-      ],
-      "id": 34
-    },
-    {
-      "google_id": "111827277827081733666",
-      "username": "LightFury",
-      "img_path": "https://lh3.googleusercontent.com/a/AATXAJz9AYlH4QMpD4QzdjJPHnw-45qcx1K8ZsjWYDC9=s96-c",
-      "title": "오버헤드 스쿼트",
-      "answer": 1,
-      "card_id": [
-        4,
-        5
-      ],
-      "id": 35
     },
     {
       "google_id": "111827277827081733666",
@@ -184,10 +74,7 @@
       "img_path": "https://lh3.googleusercontent.com/a/AATXAJz9AYlH4QMpD4QzdjJPHnw-45qcx1K8ZsjWYDC9=s96-c",
       "title": "스쾃 클린",
       "answer": 1,
-      "card_id": [
-        3,
-        4
-      ],
+      "card_id": [3, 4],
       "id": 36
     },
     {
@@ -196,11 +83,7 @@
       "img_path": "https://lh3.googleusercontent.com/a/AATXAJz9AYlH4QMpD4QzdjJPHnw-45qcx1K8ZsjWYDC9=s96-c",
       "title": "squat clean!!",
       "answer": 1,
-      "card_id": [
-        1,
-        3,
-        4
-      ],
+      "card_id": [1, 3, 4],
       "id": 37
     }
   ]
