@@ -44,7 +44,7 @@ const AppRouter = () => {
         </Route>
         <Route exact path="/quiz/:id">
           <Header userObj={userObj} setUserObj={setUserObj} />
-          <Quiz />
+          <Quiz userObj={userObj} />
         </Route>
         <Route>
           <Header userObj={userObj} setUserObj={setUserObj} />

@@ -40,5 +40,11 @@ export const CardsWrapper = styled.div`
 export const EmptyWrapper = styled.div`
   margin-top: 5rem;
 `;
+export const LoadingWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+`;
 
 export default GlobalStyle;

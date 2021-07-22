@@ -3,7 +3,7 @@
     {
       "id": 1,
       "title": "Squat Clean",
-      "card_id": [1, 2],
+      "card_id": [1, 3],
       "answer": 1,
       "created_at": "today"
     },

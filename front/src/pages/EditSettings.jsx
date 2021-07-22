@@ -34,7 +34,7 @@ const EditSettings = ({ cards, setCards }) => {
   };
 
   const handleViewBtn = () => {
-    history.push(`/quiz/${quiz.id}`);
+    history.push({ pathname: `/quiz/${quiz.id}`, state: { quiz } });
   };
 
   const onSelectBtn = () => {

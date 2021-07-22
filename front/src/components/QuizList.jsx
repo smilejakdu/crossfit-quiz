@@ -24,7 +24,6 @@ const QuizList = ({ quizzes, setQuizzes, userObj }) => {
 
   useEffect(() => {
     fetchQuizzes();
-    fetchAllQuizzes();
   }, []);
   useEffect(() => {
     filterQuizzes();
@@ -34,23 +33,10 @@ const QuizList = ({ quizzes, setQuizzes, userObj }) => {
     setError(null);
     setLoading(true);
     try {
-      const res = await quizService.getAll({
-        params: { offset: '1', limit: '10' },
-      });
+      const res = await quizService.getAll();
       console.log(res);
       setQuizzes(res.data);
-    } catch (e) {
-      setError(e);
-    }
-    setLoading(false);
-  };
-
-  const fetchAllQuizzes = async () => {
-    setError(null);
-    setLoading(true);
-    try {
-      const response = await quizService.getAll();
-      setAllQuizzes(response.data);
+      setAllQuizzes(res.data);
     } catch (e) {
       setError(e);
     }

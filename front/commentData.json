@@ -1,0 +1,25 @@
+{
+  "comments": [
+    {
+      "id": 1,
+      "quiz_id": 1,
+      "users_id": "111827277827081733666",
+      "content": "코멘트1",
+      "created_at": "today"
+    },
+    {
+      "id": 2,
+      "quiz_id": 2,
+      "users_id": "111827277827081733666",
+      "content": "코멘트22",
+      "created_at": "today"
+    },
+    {
+      "id": 3,
+      "quiz_id": 4,
+      "users_id": "2222",
+      "content": "코멘트3",
+      "created_at": "today"
+    }
+  ]
+}

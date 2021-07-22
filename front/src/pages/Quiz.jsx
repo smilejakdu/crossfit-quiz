@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Typography, Image, Button, Tooltip, message } from 'antd';
-import { Container } from '../globalStyles';
+import { Typography, Image, Button, Tooltip, message, Spin } from 'antd';
+import { Container, LoadingWrapper } from '../globalStyles';
 import { TitleWrapper } from '../styles/settings';
 import { cardService } from '../service/cards';
 import { MainWrapper, ImageWrapper, CardsWrapper } from '../styles/quiz';
+import Comments from '../components/Comments';
 const { Title } = Typography;
 
-const Quiz = () => {
+const Quiz = ({ userObj }) => {
   let location = useLocation();
   const quiz = location.state.quiz;
   const [loading, setLoading] = useState(false);
@@ -62,7 +63,9 @@ const Quiz = () => {
   };
 
   return loading ? (
-    'loading..'
+    <LoadingWrapper>
+      <Spin />
+    </LoadingWrapper>
   ) : (
     <Container
       style={{
@@ -75,7 +78,7 @@ const Quiz = () => {
       {showAnswer ? (
         showFinishScreen ? (
           <MainWrapper>
-            코멘트..........
+            <Comments userObj={userObj} quizId={id} />
             <Button type="primary" ghost onClick={handleRestart}>
               Restart Quiz
             </Button>

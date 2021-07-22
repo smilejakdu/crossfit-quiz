@@ -4,16 +4,15 @@ const baseURL = 'http://localhost:4001';
 
 const endpoint = '/quizzes';
 
-const getAll = (params) => {
-  return axios.get(baseURL + endpoint, params);
+const getAll = () => {
+  return axios.get(baseURL + endpoint);
 };
 
-// const get = (id) => {
-//   return axios.get(baseURL + endpoint + '/' + id);
+// const getAll = (filteringId = 0) => {
+//   return axios.get(baseURL + endpoint + '/sort/' + filteringId);
 // };
 
 const add = (data) => {
-  console.log('quiz data confirm :', data);
   return axios.post(baseURL + endpoint, data);
 };
 
