@@ -8,9 +8,9 @@ const getAll = (params) => {
   return axios.get(baseURL + endpoint, params);
 };
 
-const get = (id) => {
-  return axios.get(baseURL + endpoint + '/' + id);
-};
+// const get = (id) => {
+//   return axios.get(baseURL + endpoint + '/' + id);
+// };
 
 const add = (data) => {
   console.log('quiz data confirm :', data);
@@ -27,7 +27,7 @@ const remove = (id) => {
 
 export const quizService = {
   getAll,
-  get,
+  // get,
   add,
   update,
   remove,

@@ -41,8 +41,6 @@ const Card = ({
       addToSelectedCards();
     } else if (settingsCard && showRibbon) {
       removeFromSelectedCards();
-    } else {
-      setShowEditModal(true);
     }
   };
 
@@ -79,7 +77,10 @@ const Card = ({
     </Badge.Ribbon>
   ) : (
     <>
-      <StyledCard cover={<img alt="movement" src={img_path} />}>
+      <StyledCard
+        cover={<img alt="movement" src={img_path} />}
+        onClick={handleClick}
+      >
         <Meta
           title={
             <TitleWrapper>
@@ -89,7 +90,7 @@ const Card = ({
                   type="primary"
                   shape="round"
                   ghost
-                  onClick={handleClick}
+                  onClick={() => setShowEditModal(true)}
                 >
                   <EditOutlined />
                   Edit

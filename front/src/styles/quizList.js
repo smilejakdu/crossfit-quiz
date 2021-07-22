@@ -26,6 +26,12 @@ export const TagWrapper = styled.div`
   padding-bottom: 1.5rem;
 `;
 export const StyledTag = styled(Tag)`
+  cursor: pointer;
+  user-select: none;
+  background: ${(props) => props.background};
+  border: 1px solid #8176f5;
+  border-radius: 30px;
+  color: ${(props) => props.colorSelect || '#8176F5'};
   &:first-child {
     margin-right: 1rem;
   }

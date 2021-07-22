@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Empty, Skeleton } from 'antd';
 import {
   StyledSearch,
@@ -14,12 +14,21 @@ import { CardsWrapper, EmptyWrapper } from '../globalStyles';
 import { sortingOptions } from '../constants';
 
 const QuizList = ({ quizzes, setQuizzes, userObj }) => {
+  const inputRef = useRef(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [titleSearched, setTitleSearched] = useState('');
+  const [allQuizzes, setAllQuizzes] = useState([]);
+  const [myQuizzesChecked, setMyQuizzesChecked] = useState(false);
+  const [filteringId, setFilteringId] = useState(0);
 
   useEffect(() => {
     fetchQuizzes();
+    fetchAllQuizzes();
   }, []);
+  useEffect(() => {
+    filterQuizzes();
+  }, [myQuizzesChecked, titleSearched]);
 
   const fetchQuizzes = async () => {
     setError(null);
@@ -36,33 +45,102 @@ const QuizList = ({ quizzes, setQuizzes, userObj }) => {
     setLoading(false);
   };
 
-  const onSearch = (value) => console.log(value);
+  const fetchAllQuizzes = async () => {
+    setError(null);
+    setLoading(true);
+    try {
+      const response = await quizService.getAll();
+      setAllQuizzes(response.data);
+    } catch (e) {
+      setError(e);
+    }
+    setLoading(false);
+  };
 
-  function onChange(e) {
-    console.log(`checked = ${e.target.checked}`);
-  }
+  const handleSort = (value) => {
+    setFilteringId(value.id);
+  };
+
+  const filterQuizzes = () => {
+    let searchResult = [];
+    if (myQuizzesChecked) {
+      searchResult = (titleSearched ? titleSearched : allQuizzes).filter(
+        (quiz) => quiz.google_id === userObj.google_id
+      );
+    } else {
+      searchResult = titleSearched ? titleSearched : allQuizzes;
+    }
+    console.log('searchResult', searchResult);
+    setQuizzes(searchResult);
+  };
+
+  const searchByTitle = (str) => {
+    const value = str.toLowerCase();
+    inputRef.current.focus({
+      cursor: 'all',
+    });
+
+    setError(null);
+    setLoading(true);
+    try {
+      let searchResult = [];
+      if (!value) {
+        searchResult = allQuizzes;
+        setTitleSearched('');
+      } else {
+        searchResult = allQuizzes.filter((quiz) =>
+          quiz.title.toLowerCase().includes(value)
+        );
+        setTitleSearched(searchResult);
+      }
+      setQuizzes(searchResult);
+    } catch (e) {
+      setError(e);
+    }
+    setLoading(false);
+  };
+
+  const filterByUser = async (e) => {
+    setError(null);
+    setLoading(true);
+    try {
+      if (e.target.checked) {
+        setMyQuizzesChecked(true);
+      } else {
+        setMyQuizzesChecked(false);
+      }
+    } catch (e) {
+      setError(e);
+    }
+    setLoading(false);
+  };
 
   return (
     <>
       <SearchWrapper>
-        <StyledSearch placeholder="Search" onSearch={onSearch} enterButton />
+        <StyledSearch
+          placeholder="Search"
+          onSearch={searchByTitle}
+          enterButton
+          allowClear
+          ref={inputRef}
+        />
 
         <Filter>
           <TagWrapper>
             {sortingOptions.map((tag) => (
               <StyledTag
                 key={tag.id}
-                checked={tag.id === 0 && true}
-                // onChange={(checked) => handleTags(tag, checked)}
+                background={filteringId === tag.id && '#8176F5'}
+                colorSelect={filteringId === tag.id && '#fff'}
+                onClick={() => handleSort(tag)}
               >
                 {tag.name}
               </StyledTag>
             ))}
           </TagWrapper>
           {userObj && (
-            <StyledCheckbox
-            // onChange={filterByUser}
-            >
+            <StyledCheckbox onChange={filterByUser}>
               내가 만든 퀴즈
             </StyledCheckbox>
           )}

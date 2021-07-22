@@ -41,7 +41,6 @@ const Settings = ({ cards, setCards, userObj }) => {
       return;
     }
     if (isSaveClicked) {
-      setIsSaveClicked(false);
       try {
         const card_id = selectedCards.map((card) => card.id);
         const res = await quizService.add({
@@ -58,6 +57,7 @@ const Settings = ({ cards, setCards, userObj }) => {
       }
       message.success('퀴즈를 만들었습니다!');
       setShowViewBtn(true);
+      setIsSaveClicked(false);
     }
   };
 

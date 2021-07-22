@@ -46,19 +46,6 @@
       "google_id": "111827277827081733666",
       "username": "LightFury",
       "img_path": "https://lh3.googleusercontent.com/a/AATXAJz9AYlH4QMpD4QzdjJPHnw-45qcx1K8ZsjWYDC9=s96-c",
-      "title": "squat clean!!",
-      "answer": 1,
-      "card_id": [
-        1,
-        2,
-        3
-      ],
-      "id": 17
-    },
-    {
-      "google_id": "111827277827081733666",
-      "username": "LightFury",
-      "img_path": "https://lh3.googleusercontent.com/a/AATXAJz9AYlH4QMpD4QzdjJPHnw-45qcx1K8ZsjWYDC9=s96-c",
       "card_id": [
         4,
         5
@@ -202,6 +189,19 @@
         4
       ],
       "id": 36
+    },
+    {
+      "google_id": "111827277827081733666",
+      "username": "LightFury",
+      "img_path": "https://lh3.googleusercontent.com/a/AATXAJz9AYlH4QMpD4QzdjJPHnw-45qcx1K8ZsjWYDC9=s96-c",
+      "title": "squat clean!!",
+      "answer": 1,
+      "card_id": [
+        1,
+        3,
+        4
+      ],
+      "id": 37
     }
   ]
 }

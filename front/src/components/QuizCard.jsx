@@ -30,7 +30,10 @@ const QuizCard = ({ quiz, userObj }) => {
         state: { quiz },
       });
     } else {
-      history.push(`/quiz/${id}`);
+      history.push({
+        pathname: `/quiz/${id}`,
+        state: { quiz },
+      });
     }
   };
 

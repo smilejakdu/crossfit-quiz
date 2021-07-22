@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { quizService } from '../service/quizzes';
 import { Typography, Image, Button, Tooltip, message } from 'antd';
 import { Container } from '../globalStyles';
 import { TitleWrapper } from '../styles/settings';
@@ -10,8 +9,8 @@ const { Title } = Typography;
 
 const Quiz = () => {
   let location = useLocation();
+  const quiz = location.state.quiz;
   const [loading, setLoading] = useState(false);
-  const [quiz, setQuiz] = useState({});
   const [cards, setCards] = useState([]);
   const [showAnswer, setShowAnswer] = useState(false);
   const [showFinishScreen, setShowFinishScreen] = useState(false);
@@ -21,28 +20,14 @@ const Quiz = () => {
   const { answer, card_id, created_at, google_id, id, img_path, title } = quiz;
 
   useEffect(() => {
-    fetchQuiz();
+    fetchCards();
   }, []);
 
   useEffect(() => {
     setAnswerCard(cards[answer - 1]);
   }, [cards]);
 
-  const fetchQuiz = async () => {
-    setLoading(true);
-    try {
-      const quiz_id = location.pathname.substring(6, location.length);
-      const res = await quizService.get(quiz_id);
-      console.log(res.data.card_id);
-      setQuiz(res.data);
-      fetchCards(res.data.card_id);
-    } catch (e) {
-      console.log(e.message);
-    }
-    setLoading(false);
-  };
-
-  const fetchCards = async (card_id) => {
+  const fetchCards = async () => {
     setLoading(true);
     try {
       let cardsArr = [];
@@ -50,7 +35,6 @@ const Quiz = () => {
         const res = await cardService.get(id);
         cardsArr.push(res.data);
       }
-      console.log('cardsArr :', cardsArr);
       setCards(cardsArr);
     } catch (e) {
       console.log(e.message);

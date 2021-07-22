@@ -44,5 +44,6 @@ export const TagWrapper = styled.div`
 `;
 export const StyledCheckableTag = styled(CheckableTag)`
   justify-self: center;
+  user-select: none;
 `;
 export const StyledCheckbox = styled(Checkbox)``;
