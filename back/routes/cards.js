@@ -30,7 +30,7 @@ router.patch("/", async function (req, res, next) {
     const connection = await db.beginTransaction();
     const result = await model.update(connection, body);
     const card_id = result.insertId;
-
+    
     await db.commit(connection);
     res.status(200).json({ card_id: card_id });
   } catch (err) {
@@ -54,21 +54,21 @@ router.delete('/:cardId', async function (req, res, next) {
     }        
 })
 
-// router.get('/',async function (req, res, next) {
-//     try {
-//         const offset = req.query.offset
-//         const limit = req.query.limit;
-//         // return axios.get(`/user/${data}/posts?lastId=${lastId || 0}`);
-//         console.log("offset : " , offset);
-//         console.log("limit : ", limit);
-//         const result = await model.getList({offset : offset, limit : limit});
-//         console.log("result : " , result);
-//         res.status(200).json({ result });
-//     } catch(err){
-//         console.log('err : ',err)
-//         next(err)
-//     }
-// })
+router.get('/',async function (req, res, next) {
+    try {
+        const offset = req.query.offset
+        const limit = req.query.limit;
+        // return axios.get(`/user/${data}/posts?lastId=${lastId || 0}`);
+        console.log("offset : " , offset);
+        console.log("limit : ", limit);
+        const result = await model.getList({offset : offset, limit : limit});
+        console.log("result : " , result);
+        res.status(200).json({ result });
+    } catch(err){
+        console.log('err : ',err)
+        next(err)
+    }
+})
 
 
 module.exports = router;

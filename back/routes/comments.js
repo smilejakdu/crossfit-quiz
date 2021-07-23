@@ -48,11 +48,6 @@ router.delete("/", async function (req, res, next) {
 });
 
 router.get("/:quizId", async function (req, res, next) {
-	// {
-	// 	quiz_id : 1,
-	// 	google_id:1234123,
-	// 	content : "content_test"
-	// }
 	const quiz_id = req.params.quizId;
 	console.log("quiz_id : " , quiz_id);
   const result = await model.getList(quiz_id);
