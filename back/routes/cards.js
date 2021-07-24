@@ -42,7 +42,6 @@ router.delete('/:cardId', async function (req, res, next) {
         const connection = await db.beginTransaction()
         const result = await model.delete(connection, {id:card_idx})
         const card_id = result.insertId;
-        const result = await quiz_model.cardQuizgetList({ id: card_id });
         await db.commit(connection)
         res.status(200).json({ card_id: card_id }).send("delete success")
     } catch(err){

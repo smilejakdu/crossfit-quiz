@@ -67,13 +67,3 @@ module.exports.getList = async (options) => {
   }
 };
 
-
-
-module.exports.cardQuizgetList = async (options) => {
-  console.log("options : ", options); // id
-  // card_id 를 받는다.
-  try {
-  } catch (err) {
-    throw new Error(err);
-  }
-};
