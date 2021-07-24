@@ -1,9 +1,11 @@
 const { disable } = require("debug");
 const db = require("../components/db");
+
 module.exports.insert = async (connection, options) => {
   console.log("options : ", options);
   let query = "INSERT INTO quizzes SET ?";
   let values = options;
+
   return await db.query({
     connection: connection,
     query: query,
@@ -62,5 +64,16 @@ module.exports.getList = async (options) => {
     }
   }catch(err){
     throw new Error(err); 
+  }
+};
+
+
+
+module.exports.cardQuizgetList = async (options) => {
+  console.log("options : ", options); // id
+  // card_id 를 받는다.
+  try {
+  } catch (err) {
+    throw new Error(err);
   }
 };

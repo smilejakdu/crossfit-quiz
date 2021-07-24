@@ -6,7 +6,6 @@ const model = require("../models/comments");
 
 router.post("/", async function (req, res, next) {
   const body = req.body;
-  console.log("body : ", body);
   try {
     const connection = await db.beginTransaction();
     const result = await model.insert(connection, body);
@@ -23,7 +22,6 @@ router.patch("/", async function (req, res, next) {
     const json = req.body;
     const connection = await db.beginTransaction();
     const result = await model.update(connection, json);
-    console.log("result 26 : ", result);
     await db.commit(connection);
     res.status(200).json({ result });
   } catch (err) {
@@ -49,7 +47,6 @@ router.delete("/", async function (req, res, next) {
 
 router.get("/", async function (req, res, next) {
   const quiz_id = req.params.quizId;
-  console.log("quiz_id : ", quiz_id);
   const result = await model.getList(quiz_id);
   res.status(200).json({ result });
 });

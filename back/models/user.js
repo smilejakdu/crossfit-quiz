@@ -2,7 +2,6 @@ const { disable } = require("debug");
 const db = require("../components/db");
 
 module.exports.insert = async (connection, options) => {
-  console.log("options : ", options);
   let query = "INSERT INTO users SET ?";
   let values = options;
   return await db.query({
@@ -13,7 +12,6 @@ module.exports.insert = async (connection, options) => {
 };
 
 module.exports.update = async (connection, options) => {
-  console.log("options : ", options); // {idx :2, name:'ssdf'}
   let query = "UPDATE users SET ? WHERE user_idx = ?";
   return await db.query({
     connection: connection,
@@ -23,7 +21,6 @@ module.exports.update = async (connection, options) => {
 };
 
 module.exports.delete = async (connection, options) => {
-  console.log("options : ", options.user_idx); // {idx :2, name:'ssdf'}
   let query = "DELETE FROM users WHERE user_idx = ?";
   return await db.query({
     connection: connection,
@@ -33,7 +30,6 @@ module.exports.delete = async (connection, options) => {
 };
 
 module.exports.getList = async (options) => {
-  console.log("options : " , options);
   const { id } = options;
   let query = "SELECT * FROM users ";
   let values
@@ -43,7 +39,6 @@ module.exports.getList = async (options) => {
     values = id;
   }
   return await db.query({
-    // connection:connection,
     query: query,
     values: values,
   });
@@ -60,7 +55,6 @@ module.exports.getCartGetList = async (options) => {
   }
 
   return await db.query({
-    // connection:connection,
     query: query,
     values: values,
   });
