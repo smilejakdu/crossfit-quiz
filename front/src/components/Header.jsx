@@ -32,14 +32,16 @@ const Header = ({ userObj, setUserObj }) => {
 
   return (
     <Wrapper>
-      <Logo>Logo</Logo>
+      <Link to="/">
+        <Logo>Logo</Logo>
+      </Link>
 
       <Right>
         {userObj && (
           <UserWrapper>
             <Popover content={content}>
               <Avatar src={userObj.img_path} />
-              <Username>{userObj.username}</Username>
+              <Username>{userObj.name}</Username>
             </Popover>
           </UserWrapper>
         )}

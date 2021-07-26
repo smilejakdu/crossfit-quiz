@@ -9,7 +9,7 @@ export const CardWrapper = styled.div`
 `;
 export const ButtonWrapper = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
 `;
 export const ContentsWrapper = styled.div`
   display: flex;

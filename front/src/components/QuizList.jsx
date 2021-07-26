@@ -13,50 +13,49 @@ import QuizCard from './QuizCard';
 import { CardsWrapper, EmptyWrapper } from '../globalStyles';
 import { sortingOptions } from '../constants';
 
-const QuizList = ({ quizzes, setQuizzes, userObj }) => {
+const QuizList = ({ userObj }) => {
   const inputRef = useRef(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
   const [titleSearched, setTitleSearched] = useState('');
-  const [allQuizzes, setAllQuizzes] = useState([]);
   const [myQuizzesChecked, setMyQuizzesChecked] = useState(false);
   const [filteringId, setFilteringId] = useState(0);
+  const [allQuizzes, setAllQuizzes] = useState([]);
+  const [quizzes, setQuizzes] = useState([]);
 
   useEffect(() => {
     fetchQuizzes();
-  }, []);
+  }, [filteringId]);
   useEffect(() => {
     filterQuizzes();
   }, [myQuizzesChecked, titleSearched]);
 
   const fetchQuizzes = async () => {
-    setError(null);
     setLoading(true);
     try {
-      const res = await quizService.getAll();
-      console.log(res);
-      setQuizzes(res.data);
-      setAllQuizzes(res.data);
+      console.log('get quizzes');
+      const res = await quizService.getAll(filteringId);
+      console.log('get quizzes result', res);
+      // setQuizzes(res.data);
+      // setAllQuizzes(res.data);
     } catch (e) {
-      setError(e);
+      console.log(e.message);
     }
     setLoading(false);
   };
 
-  const handleSort = (value) => {
-    setFilteringId(value.id);
+  const handleSort = (tag) => {
+    setFilteringId(tag.id);
   };
 
   const filterQuizzes = () => {
     let searchResult = [];
     if (myQuizzesChecked) {
       searchResult = (titleSearched ? titleSearched : allQuizzes).filter(
-        (quiz) => quiz.google_id === userObj.google_id
+        (quiz) => quiz.users_id === userObj.id
       );
     } else {
       searchResult = titleSearched ? titleSearched : allQuizzes;
     }
-    console.log('searchResult', searchResult);
     setQuizzes(searchResult);
   };
 
@@ -65,8 +64,6 @@ const QuizList = ({ quizzes, setQuizzes, userObj }) => {
     inputRef.current.focus({
       cursor: 'all',
     });
-
-    setError(null);
     setLoading(true);
     try {
       let searchResult = [];
@@ -81,13 +78,12 @@ const QuizList = ({ quizzes, setQuizzes, userObj }) => {
       }
       setQuizzes(searchResult);
     } catch (e) {
-      setError(e);
+      console.log(e.message);
     }
     setLoading(false);
   };
 
   const filterByUser = async (e) => {
-    setError(null);
     setLoading(true);
     try {
       if (e.target.checked) {
@@ -96,7 +92,7 @@ const QuizList = ({ quizzes, setQuizzes, userObj }) => {
         setMyQuizzesChecked(false);
       }
     } catch (e) {
-      setError(e);
+      console.log(e.message);
     }
     setLoading(false);
   };
@@ -117,8 +113,8 @@ const QuizList = ({ quizzes, setQuizzes, userObj }) => {
             {sortingOptions.map((tag) => (
               <StyledTag
                 key={tag.id}
-                background={filteringId === tag.id && '#8176F5'}
-                colorSelect={filteringId === tag.id && '#fff'}
+                background={filteringId === tag.id ? '#8176F5' : undefined}
+                colorselect={filteringId === tag.id ? '#fff' : undefined}
                 onClick={() => handleSort(tag)}
               >
                 {tag.name}

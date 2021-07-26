@@ -69,6 +69,7 @@ const EditSettings = ({ cards, setCards }) => {
         console.log(e.message);
       }
       message.success('수정되었습니다.');
+      history.push('/');
     }
   };
 
@@ -83,109 +84,97 @@ const EditSettings = ({ cards, setCards }) => {
   };
 
   return (
-    <div>
-      <Container
-        style={{
-          backgroundColor: 'var(--main-bg-color)',
-        }}
+    <Container>
+      <Form
+        initialValues={{ title: quiz.title, answer: quiz.answer }}
+        onFinish={updateQuiz}
       >
-        <Form
-          name="settings-form"
-          initialValues={{ title: quiz.title, answer: quiz.answer }}
-          onFinish={updateQuiz}
-        >
-          <TitleWrapper>
-            <h1>Settings</h1>
-            {!settingsCard ? (
-              <ButtonWrapper>
-                <Popconfirm
-                  title="삭제하시겠습니까?"
-                  onConfirm={deleteQuiz}
-                  okText="Yes"
-                  cancelText="No"
-                >
-                  <StyledButton danger>Delete</StyledButton>
-                </Popconfirm>
-                <StyledButton type="primary" ghost onClick={handleViewBtn}>
-                  View
-                </StyledButton>
-
-                <StyledButton
-                  type="primary"
-                  htmlType="submit"
-                  onClick={() => setIsSaveClicked(true)}
-                >
-                  Save
-                </StyledButton>
-              </ButtonWrapper>
-            ) : (
-              <ButtonWrapper>
-                <h3>({selectedCards.length}/4)개 선택</h3>
-                <StyledButton type="primary" onClick={onSelectBtn}>
-                  Select
-                </StyledButton>
-              </ButtonWrapper>
-            )}
-          </TitleWrapper>
+        <TitleWrapper>
+          <h1>Settings</h1>
           {!settingsCard ? (
-            <SettingsMain>
-              <h2>Question</h2>
-              <Form.Item
-                name="title"
-                rules={[
-                  {
-                    required: true,
-                    message: '질문을 입력해주세요.',
-                  },
-                ]}
+            <ButtonWrapper>
+              <Popconfirm
+                title="삭제하시겠습니까?"
+                onConfirm={deleteQuiz}
+                okText="Yes"
+                cancelText="No"
               >
-                <Input placeholder="Title" allowClear style={{ width: 200 }} />
-              </Form.Item>
-              <h2 style={{ marginTop: '2rem' }}>Answer Cards</h2>
-              <Button
+                <StyledButton danger>Delete</StyledButton>
+              </Popconfirm>
+              <StyledButton type="primary" ghost onClick={handleViewBtn}>
+                View
+              </StyledButton>
+
+              <StyledButton
                 type="primary"
-                ghost
-                onClick={() => setSettingsCard(true)}
+                htmlType="submit"
+                onClick={() => setIsSaveClicked(true)}
               >
-                + Select Cards
-              </Button>
-              {selectedCards.length > 0 && (
-                <Form.Item name="answer">
-                  <Radio.Group onChange={onRadioChange} value={answer}>
-                    <CardsWrapper>
-                      {selectedCards.map((card, i) => (
-                        <StyledRadio key={card.id} value={i + 1}>
-                          Correct
-                          <Card
-                            key={card.id}
-                            card={card}
-                            settingsCard={settingsCard}
-                            selectedCards={selectedCards}
-                            setSelectedCards={setSelectedCards}
-                          />
-                        </StyledRadio>
-                      ))}
-                    </CardsWrapper>
-                  </Radio.Group>
-                </Form.Item>
-              )}
-            </SettingsMain>
+                Save
+              </StyledButton>
+            </ButtonWrapper>
           ) : (
-            <SettingsCard>
-              <h2>Select Answer Cards</h2>
-              <CardList
-                cards={cards}
-                setCards={setCards}
-                settingsCard={settingsCard}
-                setSettingsCard={setSettingsCard}
-                selectedCards={selectedCards}
-                setSelectedCards={setSelectedCards}
-              />
-            </SettingsCard>
+            <ButtonWrapper>
+              <h3>({selectedCards.length}/4)개 선택</h3>
+              <StyledButton type="primary" onClick={onSelectBtn}>
+                Select
+              </StyledButton>
+            </ButtonWrapper>
           )}
-        </Form>
-      </Container>
-    </div>
+        </TitleWrapper>
+        {!settingsCard ? (
+          <SettingsMain>
+            <h2>Question</h2>
+            <Form.Item
+              name="title"
+              rules={[
+                {
+                  required: true,
+                  message: '질문을 입력해주세요.',
+                },
+              ]}
+            >
+              <Input placeholder="Title" allowClear style={{ width: 200 }} />
+            </Form.Item>
+            <h2 style={{ marginTop: '2rem' }}>Answer Cards</h2>
+            <Button type="primary" ghost onClick={() => setSettingsCard(true)}>
+              + Edit Cards
+            </Button>
+            {selectedCards.length > 0 && (
+              <Form.Item name="answer">
+                <Radio.Group onChange={onRadioChange} value={answer}>
+                  <CardsWrapper>
+                    {selectedCards.map((card, i) => (
+                      <StyledRadio key={card.id} value={i + 1}>
+                        Correct
+                        <Card
+                          key={card.id}
+                          card={card}
+                          settingsCard={settingsCard}
+                          selectedCards={selectedCards}
+                          setSelectedCards={setSelectedCards}
+                        />
+                      </StyledRadio>
+                    ))}
+                  </CardsWrapper>
+                </Radio.Group>
+              </Form.Item>
+            )}
+          </SettingsMain>
+        ) : (
+          <SettingsCard>
+            <CardList
+              cards={cards}
+              setCards={setCards}
+              settingsCard={settingsCard}
+              setSettingsCard={setSettingsCard}
+              selectedCards={selectedCards}
+              setSelectedCards={setSelectedCards}
+            />
+          </SettingsCard>
+        )}
+      </Form>
+    </Container>
   );
 };
 

@@ -24,7 +24,6 @@ const CardList = ({
 
   useEffect(() => {
     fetchCards();
-    fetchAllCards();
   }, []);
   useEffect(() => {
     filterCards();
@@ -34,21 +33,9 @@ const CardList = ({
     setError(null);
     setLoading(true);
     try {
-      const response = await cardService.getAll({
-        params: { offset: '1', limit: '10' },
-      });
-      setCards(response.data);
-    } catch (e) {
-      setError(e);
-    }
-    setLoading(false);
-  };
-
-  const fetchAllCards = async () => {
-    setError(null);
-    setLoading(true);
-    try {
       const response = await cardService.getAll();
+      console.log('get cards result', response);
+      setCards(response.data);
       setAllCards(response.data);
     } catch (e) {
       setError(e);
@@ -82,12 +69,11 @@ const CardList = ({
     if (myCardsChecked && tagIds.length > 0) {
       searchResult = (titleSearched ? titleSearched : allCards).filter(
         (card) =>
-          card.google_id === userObj.google_id &&
-          tagIds.includes(card.category_id)
+          card.users_id === userObj.id && tagIds.includes(card.category_id)
       );
     } else if (myCardsChecked && tagIds.length === 0) {
       searchResult = (titleSearched ? titleSearched : allCards).filter(
-        (card) => card.google_id === userObj.google_id
+        (card) => card.users_id === userObj.id
       );
     } else if (!myCardsChecked && tagIds.length > 0) {
       searchResult = (titleSearched ? titleSearched : allCards).filter((card) =>
@@ -156,19 +142,21 @@ const CardList = ({
           <Empty description="검색 결과가 없습니다." />
         </EmptyWrapper>
       ) : (
-        <CardsWrapper>
-          {cards.map((card) => (
-            <Card
-              key={card.id}
-              card={card}
-              fetchCards={fetchCards}
-              selectedCards={selectedCards}
-              setSelectedCards={setSelectedCards}
-              settingsCard={settingsCard}
-              userObj={userObj}
-            />
-          ))}
-        </CardsWrapper>
+        cards.length > 0 && (
+          <CardsWrapper>
+            {cards.map((card) => (
+              <Card
+                key={card.id}
+                card={card}
+                fetchCards={fetchCards}
+                selectedCards={selectedCards}
+                setSelectedCards={setSelectedCards}
+                settingsCard={settingsCard}
+                userObj={userObj}
+              />
+            ))}
+          </CardsWrapper>
+        )
       )}
     </>
   );

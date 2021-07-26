@@ -56,7 +56,7 @@ const EditModal = ({
             (option) => option.value === category.value
           ) + 1,
         title,
-        img_path: file.response.result,
+        img_path: file.response.result.url,
       });
       console.log(res);
     } catch (e) {

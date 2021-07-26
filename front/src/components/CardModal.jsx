@@ -1,6 +1,6 @@
 import { UploadOutlined } from '@ant-design/icons';
 import { Button, message, Modal, Form, Upload } from 'antd';
-import React from 'react';
+import React, { useState } from 'react';
 import { cardService } from '../service/cards';
 import {
   ButtonWrapper,
@@ -17,6 +17,8 @@ const CardModal = ({
   form,
   userObj,
 }) => {
+  const [uploadVisible, setUploadVisible] = useState(true);
+
   const handleCancel = () => {
     setIsModalVisible(false);
   };
@@ -32,7 +34,7 @@ const CardModal = ({
       category_id,
       title,
       img_path: file.response.result,
-      google_id: userObj.google_id,
+      users_id: userObj.id,
     });
     setIsModalVisible(false);
   };
@@ -45,19 +47,20 @@ const CardModal = ({
       console.log(e.message);
     }
     await fetchCards();
+    message.success('Saved!');
   };
 
   const props = {
-    action: 'http://192.168.146.63:4000/cards_img/upload',
+    action: 'http://118.67.133.71/cards_img/upload',
     listType: 'picture',
     onChange(info) {
       if (info.file.status !== 'uploading') {
         console.log(info.file);
       }
       if (info.file.status === 'done') {
-        message.success(`${info.file.name} file uploaded successfully`);
+        setUploadVisible(false);
       } else if (info.file.status === 'error') {
-        message.error(`${info.file.name} file upload failed.`);
+        message.error(`${info.file.name}  upload failed.`);
       }
     },
   };
@@ -96,7 +99,9 @@ const CardModal = ({
               ]}
             >
               <Upload {...props}>
-                <Button icon={<UploadOutlined />}>Click to Upload</Button>
+                {uploadVisible && (
+                  <Button icon={<UploadOutlined />}>Click to Upload</Button>
+                )}
               </Upload>
             </Form.Item>
           </ContentsWrapper>

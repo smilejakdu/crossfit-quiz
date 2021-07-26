@@ -11,30 +11,30 @@ const GlobalStyle = createGlobalStyle`
     :root {
       --main-bg-color: #f7f9fa;
       --blue-color:#3799fc;
+      --purple-color:#8176f5;
     }
 `;
 export const Container = styled.div`
-  z-index: 1;
-  width: 100%;
-  margin-right: auto;
-  margin-left: auto;
-  padding: 2rem 4rem;
+  background: var(--main-bg-color);
+  height: 100vh;
 `;
 export const CardsWrapper = styled.div`
-  padding: 2rem;
+  margin-top: 1rem;
   display: grid;
-  grid-gap: 3rem;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-
-  @media screen and (max-width: 80rem) {
+  grid-gap: 2rem 0;
+  place-items: center;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  @media screen and (max-width: 1400px) {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+  }
+  @media screen and (max-width: 1124px) {
     grid-template-columns: 1fr 1fr 1fr;
   }
-  @media screen and (max-width: 70rem) {
+  @media screen and (max-width: 800px) {
     grid-template-columns: 1fr 1fr;
   }
-  @media screen and (max-width: 52rem) {
+  @media screen and (max-width: 530px) {
     grid-template-columns: 1fr;
-    justify-content: center;
   }
 `;
 export const EmptyWrapper = styled.div`

@@ -1,14 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Form, Input, Button } from 'antd';
-const { TextArea } = Input;
+import { SendOutlined } from '@ant-design/icons';
+import { StyledForm } from '../styles/commentForm';
 
 const CommentForm = ({ addComment }) => {
-  const [value, setValue] = useState('');
   const [form] = Form.useForm();
-
-  const handleChange = (e) => {
-    setValue(e.target.value);
-  };
 
   const handleSubmit = (input) => {
     addComment(input);
@@ -16,7 +12,7 @@ const CommentForm = ({ addComment }) => {
   };
 
   return (
-    <Form form={form} onFinish={handleSubmit}>
+    <StyledForm form={form} onFinish={handleSubmit}>
       <Form.Item
         name="content"
         rules={[
@@ -26,14 +22,23 @@ const CommentForm = ({ addComment }) => {
           },
         ]}
       >
-        <TextArea rows={4} onChange={handleChange} value={value} />
+        <Input
+          placeholder="What do you say?"
+          allowClear
+          style={{ borderRadius: '20px' }}
+        />
       </Form.Item>
       <Form.Item>
-        <Button htmlType="submit" type="primary">
-          Add Comment
+        <Button
+          htmlType="submit"
+          type="primary"
+          shape="circle"
+          style={{ marginLeft: '0.8rem' }}
+        >
+          <SendOutlined />
         </Button>
       </Form.Item>
-    </Form>
+    </StyledForm>
   );
 };
 

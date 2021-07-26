@@ -73,7 +73,7 @@ const SearchBar = ({
           ref={inputRef}
         />
         {!settingsCard && (
-          <StyledButton onClick={showModal}>
+          <StyledButton type="primary" ghost onClick={showModal}>
             {windowSize.width > 768 ? '+ Add a Card' : '+ New'}
           </StyledButton>
         )}

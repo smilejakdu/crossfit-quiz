@@ -1,6 +1,6 @@
 import axios from 'axios';
-// import { baseURL } from './config';
-const baseURL = 'http://localhost:4002';
+import { baseURL } from './config';
+// const baseURL = 'http://localhost:4002';
 
 const endpoint = '/comments';
 
@@ -26,6 +26,7 @@ const remove = (id) => {
 
 export const commentService = {
   getAll,
+  // get,
   add,
   update,
   remove,

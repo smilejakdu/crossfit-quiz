@@ -3,28 +3,30 @@ import { commentService } from '../service/comments.js';
 import { Popconfirm, Button, Form, Input, Avatar, message } from 'antd';
 import {
   BtnContainer,
+  ButtonWrapper,
   CommentContainer,
+  Content,
+  EditForm,
+  StyledButton,
   StyledComment,
   StyledList,
 } from '../styles/commentList.js';
-
 const CommentList = ({ comments, userObj, fetchComments }) => {
   const [showEdit, setShowEdit] = useState(false);
   const [editId, setEditId] = useState('1');
-  const [content, setContent] = useState({});
+  const [form] = Form.useForm();
 
   const openEditForm = (comment) => {
     setEditId(comment.id);
     setShowEdit(true);
   };
 
-  const handleEditChange = (e) => {
-    setContent(e.target.value);
-  };
-
   const updateComment = async (id) => {
     try {
-      const res = await commentService.update({ id, content });
+      const res = await commentService.update({
+        id,
+        content: form.getFieldsValue().content,
+      });
       console.log(res.data);
       setShowEdit(false);
     } catch (e) {
@@ -47,11 +49,14 @@ const CommentList = ({ comments, userObj, fetchComments }) => {
   return (
     <StyledList
       dataSource={comments}
-      header={`${comments.length} ${comments.length > 1 ? 'replies' : 'reply'}`}
+      header={`${comments.length} ${
+        comments.length > 1 ? 'comments' : 'comment'
+      }`}
       itemLayout="horizontal"
       renderItem={(comment) =>
         editId === comment.id && showEdit ? (
-          <Form
+          <EditForm
+            form={form}
             onFinish={() => updateComment(comment.id)}
             initialValues={{
               content: comment.content,
@@ -66,15 +71,28 @@ const CommentList = ({ comments, userObj, fetchComments }) => {
                 },
               ]}
             >
-              <Input value={content} onChange={handleEditChange} />
+              <Input style={{ borderRadius: '20px' }} />
             </Form.Item>
-            <Form.Item>
-              <Button type="primary" ghost htmlType="submit">
-                Save
-              </Button>
-              <Button onClick={() => setShowEdit(false)}>Cancel</Button>
-            </Form.Item>
-          </Form>
+            <ButtonWrapper>
+              <Form.Item>
+                <StyledButton
+                  size="small"
+                  shape="round"
+                  htmlType="submit"
+                  style={{ marginRight: '0.5rem' }}
+                >
+                  Save
+                </StyledButton>
+                <StyledButton
+                  size="small"
+                  shape="round"
+                  onClick={() => setShowEdit(false)}
+                >
+                  Cancel
+                </StyledButton>
+              </Form.Item>
+            </ButtonWrapper>
+          </EditForm>
         ) : (
           <CommentContainer>
             <StyledComment
@@ -84,11 +102,11 @@ const CommentList = ({ comments, userObj, fetchComments }) => {
                   alt={`${comment.name}'s avatar`}
                 />
               }
-              author={comment.name}
-              content={comment.content}
+              author={<span style={{ color: 'white' }}>{comment.name}</span>}
+              content={<Content>{comment.content}</Content>}
               datetime={<span>{comment.created_at}</span>}
             />
-            {comment.users_id === userObj.google_id && (
+            {comment.users_id === userObj.id && (
               <BtnContainer>
                 <Button type="link" onClick={() => openEditForm(comment)}>
                   edit

@@ -1,10 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { Badge, Button, Tag } from 'antd';
+import { Badge, Tag } from 'antd';
 import Meta from 'antd/lib/card/Meta';
 import { useLocation } from 'react-router';
 import EditModal from './EditModal';
 import { categoryOptions } from '../constants';
-import { DeselectBtn, StyledCard, TitleWrapper } from '../styles/card';
+import {
+  DeselectBtn,
+  EditButton,
+  StyledCard,
+  TitleWrapper,
+} from '../styles/card';
 import { EditOutlined, MinusCircleOutlined } from '@ant-design/icons';
 import { useRouteMatch } from 'react-router-dom';
 
@@ -21,7 +26,7 @@ const Card = ({
   const [showEditModal, setShowEditModal] = useState(false);
   const [category, setCategory] = useState('');
   let matchEditSettings = useRouteMatch('/settings/:id');
-  const { id, title, category_id, img_path, google_id } = card;
+  const { id, title, category_id, img_path, users_id } = card;
 
   useEffect(() => {
     if (category_id) setCategory(categoryOptions[category_id - 1].value);
@@ -81,23 +86,18 @@ const Card = ({
         cover={<img alt="movement" src={img_path} />}
         onClick={handleClick}
       >
+        {userObj && userObj.id === users_id && (
+          <EditButton
+            type="primary"
+            shape="round"
+            onClick={() => setShowEditModal(true)}
+          >
+            <EditOutlined />
+            Edit
+          </EditButton>
+        )}
         <Meta
-          title={
-            <TitleWrapper>
-              {title}
-              {userObj && userObj.google_id === google_id && (
-                <Button
-                  type="primary"
-                  shape="round"
-                  ghost
-                  onClick={() => setShowEditModal(true)}
-                >
-                  <EditOutlined />
-                  Edit
-                </Button>
-              )}
-            </TitleWrapper>
-          }
+          title={<TitleWrapper>{title}</TitleWrapper>}
           description={[
             category_id && <Tag>{category}</Tag>,
             !settingsCard && location.pathname === '/settings' && (

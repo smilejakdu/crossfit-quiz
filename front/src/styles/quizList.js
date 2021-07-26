@@ -29,9 +29,9 @@ export const StyledTag = styled(Tag)`
   cursor: pointer;
   user-select: none;
   background: ${(props) => props.background};
-  border: 1px solid #8176f5;
+  border: 1px solid var(--purple-color);
   border-radius: 30px;
-  color: ${(props) => props.colorSelect || '#8176F5'};
+  color: ${(props) => props.colorselect || 'var(--purple-color)'};
   &:first-child {
     margin-right: 1rem;
   }

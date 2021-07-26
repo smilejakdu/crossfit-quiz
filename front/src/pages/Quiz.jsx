@@ -5,10 +5,11 @@ import { Container, LoadingWrapper } from '../globalStyles';
 import { TitleWrapper } from '../styles/settings';
 import { cardService } from '../service/cards';
 import { MainWrapper, ImageWrapper, CardsWrapper } from '../styles/quiz';
-import Comments from '../components/Comments';
+import FinishScreen from '../components/FinishScreen';
+import Header from '../components/Header';
 const { Title } = Typography;
 
-const Quiz = ({ userObj }) => {
+const Quiz = ({ userObj, setUserObj }) => {
   let location = useLocation();
   const quiz = location.state.quiz;
   const [loading, setLoading] = useState(false);
@@ -18,7 +19,7 @@ const Quiz = ({ userObj }) => {
   const [selectedCard, setSelectedCard] = useState([]);
   const [answerCard, setAnswerCard] = useState([]);
 
-  const { answer, card_id, created_at, google_id, id, img_path, title } = quiz;
+  const { answer, card_id, created_at, users_id, id, img_path, title } = quiz;
 
   useEffect(() => {
     fetchCards();
@@ -66,24 +67,16 @@ const Quiz = ({ userObj }) => {
     <LoadingWrapper>
       <Spin />
     </LoadingWrapper>
+  ) : showFinishScreen ? (
+    <FinishScreen userObj={userObj} quizId={id} handleRestart={handleRestart} />
   ) : (
-    <Container
-      style={{
-        backgroundColor: 'var(--main-bg-color)',
-      }}
-    >
-      <TitleWrapper>
-        <Title level={2}>{title}</Title>
-      </TitleWrapper>
-      {showAnswer ? (
-        showFinishScreen ? (
-          <MainWrapper>
-            <Comments userObj={userObj} quizId={id} />
-            <Button type="primary" ghost onClick={handleRestart}>
-              Restart Quiz
-            </Button>
-          </MainWrapper>
-        ) : (
+    <>
+      <Header userObj={userObj} setUserObj={setUserObj} />
+      <Container>
+        <TitleWrapper>
+          <Title level={2}>{title}</Title>
+        </TitleWrapper>
+        {showAnswer ? (
           <MainWrapper>
             <CardsWrapper>
               {cards.map((card) =>
@@ -95,7 +88,10 @@ const Quiz = ({ userObj }) => {
                     color="lime"
                     visible={selectedCard === answerCard && true}
                   >
-                    <ImageWrapper backgroundColor="var(--blue-color)">
+                    <ImageWrapper
+                      backgroundColor="var(--blue-color)"
+                      height="18rem"
+                    >
                       <Title style={{ color: '#ffffff' }} level={4}>
                         {card.title}
                       </Title>
@@ -119,7 +115,7 @@ const Quiz = ({ userObj }) => {
                       true
                     }
                   >
-                    <ImageWrapper>
+                    <ImageWrapper height="18rem">
                       <Title level={4}>{card.title}</Title>
                       <Image
                         key={card.id}
@@ -136,21 +132,35 @@ const Quiz = ({ userObj }) => {
               Finish
             </Button>
           </MainWrapper>
-        )
-      ) : (
-        <MainWrapper>
-          <CardsWrapper>
-            {cards.map((card) =>
-              card === selectedCard ? (
-                <Tooltip
-                  placement="topLeft"
-                  title="Select"
-                  arrowPointAtCenter
-                  color="purple"
-                  visible={true}
-                >
+        ) : (
+          <MainWrapper>
+            <CardsWrapper>
+              {cards.map((card) =>
+                card === selectedCard ? (
+                  <Tooltip
+                    placement="topLeft"
+                    title="Select"
+                    arrowPointAtCenter
+                    color="#8176F5"
+                    visible={true}
+                  >
+                    <ImageWrapper
+                      justifyContent="center"
+                      border="1px solid #8176F5"
+                      onClick={() => handleSelect(card)}
+                    >
+                      <Image
+                        key={card.id}
+                        width={200}
+                        preview={false}
+                        src={card.img_path}
+                      />
+                    </ImageWrapper>
+                  </Tooltip>
+                ) : (
                   <ImageWrapper
-                    border="1px solid purple"
+                    transform="scale(1.04)"
+                    justifyContent="center"
                     onClick={() => handleSelect(card)}
                   >
                     <Image
@@ -160,28 +170,16 @@ const Quiz = ({ userObj }) => {
                       src={card.img_path}
                     />
                   </ImageWrapper>
-                </Tooltip>
-              ) : (
-                <ImageWrapper
-                  transform="scale(1.04)"
-                  onClick={() => handleSelect(card)}
-                >
-                  <Image
-                    key={card.id}
-                    width={200}
-                    preview={false}
-                    src={card.img_path}
-                  />
-                </ImageWrapper>
-              )
-            )}
-          </CardsWrapper>
-          <Button type="primary" onClick={handleCheckAnswer}>
-            정답 확인
-          </Button>
-        </MainWrapper>
-      )}
-    </Container>
+                )
+              )}
+            </CardsWrapper>
+            <Button type="primary" onClick={handleCheckAnswer}>
+              정답 확인
+            </Button>
+          </MainWrapper>
+        )}
+      </Container>
+    </>
   );
 };
 
