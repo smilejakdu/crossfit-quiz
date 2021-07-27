@@ -2,6 +2,7 @@ import { UploadOutlined } from '@ant-design/icons';
 import { Button, message, Modal, Form, Upload } from 'antd';
 import React, { useState } from 'react';
 import { cardService } from '../service/cards';
+import { baseURL } from '../service/config';
 import {
   ButtonWrapper,
   CardWrapper,
@@ -51,7 +52,7 @@ const CardModal = ({
   };
 
   const props = {
-    action: 'http://118.67.133.71/cards_img/upload',
+    action: `${baseURL}/cards_img/upload`,
     listType: 'picture',
     onChange(info) {
       if (info.file.status !== 'uploading') {

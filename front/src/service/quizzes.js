@@ -1,18 +1,19 @@
 import axios from 'axios';
-import { baseURL } from './config';
-// const baseURL = 'http://localhost:4001';
+// import { baseURL } from './config';
+const baseURL = 'http://localhost:4001';
 
 const endpoint = '/quizzes';
 
-// const getAll = () => {
-//   return axios.get(baseURL + endpoint);
-// };
-
-const getAll = (filteringId = 0) => {
-  return axios.get(baseURL + endpoint + '/sort/' + filteringId);
+const getAll = () => {
+  return axios.get(baseURL + endpoint);
 };
 
+// const getAll = (filteringId = 0) => {
+//   return axios.get(baseURL + endpoint + '/sort/' + filteringId);
+// };
+
 const get = (id) => {
+  console.log(id);
   return axios.get(baseURL + endpoint + '/' + id);
 };
 

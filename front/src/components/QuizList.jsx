@@ -12,6 +12,7 @@ import { quizService } from '../service/quizzes';
 import QuizCard from './QuizCard';
 import { CardsWrapper, EmptyWrapper } from '../globalStyles';
 import { sortingOptions } from '../constants';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 const QuizList = ({ userObj }) => {
   const inputRef = useRef(null);
@@ -21,22 +22,33 @@ const QuizList = ({ userObj }) => {
   const [filteringId, setFilteringId] = useState(0);
   const [allQuizzes, setAllQuizzes] = useState([]);
   const [quizzes, setQuizzes] = useState([]);
+  const [start, setStart] = useState(0);
+  const [count, setCount] = useState(10);
 
   useEffect(() => {
     fetchQuizzes();
   }, [filteringId]);
+
   useEffect(() => {
     filterQuizzes();
   }, [myQuizzesChecked, titleSearched]);
 
+  console.log('quizzes', quizzes);
+
   const fetchQuizzes = async () => {
     setLoading(true);
     try {
-      console.log('get quizzes');
+      setStart(start + count);
+      console.log('fetch Quiz');
       const res = await quizService.getAll(filteringId);
-      console.log('get quizzes result', res);
-      // setQuizzes(res.data);
-      // setAllQuizzes(res.data);
+      console.log('fetch Quiz Result', res);
+      setAllQuizzes(res.data);
+
+      let arr = [];
+      for (let i = start; i < count; i++) {
+        arr.push(res.data[i]);
+      }
+      setQuizzes(quizzes.concat(arr));
     } catch (e) {
       console.log(e.message);
     }
@@ -129,7 +141,7 @@ const QuizList = ({ userObj }) => {
         </Filter>
       </SearchWrapper>
 
-      {loading ? (
+      {/* {loading ? (
         <Skeleton active />
       ) : quizzes.length === 0 ? (
         <EmptyWrapper>
@@ -146,7 +158,29 @@ const QuizList = ({ userObj }) => {
             />
           ))}
         </CardsWrapper>
-      )}
+      )} */}
+
+      <InfiniteScroll
+        dataLength={quizzes.length}
+        next={fetchQuizzes}
+        hasMore={true}
+        loader={<h4>Loading...</h4>}
+        endMessage={
+          <p style={{ textAlign: 'center' }}>
+            <b>Yay! You have seen it all</b>
+          </p>
+        }
+      >
+        <CardsWrapper>
+          {quizzes.map((quiz) => (
+            <QuizCard
+              quiz={quiz}
+              fetchQuizzes={fetchQuizzes}
+              userObj={userObj}
+            />
+          ))}
+        </CardsWrapper>
+      </InfiniteScroll>
     </>
   );
 };
