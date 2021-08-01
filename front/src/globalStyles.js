@@ -5,7 +5,7 @@ const GlobalStyle = createGlobalStyle`
         margin:0;
         padding:0;
         box-sizing:border-box;
-        font-family:'Montserrat', sans-serif;
+        font-family: 'Open Sans', sans-serif;
     }
     
     :root {
@@ -16,24 +16,26 @@ const GlobalStyle = createGlobalStyle`
 `;
 export const Container = styled.div`
   background: var(--main-bg-color);
-  height: 100vh;
+  min-height: 90vh;
 `;
 export const CardsWrapper = styled.div`
-  margin-top: 1rem;
+  max-width: 1600px;
+  margin: ${(props) => props.margin || '0 10vw'};
+  margin-bottom: 3rem;
   display: grid;
-  grid-gap: 2rem 0;
+  grid-gap: 2vw 0;
   place-items: center;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-  @media screen and (max-width: 1400px) {
+  @media screen and (max-width: 1600px) {
     grid-template-columns: 1fr 1fr 1fr 1fr;
   }
-  @media screen and (max-width: 1124px) {
+  @media screen and (max-width: 1250px) {
     grid-template-columns: 1fr 1fr 1fr;
   }
-  @media screen and (max-width: 800px) {
+  @media screen and (max-width: 1100px) {
     grid-template-columns: 1fr 1fr;
   }
-  @media screen and (max-width: 530px) {
+  @media screen and (max-width: 700px) {
     grid-template-columns: 1fr;
   }
 `;
@@ -45,6 +47,9 @@ export const LoadingWrapper = styled.div`
   justify-content: center;
   align-items: center;
   min-height: 100vh;
+`;
+export const SkeletonWrapper = styled.div`
+  margin: 5rem;
 `;
 
 export default GlobalStyle;

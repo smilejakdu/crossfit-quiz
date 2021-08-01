@@ -1,9 +1,10 @@
-import React from 'react';
-import { Form, Input, Button } from 'antd';
+import React, { useState } from 'react';
+import { Form, Button } from 'antd';
 import { SendOutlined } from '@ant-design/icons';
-import { StyledForm } from '../styles/commentForm';
+import { StyledForm, StyledInput } from '../styles/commentForm';
 
 const CommentForm = ({ addComment }) => {
+  const [width, setWidth] = useState('15rem');
   const [form] = Form.useForm();
 
   const handleSubmit = (input) => {
@@ -22,10 +23,12 @@ const CommentForm = ({ addComment }) => {
           },
         ]}
       >
-        <Input
-          placeholder="What do you say?"
+        <StyledInput
+          placeholder="Please leave your thoughts..."
           allowClear
-          style={{ borderRadius: '20px' }}
+          width={width}
+          onMouseOver={() => setWidth('23rem')}
+          onMouseLeave={() => setWidth('15rem')}
         />
       </Form.Item>
       <Form.Item>

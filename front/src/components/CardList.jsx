@@ -3,7 +3,8 @@ import { Empty, Form, message, Skeleton } from 'antd';
 import Card from './Card';
 import SearchBar from './SearchBar';
 import { cardService } from '../service/cards';
-import { CardsWrapper, EmptyWrapper } from '../globalStyles';
+import { CardsWrapper, EmptyWrapper, SkeletonWrapper } from '../globalStyles';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 const CardList = ({
   cards,
@@ -16,41 +17,58 @@ const CardList = ({
   const [form] = Form.useForm();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
   const [allCards, setAllCards] = useState([]);
   const [tagIds, setTagIds] = useState([]);
   const [myCardsChecked, setMyCardsChecked] = useState(false);
   const [titleSearched, setTitleSearched] = useState('');
+  const [showAllBtn, setShowAllBtn] = useState(false);
+  const [start, setStart] = useState(0);
+  const count = 10;
 
   useEffect(() => {
     fetchCards();
   }, []);
+
+  useEffect(() => {
+    const sorted = allCards.reverse();
+    setCards(sorted);
+  }, [allCards]);
+
   useEffect(() => {
     filterCards();
   }, [tagIds, myCardsChecked, titleSearched]);
 
   const fetchCards = async () => {
-    setError(null);
     setLoading(true);
     try {
-      const response = await cardService.getAll();
-      console.log('get cards result', response);
-      setCards(response.data);
-      setAllCards(response.data);
+      const res = await cardService.getAll();
+      console.log('get cards result', res);
+      setAllCards(res.data.result);
+      let arr = [];
+      for (
+        let i = start;
+        i < Math.min(start + count, res.data.result.length);
+        i++
+      ) {
+        arr.push(res.data.result[i]);
+      }
+      setCards(cards.concat(arr));
+      setStart(start + count);
     } catch (e) {
-      setError(e);
+      console.log(e.message);
     }
     setLoading(false);
   };
 
   const searchByTitle = async (value) => {
-    setError(null);
+    setShowAllBtn(true);
     setLoading(true);
     try {
       let searchResult = [];
       if (!value) {
         searchResult = allCards;
         setTitleSearched('');
+        setShowAllBtn(false);
       } else {
         searchResult = allCards.filter((card) =>
           card.title.toLowerCase().includes(value)
@@ -59,7 +77,7 @@ const CardList = ({
       }
       setCards(searchResult);
     } catch (e) {
-      setError(e);
+      console.log(e.message);
     }
     setLoading(false);
   };
@@ -86,18 +104,16 @@ const CardList = ({
   };
 
   const filterByCategory = async (idArr) => {
-    setError(null);
     setLoading(true);
     try {
       setTagIds(idArr);
     } catch (e) {
-      setError(e);
+      console.log(e.message);
     }
     setLoading(false);
   };
 
   const filterByUser = async (e) => {
-    setError(null);
     setLoading(true);
     try {
       if (e.target.checked) {
@@ -106,9 +122,14 @@ const CardList = ({
         setMyCardsChecked(false);
       }
     } catch (e) {
-      setError(e);
+      console.log(e.message);
     }
     setLoading(false);
+  };
+
+  const resetFilter = () => {
+    setShowAllBtn(false);
+    setCards(allCards);
   };
 
   const showModal = async () => {
@@ -133,16 +154,26 @@ const CardList = ({
         filterByCategory={filterByCategory}
         filterByUser={filterByUser}
         userObj={userObj}
+        resetFilter={resetFilter}
+        showAllBtn={showAllBtn}
       />
 
-      {loading ? (
-        <Skeleton active />
-      ) : cards.length === 0 ? (
-        <EmptyWrapper>
-          <Empty description="검색 결과가 없습니다." />
-        </EmptyWrapper>
+      {cards.length === 0 ? (
+        loading ? (
+          <SkeletonWrapper>
+            <Skeleton active />
+          </SkeletonWrapper>
+        ) : (
+          <EmptyWrapper>
+            <Empty description="검색 결과가 없습니다." />
+          </EmptyWrapper>
+        )
       ) : (
-        cards.length > 0 && (
+        <InfiniteScroll
+          dataLength={cards.length}
+          next={fetchCards}
+          hasMore={true}
+        >
           <CardsWrapper>
             {cards.map((card) => (
               <Card
@@ -156,7 +187,7 @@ const CardList = ({
               />
             ))}
           </CardsWrapper>
-        )
+        </InfiniteScroll>
       )}
     </>
   );

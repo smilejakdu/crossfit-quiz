@@ -1,18 +1,19 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Empty, Skeleton } from 'antd';
+import { Empty, Skeleton, Button } from 'antd';
 import {
   StyledSearch,
   Filter,
   SearchWrapper,
   TagWrapper,
-  StyledCheckbox,
   StyledTag,
 } from '../styles/quizList';
 import { quizService } from '../service/quizzes';
 import QuizCard from './QuizCard';
-import { CardsWrapper, EmptyWrapper } from '../globalStyles';
+import { CardsWrapper, EmptyWrapper, SkeletonWrapper } from '../globalStyles';
 import { sortingOptions } from '../constants';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import { RedoOutlined } from '@ant-design/icons';
+import { CheckboxWrapper, StyledCheckbox } from '../styles/searchBar';
 
 const QuizList = ({ userObj }) => {
   const inputRef = useRef(null);
@@ -22,8 +23,18 @@ const QuizList = ({ userObj }) => {
   const [filteringId, setFilteringId] = useState(0);
   const [allQuizzes, setAllQuizzes] = useState([]);
   const [quizzes, setQuizzes] = useState([]);
+  const [showAllBtn, setShowAllBtn] = useState(false);
   const [start, setStart] = useState(0);
-  const [count, setCount] = useState(10);
+  const count = 10;
+
+  useEffect(() => {
+    fetchQuizzes();
+  }, []);
+
+  useEffect(() => {
+    const sorted = allQuizzes.reverse();
+    setQuizzes(sorted);
+  }, [allQuizzes]);
 
   useEffect(() => {
     fetchQuizzes();
@@ -33,22 +44,22 @@ const QuizList = ({ userObj }) => {
     filterQuizzes();
   }, [myQuizzesChecked, titleSearched]);
 
-  console.log('quizzes', quizzes);
-
   const fetchQuizzes = async () => {
     setLoading(true);
     try {
-      setStart(start + count);
-      console.log('fetch Quiz');
       const res = await quizService.getAll(filteringId);
       console.log('fetch Quiz Result', res);
-      setAllQuizzes(res.data);
-
+      setAllQuizzes(res.data.result);
       let arr = [];
-      for (let i = start; i < count; i++) {
-        arr.push(res.data[i]);
+      for (
+        let i = start;
+        i < Math.min(start + count, res.data.result.length);
+        i++
+      ) {
+        arr.push(res.data.result[i]);
       }
       setQuizzes(quizzes.concat(arr));
+      setStart(start + count);
     } catch (e) {
       console.log(e.message);
     }
@@ -76,12 +87,14 @@ const QuizList = ({ userObj }) => {
     inputRef.current.focus({
       cursor: 'all',
     });
+    setShowAllBtn(true);
     setLoading(true);
     try {
       let searchResult = [];
       if (!value) {
         searchResult = allQuizzes;
         setTitleSearched('');
+        setShowAllBtn(false);
       } else {
         searchResult = allQuizzes.filter((quiz) =>
           quiz.title.toLowerCase().includes(value)
@@ -109,6 +122,11 @@ const QuizList = ({ userObj }) => {
     setLoading(false);
   };
 
+  const resetFilter = () => {
+    setShowAllBtn(false);
+    setQuizzes(allQuizzes);
+  };
+
   return (
     <>
       <SearchWrapper>
@@ -134,53 +152,49 @@ const QuizList = ({ userObj }) => {
             ))}
           </TagWrapper>
           {userObj && (
-            <StyledCheckbox onChange={filterByUser}>
-              내가 만든 퀴즈
-            </StyledCheckbox>
+            <CheckboxWrapper>
+              <StyledCheckbox onChange={filterByUser}>
+                내가 만든 퀴즈
+              </StyledCheckbox>
+              {showAllBtn && (
+                <Button type="link" size="small" onClick={resetFilter}>
+                  <RedoOutlined />
+                  모든 카드
+                </Button>
+              )}
+            </CheckboxWrapper>
           )}
         </Filter>
       </SearchWrapper>
 
-      {/* {loading ? (
-        <Skeleton active />
-      ) : quizzes.length === 0 ? (
-        <EmptyWrapper>
-          <Empty description="검색 결과가 없습니다." />
-        </EmptyWrapper>
+      {quizzes.length === 0 ? (
+        loading ? (
+          <SkeletonWrapper>
+            <Skeleton active />
+          </SkeletonWrapper>
+        ) : (
+          <EmptyWrapper>
+            <Empty description="검색 결과가 없습니다." />
+          </EmptyWrapper>
+        )
       ) : (
-        <CardsWrapper>
-          {quizzes.map((quiz) => (
-            <QuizCard
-              key={quiz.id}
-              quiz={quiz}
-              fetchQuizzes={fetchQuizzes}
-              userObj={userObj}
-            />
-          ))}
-        </CardsWrapper>
-      )} */}
-
-      <InfiniteScroll
-        dataLength={quizzes.length}
-        next={fetchQuizzes}
-        hasMore={true}
-        loader={<h4>Loading...</h4>}
-        endMessage={
-          <p style={{ textAlign: 'center' }}>
-            <b>Yay! You have seen it all</b>
-          </p>
-        }
-      >
-        <CardsWrapper>
-          {quizzes.map((quiz) => (
-            <QuizCard
-              quiz={quiz}
-              fetchQuizzes={fetchQuizzes}
-              userObj={userObj}
-            />
-          ))}
-        </CardsWrapper>
-      </InfiniteScroll>
+        <InfiniteScroll
+          dataLength={quizzes.length}
+          next={fetchQuizzes}
+          hasMore={true}
+        >
+          <CardsWrapper>
+            {quizzes.map((quiz) => (
+              <QuizCard
+                key={quiz.id}
+                quiz={quiz}
+                fetchQuizzes={fetchQuizzes}
+                userObj={userObj}
+              />
+            ))}
+          </CardsWrapper>
+        </InfiniteScroll>
+      )}
     </>
   );
 };

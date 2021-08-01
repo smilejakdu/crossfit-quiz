@@ -1,6 +1,7 @@
 import { UploadOutlined } from '@ant-design/icons';
 import { Button, message, Modal, Form, Upload } from 'antd';
 import React, { useState } from 'react';
+import { categoryOptions } from '../constants';
 import { cardService } from '../service/cards';
 import { baseURL } from '../service/config';
 import {
@@ -22,28 +23,34 @@ const CardModal = ({
 
   const handleCancel = () => {
     setIsModalVisible(false);
+    setUploadVisible(true);
   };
 
   const handleSave = (values) => {
-    const {
-      category_id,
-      title,
-      image: { file },
-    } = values;
-    console.log(file);
+    const { category_id, title, image } = values;
+    console.log('image : ', image);
+    if (image.fileList.length === 0) {
+      message.warning('이미지를 업로드해주세요.');
+      return;
+    }
+    const selectedOption = categoryOptions.filter(
+      (option) => category_id.value === option.value
+    );
     addCard({
-      category_id,
+      category_id: selectedOption[0].id,
       title,
-      img_path: file.response.result,
+      img_path: image.file.response.result,
       users_id: userObj.id,
     });
     setIsModalVisible(false);
+    setUploadVisible(true);
   };
 
   const addCard = async (values) => {
+    console.log('add card data : ', values);
     try {
       const res = await cardService.add(values);
-      console.log(res);
+      console.log('add card result : ', res);
     } catch (e) {
       console.log(e.message);
     }
@@ -55,14 +62,17 @@ const CardModal = ({
     action: `${baseURL}/cards_img/upload`,
     listType: 'picture',
     onChange(info) {
-      if (info.file.status !== 'uploading') {
-        console.log(info.file);
-      }
-      if (info.file.status === 'done') {
+      if (info.file.status === 'uploading') {
         setUploadVisible(false);
+      } else if (info.file.status === 'done') {
+        message.success(`${info.file.name} uploaded!`);
       } else if (info.file.status === 'error') {
         message.error(`${info.file.name}  upload failed.`);
       }
+    },
+    onRemove() {
+      form.resetFields(['image']);
+      setUploadVisible(true);
     },
   };
 
@@ -101,7 +111,7 @@ const CardModal = ({
             >
               <Upload {...props}>
                 {uploadVisible && (
-                  <Button icon={<UploadOutlined />}>Click to Upload</Button>
+                  <Button icon={<UploadOutlined />}>Upload</Button>
                 )}
               </Upload>
             </Form.Item>

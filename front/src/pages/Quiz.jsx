@@ -7,6 +7,8 @@ import { cardService } from '../service/cards';
 import { MainWrapper, ImageWrapper, CardsWrapper } from '../styles/quiz';
 import FinishScreen from '../components/FinishScreen';
 import Header from '../components/Header';
+import { baseURL } from '../service/config';
+import { answerService } from '../service/answer';
 const { Title } = Typography;
 
 const Quiz = ({ userObj, setUserObj }) => {
@@ -19,24 +21,21 @@ const Quiz = ({ userObj, setUserObj }) => {
   const [selectedCard, setSelectedCard] = useState([]);
   const [answerCard, setAnswerCard] = useState([]);
 
-  const { answer, card_id, created_at, users_id, id, img_path, title } = quiz;
+  const { answer, id, title, cards_id1, cards_id2 } = quiz;
 
   useEffect(() => {
-    fetchCards();
+    fetchCardsById();
   }, []);
 
   useEffect(() => {
     setAnswerCard(cards[answer - 1]);
   }, [cards]);
 
-  const fetchCards = async () => {
-    setLoading(true);
+  const fetchCardsById = async () => {
     try {
-      let cardsArr = [];
-      for await (const id of card_id) {
-        const res = await cardService.get(id);
-        cardsArr.push(res.data);
-      }
+      const res1 = await cardService.get(cards_id1);
+      const res2 = await cardService.get(cards_id2);
+      let cardsArr = [res1.data[0], res2.data[0]];
       setCards(cardsArr);
     } catch (e) {
       console.log(e.message);
@@ -46,15 +45,34 @@ const Quiz = ({ userObj, setUserObj }) => {
 
   const handleSelect = (card) => {
     setSelectedCard(card);
-    console.log('클릭', card);
   };
 
   const handleCheckAnswer = () => {
     if (selectedCard.length === 0) {
-      message.warning('정답을 선택해주세요.');
+      message.warning('카드를 선택해주세요.');
       return;
     }
     setShowAnswer(true);
+  };
+
+  const handleFinish = () => {
+    setShowFinishScreen(true);
+    updateCorrectRate({
+      users_id: userObj.id,
+      quiz_id: id,
+      answer: selectedCard === answerCard ? 1 : 0,
+    });
+  };
+
+  const updateCorrectRate = async (data) => {
+    setLoading(true);
+    try {
+      const res = await answerService.add(data);
+      console.log('post 정답률 result : ', res);
+    } catch (e) {
+      console.log(e.message);
+    }
+    setLoading(false);
   };
 
   const handleRestart = () => {
@@ -68,7 +86,7 @@ const Quiz = ({ userObj, setUserObj }) => {
       <Spin />
     </LoadingWrapper>
   ) : showFinishScreen ? (
-    <FinishScreen userObj={userObj} quizId={id} handleRestart={handleRestart} />
+    <FinishScreen userObj={userObj} quiz={quiz} handleRestart={handleRestart} />
   ) : (
     <>
       <Header userObj={userObj} setUserObj={setUserObj} />
@@ -90,16 +108,19 @@ const Quiz = ({ userObj, setUserObj }) => {
                   >
                     <ImageWrapper
                       backgroundColor="var(--blue-color)"
-                      height="18rem"
+                      height="20rem"
                     >
-                      <Title style={{ color: '#ffffff' }} level={4}>
+                      <Title
+                        style={{ color: '#ffffff', paddingBottom: '2rem' }}
+                        level={4}
+                      >
                         {card.title}
                       </Title>
                       <Image
                         key={card.id}
                         width={200}
                         preview={false}
-                        src={card.img_path}
+                        src={`${baseURL}/${card.img_path}`}
                       />
                     </ImageWrapper>
                   </Tooltip>
@@ -115,20 +136,22 @@ const Quiz = ({ userObj, setUserObj }) => {
                       true
                     }
                   >
-                    <ImageWrapper height="18rem">
-                      <Title level={4}>{card.title}</Title>
+                    <ImageWrapper height="20rem">
+                      <Title style={{ paddingBottom: '2rem' }} level={4}>
+                        {card.title}
+                      </Title>
                       <Image
                         key={card.id}
                         width={200}
                         preview={false}
-                        src={card.img_path}
+                        src={`${baseURL}/${card.img_path}`}
                       />
                     </ImageWrapper>
                   </Tooltip>
                 )
               )}
             </CardsWrapper>
-            <Button type="primary" onClick={() => setShowFinishScreen(true)}>
+            <Button type="primary" onClick={handleFinish}>
               Finish
             </Button>
           </MainWrapper>
@@ -153,7 +176,7 @@ const Quiz = ({ userObj, setUserObj }) => {
                         key={card.id}
                         width={200}
                         preview={false}
-                        src={card.img_path}
+                        src={`${baseURL}/${card.img_path}`}
                       />
                     </ImageWrapper>
                   </Tooltip>
@@ -167,7 +190,7 @@ const Quiz = ({ userObj, setUserObj }) => {
                       key={card.id}
                       width={200}
                       preview={false}
-                      src={card.img_path}
+                      src={`${baseURL}/${card.img_path}`}
                     />
                   </ImageWrapper>
                 )

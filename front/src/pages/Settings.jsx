@@ -1,5 +1,6 @@
+import { LeftOutlined } from '@ant-design/icons';
 import { Button, Input, message, Form, Radio } from 'antd';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import Card from '../components/Card';
 import CardList from '../components/CardList';
@@ -21,9 +22,21 @@ const Settings = ({ cards, setCards, userObj }) => {
   const [selectedCards, setSelectedCards] = useState([]);
   const [answer, setAnswer] = useState(1);
   const [isSaveClicked, setIsSaveClicked] = useState(false);
-  const [quiz, setQuiz] = useState([]);
+  const [quizId, setQuizId] = useState(0);
+  const [quiz, setQuiz] = useState({});
   let history = useHistory();
-  const { id, name, img_path } = userObj;
+
+  useEffect(() => {
+    setCards([]);
+  }, [settingsCard]);
+
+  useEffect(() => {
+    fetchQuizzes();
+  }, [quizId]);
+
+  useEffect(() => {
+    if (quizId !== 0) setShowViewBtn(true);
+  }, [quiz]);
 
   const onRadioChange = (e) => {
     setAnswer(e.target.value);
@@ -31,7 +44,7 @@ const Settings = ({ cards, setCards, userObj }) => {
 
   const handleViewBtn = () => {
     history.push({
-      pathname: `/quiz/${quiz.id}`,
+      pathname: `/quiz/${quizId}`,
       state: { quiz },
     });
   };
@@ -40,31 +53,41 @@ const Settings = ({ cards, setCards, userObj }) => {
     const { title, answer } = values;
     console.log(values);
     if (selectedCards.length < 2) {
-      message.warning('카드를 2개 이상 선택해주세요.');
+      message.warning('카드를 2장 선택해주세요.');
       return;
     }
     if (isSaveClicked) {
       try {
-        const card_id = selectedCards.map((card) => card.id);
+        const selectedIds = selectedCards.map((card) => card.id);
         const res = await quizService.add({
-          users_id: id,
-          name,
-          img_path,
+          users_id: userObj.id,
           title,
           answer,
-          card_id,
+          cards_id1: selectedIds[0],
+          cards_id2: selectedIds[1],
         });
-        setQuiz(res.data);
+        console.log('post quiz result : ', res);
+        setQuizId(res.data.quiz_id);
       } catch (e) {
         console.log(e.message);
       }
       message.success('퀴즈를 만들었습니다!');
-      setShowViewBtn(true);
       setIsSaveClicked(false);
     }
   };
 
-  const onSelectBtn = () => {
+  const fetchQuizzes = async () => {
+    try {
+      const res = await quizService.getAll();
+      const addedQuiz = res.data.result.filter((quiz) => quiz.id === quizId);
+      console.log('added', addedQuiz);
+      setQuiz(...addedQuiz);
+    } catch (e) {
+      console.log(e.message);
+    }
+  };
+
+  const onBackToSettingsMain = () => {
     setSettingsCard(false);
   };
 
@@ -90,13 +113,16 @@ const Settings = ({ cards, setCards, userObj }) => {
             </ButtonWrapper>
           ) : (
             <ButtonWrapper>
-              <h3>({selectedCards.length}/4)개 선택</h3>
-              <StyledButton type="primary" onClick={onSelectBtn}>
-                {selectedCards.length > 0 ? 'Select' : 'Back'}
+              <StyledButton type="primary" onClick={onBackToSettingsMain}>
+                <LeftOutlined />
+                {selectedCards.length > 0
+                  ? `(${selectedCards.length}/2)개 Select`
+                  : 'Back'}
               </StyledButton>
             </ButtonWrapper>
           )}
         </TitleWrapper>
+
         {!settingsCard ? (
           <SettingsMain>
             <h2>Question</h2>
@@ -109,7 +135,12 @@ const Settings = ({ cards, setCards, userObj }) => {
                 },
               ]}
             >
-              <Input placeholder="Title" allowClear style={{ width: 200 }} />
+              <Input
+                onKeyDown={(e) => (e.key === 'Enter' ? e.preventDefault() : '')}
+                placeholder="Title"
+                allowClear
+                style={{ width: 200 }}
+              />
             </Form.Item>
             <h2 style={{ marginTop: '2rem' }}>Answer Cards</h2>
             <Button type="primary" ghost onClick={() => setSettingsCard(true)}>
@@ -126,7 +157,7 @@ const Settings = ({ cards, setCards, userObj }) => {
                 ]}
               >
                 <Radio.Group onChange={onRadioChange} value={answer}>
-                  <CardsWrapper>
+                  <CardsWrapper margin="1vw 0">
                     {selectedCards.map((card, i) => (
                       <StyledRadio value={i + 1}>
                         Correct

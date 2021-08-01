@@ -1,16 +1,11 @@
 import axios from 'axios';
-// import { baseURL } from './config';
-const baseURL = 'http://localhost:4002';
+import { baseURL } from './config';
 
 const endpoint = '/comments';
 
-const getAll = (params) => {
-  return axios.get(baseURL + endpoint, params);
+const get = (id) => {
+  return axios.get(baseURL + endpoint + '/' + id);
 };
-
-// const get = (id) => {
-//   return axios.get(baseURL + endpoint + '/quiz/' + id);
-// };
 
 const add = (data) => {
   return axios.post(baseURL + endpoint, data);
@@ -25,8 +20,7 @@ const remove = (id) => {
 };
 
 export const commentService = {
-  getAll,
-  // get,
+  get,
   add,
   update,
   remove,

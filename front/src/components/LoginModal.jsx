@@ -2,7 +2,7 @@ import React from 'react';
 import { Modal } from 'antd';
 import { GoogleLogin } from 'react-google-login';
 import styled from 'styled-components';
-import { loginRequest } from '../service/login';
+import { userService } from '../service/users';
 
 const Wrapper = styled.div`
   display: flex;
@@ -23,8 +23,7 @@ const LoginModal = ({ isModalVisible, setIsModalVisible, setUserObj }) => {
       name,
       img_path: imageUrl,
     };
-    const res = loginRequest(profileData);
-    console.log(res);
+    userService.login(profileData);
     setUserObj(profileData);
   };
 

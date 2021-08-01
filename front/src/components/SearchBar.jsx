@@ -8,10 +8,13 @@ import {
   StyledSearch,
   TagWrapper,
   StyledCheckableTag,
+  CheckboxWrapper,
 } from '../styles/searchBar';
 import { categoryOptions } from '../constants';
 import CardModal from './CardModal';
 import React, { useEffect, useRef, useState } from 'react';
+import { RedoOutlined } from '@ant-design/icons';
+import { Button } from 'antd';
 
 const SearchBar = ({
   showModal,
@@ -24,6 +27,8 @@ const SearchBar = ({
   filterByCategory,
   filterByUser,
   userObj,
+  resetFilter,
+  showAllBtn,
 }) => {
   const [selectedTags, setSelectedTags] = useState('');
   const [windowSize, setWindowSize] = useState({
@@ -98,9 +103,17 @@ const SearchBar = ({
           ))}
         </TagWrapper>
         {userObj && (
-          <StyledCheckbox onChange={filterByUser}>
-            내가 만든 카드
-          </StyledCheckbox>
+          <CheckboxWrapper>
+            <StyledCheckbox onChange={filterByUser}>
+              내가 만든 카드
+            </StyledCheckbox>
+            {showAllBtn && (
+              <Button type="link" size="small" onClick={resetFilter}>
+                <RedoOutlined />
+                모든 카드
+              </Button>
+            )}
+          </CheckboxWrapper>
         )}
       </Filter>
     </Wrapper>

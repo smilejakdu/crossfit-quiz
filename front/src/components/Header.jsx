@@ -1,18 +1,44 @@
+import { debounce } from 'debounce';
 import React, { useEffect, useState } from 'react';
 import { Button, Popover, Avatar } from 'antd';
 import LoginModal from './LoginModal';
 import { GoogleLogout } from 'react-google-login';
 import { Link, useRouteMatch } from 'react-router-dom';
-import { Logo, Right, Username, UserWrapper, Wrapper } from '../styles/header';
+import {
+  Logo,
+  LogoTitle,
+  Right,
+  Username,
+  UserWrapper,
+  Wrapper,
+} from '../styles/header';
 
 const Header = ({ userObj, setUserObj }) => {
   let matchSettings = useRouteMatch('/settings');
   let matchQuiz = useRouteMatch('/quiz/:id');
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [windowSize, setWindowSize] = useState({
+    width: window.innerWidth,
+    height: window.innerHeight,
+  });
 
   useEffect(() => {
     window.localStorage.setItem('userObj', JSON.stringify(userObj));
   }, [userObj]);
+
+  useEffect(() => {
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  const handleResize = debounce(() => {
+    setWindowSize({
+      width: window.innerWidth,
+      height: window.innerHeight,
+    });
+  }, 1000);
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -33,7 +59,14 @@ const Header = ({ userObj, setUserObj }) => {
   return (
     <Wrapper>
       <Link to="/">
-        <Logo>Logo</Logo>
+        <div styles={{ display: 'flex', alignItems: 'center' }}>
+          <LogoTitle>CROSSFIT</LogoTitle>
+          <Logo
+            alt="logo"
+            src="https://image.flaticon.com/icons/png/512/1248/1248778.png"
+          />
+          <LogoTitle>QUIZ</LogoTitle>
+        </div>
       </Link>
 
       <Right>
@@ -41,7 +74,7 @@ const Header = ({ userObj, setUserObj }) => {
           <UserWrapper>
             <Popover content={content}>
               <Avatar src={userObj.img_path} />
-              <Username>{userObj.name}</Username>
+              {windowSize.width > 768 && <Username>{userObj.name}</Username>}
             </Popover>
           </UserWrapper>
         )}
@@ -49,7 +82,7 @@ const Header = ({ userObj, setUserObj }) => {
           matchSettings || matchQuiz ? (
             <Link to="/">
               <Button type="primary" ghost>
-                Back to Quiz List
+                Back Home
               </Button>
             </Link>
           ) : (

@@ -1,5 +1,4 @@
 import { Tag, Input } from 'antd';
-import Checkbox from 'antd/lib/checkbox/Checkbox';
 import styled from 'styled-components';
 const { Search } = Input;
 
@@ -36,4 +35,3 @@ export const StyledTag = styled(Tag)`
     margin-right: 1rem;
   }
 `;
-export const StyledCheckbox = styled(Checkbox)``;

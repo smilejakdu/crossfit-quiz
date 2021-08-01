@@ -42,12 +42,13 @@ const EditSettings = ({ cards, setCards }) => {
   };
 
   const fetchSelectedCards = async () => {
+    const { cards_id1, cards_id2 } = quiz;
+    console.log('cards_id1 : ', cards_id1);
+    console.log('cards_id2 : ', cards_id2);
     try {
-      let cardsArr = [];
-      for await (const id of quiz.card_id) {
-        const res = await cardService.get(id);
-        cardsArr.push(res.data);
-      }
+      const res1 = await cardService.get(cards_id1);
+      const res2 = await cardService.get(cards_id2);
+      let cardsArr = [res1.data[0], res2.data[0]];
       setSelectedCards(cardsArr);
     } catch (e) {
       console.log(e.message);
@@ -56,13 +57,19 @@ const EditSettings = ({ cards, setCards }) => {
 
   const updateQuiz = async (values) => {
     const { title, answer } = values;
+    if (selectedCards.length < 2) {
+      message.warning('카드를 2장 선택해주세요.');
+      return;
+    }
     if (isSaveClicked) {
       try {
+        const selectedIds = selectedCards.map((card) => card.id);
         const res = await quizService.update({
           id: quiz.id,
           title,
           answer,
-          card_id: selectedCards.map((card) => card.id),
+          cards_id1: selectedIds[0],
+          cards_id2: selectedIds[1],
         });
         console.log('퀴즈 수정', res.data);
       } catch (e) {
@@ -115,9 +122,10 @@ const EditSettings = ({ cards, setCards }) => {
             </ButtonWrapper>
           ) : (
             <ButtonWrapper>
-              <h3>({selectedCards.length}/4)개 선택</h3>
               <StyledButton type="primary" onClick={onSelectBtn}>
-                Select
+                {selectedCards.length > 0
+                  ? `(${selectedCards.length}/2)개 Select`
+                  : 'Back'}
               </StyledButton>
             </ButtonWrapper>
           )}
@@ -134,7 +142,12 @@ const EditSettings = ({ cards, setCards }) => {
                 },
               ]}
             >
-              <Input placeholder="Title" allowClear style={{ width: 200 }} />
+              <Input
+                onKeyDown={(e) => (e.key === 'Enter' ? e.preventDefault() : '')}
+                placeholder="Title"
+                allowClear
+                style={{ width: 200 }}
+              />
             </Form.Item>
             <h2 style={{ marginTop: '2rem' }}>Answer Cards</h2>
             <Button type="primary" ghost onClick={() => setSettingsCard(true)}>
@@ -143,7 +156,7 @@ const EditSettings = ({ cards, setCards }) => {
             {selectedCards.length > 0 && (
               <Form.Item name="answer">
                 <Radio.Group onChange={onRadioChange} value={answer}>
-                  <CardsWrapper>
+                  <CardsWrapper margin="1vw 0">
                     {selectedCards.map((card, i) => (
                       <StyledRadio key={card.id} value={i + 1}>
                         Correct

@@ -8,18 +8,19 @@ export const StyledCard = styled(Card)`
   position: relative;
   border-radius: 25px;
   width: 15rem;
-  height: 21rem;
+  height: 20rem;
   overflow: hidden;
+  padding-top: 3.5rem;
 `;
 export const DeselectBtn = styled(Button)`
   font-size: 1.5em;
   color: #bec8c8;
-  &:hover {
-    color: var(--blue-color);
-  }
   position: absolute;
   top: -2.4rem;
   right: 0;
+  &:hover {
+    color: var(--blue-color);
+  }
 `;
 export const EditButton = styled(Button)`
   position: absolute;
@@ -33,4 +34,7 @@ export const EditButton = styled(Button)`
 export const TitleWrapper = styled.div`
   display: flex;
   justify-content: space-between;
+`;
+export const Cover = styled.img`
+  max-height: 10.5rem;
 `;

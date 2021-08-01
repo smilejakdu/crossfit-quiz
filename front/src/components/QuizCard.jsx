@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import {
   CalendarOutlined,
@@ -6,22 +6,27 @@ import {
   SendOutlined,
 } from '@ant-design/icons';
 import { Statistic, Avatar, message } from 'antd';
-import { StyledCard } from '../styles/card';
+import { userService } from '../service/users';
+import { StyledCard } from '../styles/quizCard';
 
 const QuizCard = ({ quiz, userObj }) => {
   let history = useHistory();
   const {
-    id,
-    title,
     answer,
-    created_at,
-    users_id,
-    name,
-    img_path,
-    card_id,
     cnt_correct_answer,
     cnt_total_answer,
+    comment_cnt,
+    created_at,
+    id,
+    title,
+    users_id,
   } = quiz;
+  const date = created_at.slice(0, 10);
+  const [author, setAuthor] = useState({});
+
+  useEffect(() => {
+    getAuthor();
+  }, []);
 
   const handleClick = () => {
     if (!userObj) {
@@ -40,6 +45,15 @@ const QuizCard = ({ quiz, userObj }) => {
     }
   };
 
+  const getAuthor = async () => {
+    try {
+      const res = await userService.get(users_id);
+      setAuthor(res.data.result[0]);
+    } catch (e) {
+      console.log(e.message);
+    }
+  };
+
   return (
     <StyledCard
       hoverable
@@ -51,39 +65,40 @@ const QuizCard = ({ quiz, userObj }) => {
         />
       }
       extra={
-        cnt_correct_answer > 0 &&
-        cnt_total_answer > 0 && (
+        cnt_total_answer ? (
           <Statistic
             valueStyle={{ fontSize: '1.1rem', color: '#cf1322' }}
             title="정답률"
             value={Math.round((cnt_correct_answer / cnt_total_answer) * 100)}
             suffix="%"
           />
+        ) : (
+          <></>
         )
       }
       onClick={handleClick}
     >
       <Statistic
         title="Submissions"
-        value={`${cnt_total_answer > 0 ? cnt_total_answer : 0}명 참여`}
+        value={`${cnt_total_answer ? cnt_total_answer : 0}명 참여`}
         prefix={<SendOutlined />}
         valueStyle={{ fontSize: '0.9rem' }}
       />
       <Statistic
         title="Created At"
-        value={created_at}
+        value={date}
         prefix={<CalendarOutlined />}
         valueStyle={{ fontSize: '0.9rem' }}
       />
-      <Statistic
+      {/* <Statistic
         title="Created By"
-        value={name}
-        prefix={<Avatar src={img_path} />}
+        value={author.name}
+        prefix={<Avatar src={author.img_path} />}
         valueStyle={{ fontSize: '0.9rem' }}
-      />
+      /> */}
       <Statistic
         title="Comments"
-        value={20}
+        value={comment_cnt}
         prefix={<CommentOutlined />}
         valueStyle={{ fontSize: '0.9rem' }}
       />

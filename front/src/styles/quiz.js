@@ -25,9 +25,9 @@ export const ImageWrapper = styled.div`
   flex-direction: column;
   justify-content: ${(props) => props.justifyContent};
   align-items: center;
-
   box-shadow: 5px 7px 14px 0px rgba(13, 27, 62, 0.75);
   border-radius: 25px;
+  overflow: hidden;
 
   &:hover {
     transform: ${(props) => props.transform};

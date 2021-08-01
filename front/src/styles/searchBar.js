@@ -46,4 +46,10 @@ export const StyledCheckableTag = styled(CheckableTag)`
   justify-self: center;
   user-select: none;
 `;
-export const StyledCheckbox = styled(Checkbox)``;
+export const CheckboxWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+export const StyledCheckbox = styled(Checkbox)`
+  margin-bottom: 1rem;
+`;

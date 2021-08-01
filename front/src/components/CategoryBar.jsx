@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { Form, Select } from 'antd';
 import { categoryOptions } from '../constants';
@@ -9,13 +9,19 @@ const StyledSelect = styled(Select)`
 
 const CategoryBar = () => {
   return (
-    <Form.Item name="category_id">
+    <Form.Item
+      name="category_id"
+      rules={[
+        {
+          required: true,
+          message: '카테고리를 선택해주세요',
+        },
+      ]}
+    >
       <StyledSelect
         labelInValue
-        style={{ width: 120 }}
+        style={{ width: '10rem' }}
         placeholder="Equipment"
-        allowClear
-        onChange={(value) => console.log(value)}
         options={categoryOptions}
       />
     </Form.Item>

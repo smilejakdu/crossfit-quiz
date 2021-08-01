@@ -1,21 +1,17 @@
 import { UploadOutlined } from '@ant-design/icons';
-import { Button, Popconfirm, Modal, Form, Upload, Select } from 'antd';
+import { Button, Popconfirm, Modal, Form, Upload, Select, message } from 'antd';
 import React, { useState } from 'react';
-import styled from 'styled-components';
 import { categoryOptions } from '../constants';
-
 import { cardService } from '../service/cards';
+import { baseURL } from '../service/config';
 import {
   ButtonWrapper,
   CardWrapper,
   ContentsWrapper,
   StyledInput,
+  StyledSelect,
 } from '../styles/editModal';
 const { Option } = Select;
-
-const StyledSelect = styled(Select)`
-  margin-top: 2rem;
-`;
 
 const EditModal = ({
   fetchCards,
@@ -26,67 +22,70 @@ const EditModal = ({
 }) => {
   const [form] = Form.useForm();
   const { id, title, img_path } = card;
-  const [fileList, setFileList] = useState([
-    {
-      uid: '-1',
-      name: title,
-      status: 'done',
-      url: img_path,
-    },
-  ]);
+  const [uploadVisible, setUploadVisible] = useState(true);
 
   const handleCancel = () => {
     setShowEditModal(false);
   };
 
-  const updateCard = async (values) => {
-    const {
-      category,
+  const handleSave = (values) => {
+    const { category, title, image } = values;
+    console.log('image : ', image);
+    if (image.fileList.length === 0) {
+      message.warning('이미지를 업로드해주세요.');
+      return;
+    }
+    updateCard({
+      category_id:
+        categoryOptions.findIndex((option) => option.value === category.value) +
+        1,
+      id,
       title,
-      img_path: { file },
-    } = values;
-    console.log(values);
+      img_path: image.file.response.result,
+    });
     setShowEditModal(false);
+  };
+
+  const updateCard = async (values) => {
+    console.log('update card data : ', values);
     try {
-      const res = await cardService.update({
-        id,
-        category_id:
-          category.value &&
-          categoryOptions.findIndex(
-            (option) => option.value === category.value
-          ) + 1,
-        title,
-        img_path: file.response.result.url,
-      });
-      console.log(res);
+      const res = await cardService.update(values);
+      console.log('update card result : ', res);
     } catch (e) {
       console.log(e.message);
     }
     await fetchCards();
+    message.success('Saved!');
   };
 
   const deleteCard = async (id) => {
+    setShowEditModal(false);
     try {
       const res = await cardService.remove(id);
-      console.log(res);
+      console.log('delete card : ', res);
     } catch (e) {
       console.log(e.message);
     }
     await fetchCards();
-  };
-
-  const removeImage = () => {
-    console.log('이미지삭제');
+    message.success('삭제되었습니다.');
   };
 
   const props = {
-    action: 'http://192.168.146.63:4000/cards_img/upload',
-    listType: 'picture-card',
-    fileList,
-    onChange({ fileList: newFileList }) {
-      setFileList(newFileList);
+    action: `${baseURL}/cards_img/upload`,
+    listType: 'picture',
+    onChange(info) {
+      if (info.file.status === 'uploading') {
+        setUploadVisible(false);
+      } else if (info.file.status === 'done') {
+        message.success(`${info.file.name} uploaded!`);
+      } else if (info.file.status === 'error') {
+        message.error(`${info.file.name}  upload failed.`);
+      }
     },
-    onRemove: removeImage,
+    onRemove() {
+      form.resetFields(['image']);
+      setUploadVisible(true);
+    },
   };
 
   return (
@@ -95,11 +94,11 @@ const EditModal = ({
         <Form
           form={form}
           name="edit-form"
-          onFinish={updateCard}
+          onFinish={handleSave}
           initialValues={{
             category: { value: category },
             title,
-            img_path: fileList[0],
+            image: img_path,
           }}
         >
           <ButtonWrapper>
@@ -116,8 +115,16 @@ const EditModal = ({
             </Button>
           </ButtonWrapper>
           <ContentsWrapper>
-            <Form.Item name="category">
-              <StyledSelect labelInValue style={{ width: 120 }} allowClear>
+            <Form.Item
+              name="category"
+              rules={[
+                {
+                  required: true,
+                  message: '카테고리를 선택해주세요.',
+                },
+              ]}
+            >
+              <StyledSelect labelInValue style={{ width: '10rem' }}>
                 {categoryOptions.map((option) => (
                   <Option key={option.id} value={option.value}>
                     {option.value}
@@ -137,7 +144,7 @@ const EditModal = ({
               <StyledInput />
             </Form.Item>
             <Form.Item
-              name="img_path"
+              name="image"
               rules={[
                 {
                   required: true,
@@ -146,7 +153,7 @@ const EditModal = ({
               ]}
             >
               <Upload {...props}>
-                {fileList.length < 1 && (
+                {uploadVisible && (
                   <Button icon={<UploadOutlined />}>Change Image</Button>
                 )}
               </Upload>

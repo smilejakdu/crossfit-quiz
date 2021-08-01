@@ -1,34 +1,40 @@
 import React, { useState } from 'react';
 import { commentService } from '../service/comments.js';
-import { Popconfirm, Button, Form, Input, Avatar, message } from 'antd';
+import { Popconfirm, Button, Input, Avatar, message, Modal } from 'antd';
 import {
   BtnContainer,
-  ButtonWrapper,
   CommentContainer,
   Content,
-  EditForm,
-  StyledButton,
   StyledComment,
   StyledList,
 } from '../styles/commentList.js';
-const CommentList = ({ comments, userObj, fetchComments }) => {
-  const [showEdit, setShowEdit] = useState(false);
-  const [editId, setEditId] = useState('1');
-  const [form] = Form.useForm();
+const { TextArea } = Input;
 
-  const openEditForm = (comment) => {
-    setEditId(comment.id);
-    setShowEdit(true);
+const CommentList = ({ comments, userObj, fetchComments }) => {
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [content, setContent] = useState('');
+  const [editId, setEditId] = useState(1);
+
+  const getCommentTime = (createdAt) => {
+    const day = new Date(createdAt);
+    const hours = ('0' + day.getHours()).slice(-2);
+    const minutes = ('0' + day.getMinutes()).slice(-2);
+    const timeString = hours + ':' + minutes;
+    return (
+      <span>
+        {createdAt.slice(2, 10)} {timeString}
+      </span>
+    );
   };
 
-  const updateComment = async (id) => {
+  const updateComment = async () => {
+    setIsModalVisible(false);
     try {
       const res = await commentService.update({
-        id,
-        content: form.getFieldsValue().content,
+        id: editId,
+        content,
       });
       console.log(res.data);
-      setShowEdit(false);
     } catch (e) {
       console.log(e.message);
     }
@@ -46,85 +52,74 @@ const CommentList = ({ comments, userObj, fetchComments }) => {
     message.success('삭제되었습니다.');
   };
 
+  const showModal = (comment) => {
+    setContent(comment.content);
+    setEditId(comment.id);
+    setIsModalVisible(true);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
+
+  const onChange = (e) => {
+    setContent(e.target.value);
+  };
+
   return (
-    <StyledList
-      dataSource={comments}
-      header={`${comments.length} ${
-        comments.length > 1 ? 'comments' : 'comment'
-      }`}
-      itemLayout="horizontal"
-      renderItem={(comment) =>
-        editId === comment.id && showEdit ? (
-          <EditForm
-            form={form}
-            onFinish={() => updateComment(comment.id)}
-            initialValues={{
-              content: comment.content,
-            }}
-          >
-            <Form.Item
-              name="content"
-              rules={[
-                {
-                  required: true,
-                  message: '내용을 입력해주세요.',
-                },
-              ]}
-            >
-              <Input style={{ borderRadius: '20px' }} />
-            </Form.Item>
-            <ButtonWrapper>
-              <Form.Item>
-                <StyledButton
-                  size="small"
-                  shape="round"
-                  htmlType="submit"
-                  style={{ marginRight: '0.5rem' }}
-                >
-                  Save
-                </StyledButton>
-                <StyledButton
-                  size="small"
-                  shape="round"
-                  onClick={() => setShowEdit(false)}
-                >
-                  Cancel
-                </StyledButton>
-              </Form.Item>
-            </ButtonWrapper>
-          </EditForm>
-        ) : (
-          <CommentContainer>
-            <StyledComment
-              avatar={
-                <Avatar
-                  src={comment.img_path}
-                  alt={`${comment.name}'s avatar`}
-                />
-              }
-              author={<span style={{ color: 'white' }}>{comment.name}</span>}
-              content={<Content>{comment.content}</Content>}
-              datetime={<span>{comment.created_at}</span>}
-            />
-            {comment.users_id === userObj.id && (
-              <BtnContainer>
-                <Button type="link" onClick={() => openEditForm(comment)}>
-                  edit
-                </Button>
-                <Popconfirm
-                  title="삭제할까요?"
-                  onConfirm={() => deleteComment(comment.id)}
-                  okText="Yes"
-                  cancelText="No"
-                >
-                  <Button type="link">delete</Button>
-                </Popconfirm>
-              </BtnContainer>
-            )}
-          </CommentContainer>
-        )
-      }
-    />
+    <>
+      <Modal
+        visible={isModalVisible}
+        footer={[
+          <Button onClick={handleCancel}>Cancel</Button>,
+          <Button type="primary" onClick={updateComment}>
+            Save
+          </Button>,
+        ]}
+        closable={false}
+      >
+        <TextArea rows={4} defaultValue={content} onChange={onChange} />
+      </Modal>
+      <StyledList
+        dataSource={comments}
+        header={`${comments.length} ${
+          comments.length > 1 ? 'comments' : 'comment'
+        }`}
+        itemLayout="horizontal"
+        renderItem={(comment) => (
+          <>
+            <CommentContainer>
+              <StyledComment
+                avatar={
+                  <Avatar
+                    src={comment.img_path}
+                    alt={`${comment.name}'s avatar`}
+                  />
+                }
+                author={<span style={{ color: 'white' }}>{comment.name}</span>}
+                content={<Content>{comment.content}</Content>}
+                datetime={getCommentTime(comment.created_at)}
+              />
+              {comment.users_id === userObj.id && (
+                <BtnContainer>
+                  <Button type="link" onClick={() => showModal(comment)}>
+                    edit
+                  </Button>
+                  <Popconfirm
+                    title="삭제할까요?"
+                    onConfirm={() => deleteComment(comment.id)}
+                    okText="Yes"
+                    cancelText="No"
+                  >
+                    <Button type="link">delete</Button>
+                  </Popconfirm>
+                </BtnContainer>
+              )}
+            </CommentContainer>
+          </>
+        )}
+      />
+    </>
   );
 };
 
